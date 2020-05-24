@@ -33,6 +33,8 @@ build/
 ### Node deps ###
 app/node_modules
 app/package-lock.json
+app/yarn.lock
+app/yarn-error.log
 
 ### App build ###
 app/dist
