@@ -29,3 +29,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Node deps ###
+app/node_modules
+app/package-lock.json
+
+### App build ###
+app/dist
