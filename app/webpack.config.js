@@ -9,6 +9,9 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
     },
+    output: {
+        filename: "app.js",
+    },
     module: {
         rules: [
             {
