@@ -1,7 +1,7 @@
 import React from "react";
 
 const App = () => (
-  <div>
+  <div data-testid="app">
     <h1>Hello Chat app!</h1>
   </div>
 );
