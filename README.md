@@ -13,7 +13,13 @@
 2. Run command:
 
 ```
+npm i
+```
+
+3. After dependencies are installed, run:
+
+```
 npm run start
 ```
 
-3. Enjoy running application on port 8000!
+4. Enjoy application running on port 8000!
