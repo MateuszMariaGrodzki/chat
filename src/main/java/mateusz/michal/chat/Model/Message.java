@@ -12,6 +12,10 @@ public class Message {
     @Column(name = "message_id")
     private int id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "message_date")
     private Date messageDate;
 

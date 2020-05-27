@@ -1,6 +1,7 @@
 package mateusz.michal.chat.Model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -19,4 +20,7 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Message> messageList;
 }
