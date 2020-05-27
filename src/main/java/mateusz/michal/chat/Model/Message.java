@@ -1,10 +1,13 @@
 package mateusz.michal.chat.Model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "message")
+@Data
 public class Message {
 
     @Id
