@@ -31,6 +31,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/register").permitAll()
-                .and().csrf().disable().formLogin().and().logout().logoutSuccessUrl("/api/login");
+                .antMatchers("/api/chat").hasAnyAuthority("USER")
+                .anyRequest().authenticated().and().csrf().disable()
+                .formLogin().defaultSuccessUrl("/api/chat").usernameParameter("user_name").passwordParameter("password")
+                .and().logout().logoutSuccessUrl("/api/login");
     }
 }
