@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class MyUserDetailsService {
-
+public class MyUserDetailsService  {
 
     private List<GrantedAuthority> getUserAuthorities(Set<Role> userRoles){
         Set<GrantedAuthority> roles = new HashSet<>();
@@ -27,5 +26,10 @@ public class MyUserDetailsService {
         }
         List<GrantedAuthority> authorities = new ArrayList<>(roles);
         return authorities;
+    }
+
+    private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities){
+        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
+                true, true, true, true, authorities);
     }
 }
