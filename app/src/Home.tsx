@@ -1,7 +1,9 @@
 import React from "react";
 
+import PageTitle from "./common/PageTitle";
+
 const Home = () => {
-  return <div>Home page</div>;
+  return <PageTitle>Welcome to our Chat!</PageTitle>;
 };
 
 export default Home;

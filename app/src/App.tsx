@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Container } from "@material-ui/core";
+import { Container, CssBaseline } from "@material-ui/core";
 
 import Header from "./Header";
 import Register from "./Register";
@@ -16,6 +16,7 @@ const App = () => (
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
       />
     </Helmet>
+    <CssBaseline />
     <Router>
       <Header />
       <Container>
