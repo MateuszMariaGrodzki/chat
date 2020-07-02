@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import styled from "styled-components";
-import { Input, Button, Box } from "@material-ui/core";
+import { Input, Button, Box, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 
 import PageTitle from "./common/PageTitle";
 
@@ -19,6 +20,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState<null | "success" | "error">(null);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -35,15 +37,30 @@ const Register = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/api/register", {
+      .post("http://localhost:2222/api/register", {
         name,
         email,
         password,
       })
-      .then(function (response) {
+      .then((response) => {
+        if (response.status === 200) {
+          // TODO: check also backend response when provided; handle errors
+          setStatus("success");
+        } else {
+          setStatus("error");
+        }
         console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        setStatus("error");
       });
   };
+
+  const handleSnackbarClose = () => {
+    setStatus(null);
+  };
+
   return (
     <>
       <Helmet>
@@ -87,6 +104,12 @@ const Register = () => {
           </Button>
         </Box>
       </Form>
+      <Snackbar open={status === "success"} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <Alert severity="success">Registered successfully!</Alert>
+      </Snackbar>
+      <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose}>
+        <Alert severity="error">Oops! Something went wrong...</Alert>
+      </Snackbar>
     </>
   );
 };
