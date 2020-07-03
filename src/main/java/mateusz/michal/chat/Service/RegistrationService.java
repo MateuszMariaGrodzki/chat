@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class RegistrationService {
@@ -55,6 +56,10 @@ public class RegistrationService {
         return !user.isPresent();
     }
 
+    private boolean isEmailIncorrect(String email){
+        Pattern pattern = Pattern.compile("[a-zA-Z]+[\\.a-zA-Z0-9]*@[a-zA-Z0-9]+\\.[a-z]{2,}[a-z]*");
+        return ! pattern.matcher(email).matches();
+    }
 
     public void saveUserToDatabase(@NotNull User user) throws Exception {
         if(isUserNotInDatabaseByName(user.getName())) {
