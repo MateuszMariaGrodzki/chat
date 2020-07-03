@@ -22,7 +22,7 @@ public class RegistrationController {
             registrationService.saveUserToDatabase(user);
             return ResponseEntity.ok("Registered");
         } catch(Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.ok(e.getMessage());
         }
     }
 }
