@@ -46,19 +46,19 @@ public class RegistrationService {
     }
 
 
-    private boolean isUserNotInDatabaseByName(String name){
+    private boolean isUserInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
-        return !user.isPresent();
+        return user.isPresent();
     }
 
-    private boolean isUserNotInDatabaseByEmail(String email){
+    private boolean isUserInDatabaseByEmail(String email){
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
-        return !user.isPresent();
+        return user.isPresent();
     }
 
     private boolean isEmailIncorrect(String email){
         Pattern pattern = Pattern.compile("[a-zA-Z]+[\\.a-zA-Z0-9]*@[a-zA-Z0-9]+\\.[a-z]{2,}[a-z]*");
-        return ! pattern.matcher(email).matches();
+        return !pattern.matcher(email).matches();
     }
 
     public boolean isPasswordIncorrect(String password) {
@@ -68,11 +68,23 @@ public class RegistrationService {
     }
 
     public void saveUserToDatabase(@NotNull User user) throws Exception {
-        if(isUserNotInDatabaseByName(user.getName())) {
+        if(isNameNotPresent(user.getName())){
+            throw new Exception("name_missing");
+        } else if(isEmailNotPresent(user.getEmail())){
+            throw new Exception("email_missing");
+        } else if(isPassworNotPresent(user.getPassword())){
+            throw new Exception("password_missing");
+        } else if (isUserInDatabaseByName(user.getName())){
+            throw new Exception("name_occupied");
+        } else if(isUserInDatabaseByEmail(user.getEmail())){
+            throw new Exception("email_occupied");
+        } else if(isEmailIncorrect(user.getEmail())){
+            throw new Exception("email_incorrect");
+        } else if(isPasswordIncorrect(user.getPassword())){
+            throw new Exception("weak_password");
+        } else {
             User userToSave = createUser(user);
             userRepository.save(userToSave);
-        } else {
-            throw new Exception("Podane imię lub email jest już zajęte");
         }
     }
 }
