@@ -32,10 +32,13 @@ public class RegistrationService {
         return user;
     }
 
-    private boolean isNamePresent(User user){
+    private boolean isNameNotPresent(User user){
         return user.getName().equals("");
     }
 
+    private boolean isEmailNotPresent(User user){
+        return user.getEmail().equals("");
+    }
 
 
     private boolean isUserNotInDatabaseByName(String name){
