@@ -10,7 +10,6 @@ import java.awt.*;
 
 @RestController()
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RegistrationController {
 
     @Autowired
