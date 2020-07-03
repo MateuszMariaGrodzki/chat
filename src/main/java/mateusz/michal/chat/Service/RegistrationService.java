@@ -32,16 +32,16 @@ public class RegistrationService {
         return user;
     }
 
-    private boolean isNameNotPresent(User user){
-        return user.getName().equals("");
+    private boolean isNameNotPresent(String name){
+        return name.equals("");
     }
 
-    private boolean isEmailNotPresent(User user){
-        return user.getEmail().equals("");
+    private boolean isEmailNotPresent(String email){
+        return email.equals("");
     }
 
-    private boolean isPassworNotPresent(User user){
-        return user.getPassword().equals("");
+    private boolean isPassworNotPresent(String password){
+        return password.equals("");
     }
 
 
@@ -54,6 +54,7 @@ public class RegistrationService {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
         return !user.isPresent();
     }
+
 
     public void saveUserToDatabase(@NotNull User user) throws Exception {
         if(isUserNotInDatabaseByName(user.getName())) {
