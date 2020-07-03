@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class RegistrationService {
@@ -32,8 +33,8 @@ public class RegistrationService {
     }
 
     private boolean isUserNotInDatabaseByName(String name){
-        User user = userRepository.findByName(name);
-        return user == null;
+        Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
+        return !user.isPresent();
     }
 
     private boolean isUserNotInDatabaseByEmail(String email){
@@ -42,7 +43,7 @@ public class RegistrationService {
     }
 
     public void saveUserToDatabase(@NotNull User user) throws Exception {
-        if(isUserNotInDatabaseByEmail(user.getName()) || isUserNotInDatabaseByEmail(user.getEmail())) {
+        if(isUserNotInDatabaseByName(user.getName())) {
             User userToSave = createUser(user);
             userRepository.save(userToSave);
         } else {
