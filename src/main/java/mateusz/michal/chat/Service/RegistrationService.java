@@ -40,6 +40,10 @@ public class RegistrationService {
         return user.getEmail().equals("");
     }
 
+    private boolean isPassworNotPresent(User user){
+        return user.getPassword().equals("");
+    }
+
 
     private boolean isUserNotInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
