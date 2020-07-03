@@ -38,8 +38,8 @@ public class RegistrationService {
     }
 
     private boolean isUserNotInDatabaseByEmail(String email){
-        User user = userRepository.findByEmail(email);
-        return user == null;
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
+        return !user.isPresent();
     }
 
     public void saveUserToDatabase(@NotNull User user) throws Exception {
