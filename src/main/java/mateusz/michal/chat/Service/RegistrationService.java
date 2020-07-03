@@ -61,6 +61,12 @@ public class RegistrationService {
         return ! pattern.matcher(email).matches();
     }
 
+    public boolean isPasswordIncorrect(String password) {
+        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
+                "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*])(?!=.*\\s).{8,15}");
+        return !pattern.matcher(password).matches();
+    }
+
     public void saveUserToDatabase(@NotNull User user) throws Exception {
         if(isUserNotInDatabaseByName(user.getName())) {
             User userToSave = createUser(user);
