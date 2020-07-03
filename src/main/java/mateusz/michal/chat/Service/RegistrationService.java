@@ -32,6 +32,12 @@ public class RegistrationService {
         return user;
     }
 
+    private boolean isNamePresent(User user){
+        return user.getName().equals("");
+    }
+
+
+
     private boolean isUserNotInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
         return !user.isPresent();
