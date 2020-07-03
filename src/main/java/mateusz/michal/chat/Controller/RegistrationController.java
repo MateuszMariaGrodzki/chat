@@ -6,17 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
-
 @RestController()
 @RequestMapping("/api")
 public class RegistrationController {
 
     @Autowired
     UserService userService;
-
-    @GetMapping("/register")
-    public void registration(){}
 
     @PostMapping(value = "/register",consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createNewUser(@RequestBody User user){
