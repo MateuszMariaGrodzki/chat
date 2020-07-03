@@ -1,5 +1,7 @@
 package mateusz.michal.chat.Controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import mateusz.michal.chat.Model.JsonRespond;
 import mateusz.michal.chat.Model.User;
 import mateusz.michal.chat.Service.RegistrationService;
 import mateusz.michal.chat.Service.UserService;
@@ -17,12 +19,13 @@ public class RegistrationController {
     RegistrationService registrationService;
 
     @PostMapping(value = "/register",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createNewUser(@RequestBody User user){
+    public ResponseEntity<JsonRespond> createNewUser(@RequestBody User user){
         try {
             registrationService.saveUserToDatabase(user);
-            return ResponseEntity.ok("Registered");
+            JsonRespond error = new JsonRespond("registered");
+            return ResponseEntity.ok(error);
         } catch(Exception e){
-            return ResponseEntity.ok(e.getMessage());
+            return ResponseEntity.ok(new JsonRespond(e.getMessage()));
         }
     }
 }
