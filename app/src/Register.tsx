@@ -37,7 +37,7 @@ const Register = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:2222/api/register", {
+      .post("http://localhost:8080/api/register", {
         name,
         email,
         password,
