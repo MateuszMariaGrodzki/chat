@@ -67,24 +67,25 @@ public class RegistrationService {
         return !pattern.matcher(password).matches();
     }
 
-    public void saveUserToDatabase(@NotNull User user) throws Exception {
+    public String saveUserToDatabase(@NotNull User user) {
         if(isNameNotPresent(user.getName())){
-            throw new Exception("name_missing");
+            return "name_missing";
         } else if(isEmailNotPresent(user.getEmail())){
-            throw new Exception("email_missing");
+            return "email_missing";
         } else if(isPassworNotPresent(user.getPassword())){
-            throw new Exception("password_missing");
+            return "password_missing";
         } else if (isUserInDatabaseByName(user.getName())){
-            throw new Exception("name_occupied");
+            return "name_occupied";
         } else if(isUserInDatabaseByEmail(user.getEmail())){
-            throw new Exception("email_occupied");
+            return "email_occupied";
         } else if(isEmailIncorrect(user.getEmail())){
-            throw new Exception("email_incorrect");
+            return "email_incorrect";
         } else if(isPasswordIncorrect(user.getPassword())){
-            throw new Exception("weak_password");
+            return "weak_password";
         } else {
             User userToSave = createUser(user);
             userRepository.save(userToSave);
+            return "registered";
         }
     }
 }
