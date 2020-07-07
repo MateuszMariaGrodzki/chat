@@ -65,11 +65,7 @@ public class RegistrationServiceTest {
         user.setName("Mateusz");
         user.setEmail("mateusz@gmail.com");
         user.setPassword("AlaMaKota3@");
-        User userFromDatabase = new User();
-        user.setName("Mateusz");
-        user.setEmail("mati402@onet.pl");
-        user.setPassword("ala");
-        when(userRepository.findByName(anyString())).thenReturn(userFromDatabase);
+        when(userRepository.findByName(anyString())).thenReturn(user);
         assertEquals("name_occupied", registrationService.saveUserToDatabase(user));
     }
 
@@ -80,11 +76,8 @@ public class RegistrationServiceTest {
         user.setName("User1");
         user.setEmail("mateusz@gmail.com");
         user.setPassword("AlaMaKota");
-        User userFromDatabase = new User();
-        user.setName("User2");
-        user.setEmail("mateusz@gmail.com");
-        user.setPassword("Kot231");
-        when(userRepository.findByEmail(anyString())).thenReturn(userFromDatabase);
+        when(userRepository.findByEmail(anyString())).thenReturn(user);
         assertEquals("email_occupied",registrationService.saveUserToDatabase(user));
     }
+    
 }
