@@ -1,12 +1,9 @@
 package mateusz.michal.chat.Controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import mateusz.michal.chat.Model.JsonRespond;
 import mateusz.michal.chat.Model.User;
 import mateusz.michal.chat.Service.RegistrationService;
-import mateusz.michal.chat.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

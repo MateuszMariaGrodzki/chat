@@ -3,7 +3,6 @@ package mateusz.michal.chat.Component;
 import mateusz.michal.chat.Model.Message;
 import mateusz.michal.chat.Model.Role;
 import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Repository.UserRepository;
 import mateusz.michal.chat.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
