@@ -89,4 +89,24 @@ public class RegistrationServiceTest {
         user.setPassword("Alokamak");
         assertEquals("email_incorrect", registrationService.saveUserToDatabase(user));
     }
+
+    @Test
+    @DisplayName("Test for saveUserToDatabase with weak password")
+    void  shouldPasswortBeWeak(){
+        User user = new User();
+        user.setName("Mateusz");
+        user.setEmail("mateusz@gmail.com");
+        user.setPassword("AlaMaKota3");
+        assertEquals("weak_password",registrationService.saveUserToDatabase(user));
+        user.setPassword("Al3@");
+        assertEquals("weak_password",registrationService.saveUserToDatabase(user));
+        user.setPassword("AlaMaKota1234!@#$KotaMaAla");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
+        user.setPassword("AlaMaKota!@#$");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
+        user.setPassword("ALAMAKOTA123@");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
+        user.setPassword("alamakota123@");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
+    }
 }
