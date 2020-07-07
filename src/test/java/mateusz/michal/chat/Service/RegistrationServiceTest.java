@@ -79,5 +79,14 @@ public class RegistrationServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(user);
         assertEquals("email_occupied",registrationService.saveUserToDatabase(user));
     }
-    
+
+    @Test
+    @DisplayName("Test for saveUserToDatabase with incorrect email")
+    void shouldEmailBeIncorrect(){
+        User user = new User();
+        user.setName("Mateusz");
+        user.setEmail("mateusz.gmail.com");
+        user.setPassword("Alokamak");
+        assertEquals("email_incorrect", registrationService.saveUserToDatabase(user));
+    }
 }
