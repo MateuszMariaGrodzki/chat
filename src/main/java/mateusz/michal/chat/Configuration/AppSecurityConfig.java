@@ -40,11 +40,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/chat").hasAnyAuthority("USER")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
-        http.formLogin().defaultSuccessUrl("/api/chat").usernameParameter("user_name")
-                .passwordParameter("password")
-                .and().logout().logoutSuccessUrl("/api/login");
+        http.formLogin().disable();
     }
 
     @Bean
