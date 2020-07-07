@@ -72,4 +72,19 @@ public class RegistrationServiceTest {
         when(userRepository.findByName(anyString())).thenReturn(userFromDatabase);
         assertEquals("name_occupied", registrationService.saveUserToDatabase(user));
     }
+
+    @Test
+    @DisplayName("Test for saveUserToDatabase with email occupied")
+    void shouldEmailBeInDatabase(){
+        User user = new User();
+        user.setName("User1");
+        user.setEmail("mateusz@gmail.com");
+        user.setPassword("AlaMaKota");
+        User userFromDatabase = new User();
+        user.setName("User2");
+        user.setEmail("mateusz@gmail.com");
+        user.setPassword("Kot231");
+        when(userRepository.findByEmail(anyString())).thenReturn(userFromDatabase);
+        assertEquals("email_occupied",registrationService.saveUserToDatabase(user));
+    }
 }
