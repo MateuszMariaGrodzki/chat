@@ -23,12 +23,22 @@ public class RegistrationServiceTest {
     }
 
     @Test
-    @DisplayName("Test saveUserToDatabase with invalid name")
-    void shouldNameBeMissing() throws Exception{
+    @DisplayName("Test saveUserToDatabase with missing name")
+    void shouldNameBeMissing() {
         User user = new User();
         user.setName("");
         user.setPassword("AlamaKota3@");
         user.setEmail("Ala325@gmail.com");
         assertEquals("name_missing",registrationService.saveUserToDatabase(user));
+    }
+
+    @Test
+    @DisplayName("Test saveUserToDatabase with missing email")
+    void shouldEmailBeMissing() {
+        User user = new User();
+        user.setName("AlamaKota");
+        user.setEmail("");
+        user.setPassword("AlamaKota3@");
+        assertEquals("email_missing", registrationService.saveUserToDatabase(user));
     }
 }
