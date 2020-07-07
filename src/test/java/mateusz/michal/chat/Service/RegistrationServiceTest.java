@@ -41,4 +41,15 @@ public class RegistrationServiceTest {
         user.setPassword("AlamaKota3@");
         assertEquals("email_missing", registrationService.saveUserToDatabase(user));
     }
+
+    @Test
+    @DisplayName("Test saveUserToDatabase with missing password")
+    void shouldPasswordBeMissing(){
+        User user = new User();
+        user.setName("Mateusz");
+        user.setEmail("mateusz@gmail.com");
+        user.setPassword("");
+        assertEquals("password_missing", registrationService.saveUserToDatabase(user));
+    }
+
 }
