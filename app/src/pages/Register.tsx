@@ -67,7 +67,6 @@ const Register = () => {
           onChange={handleNameChange}
           value={name}
           fullWidth
-          required
         />
         <StyledInput
           placeholder="E-mail address"
@@ -77,7 +76,6 @@ const Register = () => {
           onChange={handleEmailChange}
           value={email}
           fullWidth
-          required
         />
         <StyledInput
           placeholder="Password"
@@ -87,7 +85,6 @@ const Register = () => {
           onChange={handlePasswordChange}
           value={password}
           fullWidth
-          required
         />
         <Box mt={2} display="flex" justifyContent="center">
           <Button variant="contained" size="large" type="submit" color="primary">
