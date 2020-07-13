@@ -5,6 +5,7 @@ import { Container, CssBaseline } from "@material-ui/core";
 
 import Header from "./Header";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 
 const App = () => (
@@ -23,6 +24,9 @@ const App = () => (
         <Switch>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/login">
+            <Login />
           </Route>
           <Route path="/">
             <Home />

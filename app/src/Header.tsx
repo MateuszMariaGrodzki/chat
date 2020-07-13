@@ -18,6 +18,9 @@ const Header = () => {
         <Button component={StyledLink} to="/register">
           Register
         </Button>
+        <Button component={StyledLink} to="/login">
+          Login
+        </Button>
       </Toolbar>
     </AppBar>
   );
