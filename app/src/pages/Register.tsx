@@ -1,20 +1,11 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
-import styled from "styled-components";
-import { Input, Button, Box, Snackbar } from "@material-ui/core";
+import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
-import PageTitle from "./common/PageTitle";
-
-const Form = styled.form`
-  max-width: 400px;
-  margin: 0 auto;
-`;
-
-const StyledInput = styled(Input)`
-  margin-top: 10px;
-`;
+import PageTitle from "../common/PageTitle";
+import { StyledInput, Form } from "./styled";
 
 const Register = () => {
   const [name, setName] = useState("");
