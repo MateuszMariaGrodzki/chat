@@ -1,21 +1,17 @@
 import React from "react";
-import { Link, LinkProps } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Typography, Button } from "@material-ui/core";
-import styled from "styled-components";
+import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 
-const StyledLink = styled(Link)`
-  margin-left: 10px;
-`;
+import { StyledLink } from "./styled";
 
 const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6">ChatApp</Typography>
-        <Button component={StyledLink} to="/">
+        <Button component={StyledLink} to="/" color="secondary">
           Home
         </Button>
-        <Button component={StyledLink} to="/register">
+        <Button component={StyledLink} to="/register" color="primary">
           Register
         </Button>
         <Button component={StyledLink} to="/login">

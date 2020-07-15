@@ -3,7 +3,7 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Container, CssBaseline } from "@material-ui/core";
 
-import Header from "./Header";
+import Header from "./components/Header";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
