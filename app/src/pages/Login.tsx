@@ -4,21 +4,13 @@ import axios from "axios";
 import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
-import PageTitle from "../common/PageTitle";
-import { StyledInput, Form } from "./styled";
+import useInput from "../hooks";
+import { PageTitle, Input, Form } from "../common";
 
 const Login = () => {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, handleNameChange] = useInput();
+  const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +45,7 @@ const Login = () => {
       </Helmet>
       <PageTitle>Log in to your chatter account</PageTitle>
       <Form onSubmit={handleSubmit}>
-        <StyledInput
+        <Input
           placeholder="Name"
           type="text"
           name="name"
@@ -62,7 +54,7 @@ const Login = () => {
           value={name}
           fullWidth
         />
-        <StyledInput
+        <Input
           placeholder="Password"
           type="password"
           name="pwd"

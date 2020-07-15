@@ -4,26 +4,14 @@ import axios from "axios";
 import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
-import PageTitle from "../common/PageTitle";
-import { StyledInput, Form } from "./styled";
+import useInput from "../hooks";
+import { PageTitle, Input, Form } from "../common";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, handleNameChange] = useInput();
+  const [email, handleEmailChange] = useInput();
+  const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,7 +47,7 @@ const Register = () => {
       </Helmet>
       <PageTitle>Join the best chatters!</PageTitle>
       <Form onSubmit={handleSubmit}>
-        <StyledInput
+        <Input
           placeholder="Name"
           type="text"
           name="name"
@@ -68,7 +56,7 @@ const Register = () => {
           value={name}
           fullWidth
         />
-        <StyledInput
+        <Input
           placeholder="E-mail address"
           type="email"
           name="email"
@@ -77,7 +65,7 @@ const Register = () => {
           value={email}
           fullWidth
         />
-        <StyledInput
+        <Input
           placeholder="Password"
           type="password"
           name="pwd"

@@ -7,8 +7,6 @@ const StyledTypography = styled(Typography)`
   text-align: center;
 `;
 
-const PageTitle: React.FC = ({ children }) => {
+export const PageTitle: React.FC = ({ children }) => {
   return <StyledTypography variant="h6">{children}</StyledTypography>;
 };
-
-export default PageTitle;
