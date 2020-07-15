@@ -8,7 +8,7 @@ import useInput from "../hooks";
 import { PageTitle, Input, Form } from "../common";
 
 const Register = () => {
-  const [name, handleNameChange] = useInput();
+  const [username, handleUsernameChange] = useInput();
   const [email, handleEmailChange] = useInput();
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
@@ -17,7 +17,7 @@ const Register = () => {
     e.preventDefault();
     axios
       .post("http://localhost:8080/api/register", {
-        name,
+        username,
         email,
         password,
       })
@@ -48,12 +48,12 @@ const Register = () => {
       <PageTitle>Join the best chatters!</PageTitle>
       <Form onSubmit={handleSubmit}>
         <Input
-          placeholder="Name"
+          placeholder="Username"
           type="text"
-          name="name"
-          id="name"
-          onChange={handleNameChange}
-          value={name}
+          name="username"
+          id="username"
+          onChange={handleUsernameChange}
+          value={username}
           fullWidth
         />
         <Input

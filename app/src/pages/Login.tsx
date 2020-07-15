@@ -8,7 +8,7 @@ import useInput from "../hooks";
 import { PageTitle, Input, Form } from "../common";
 
 const Login = () => {
-  const [name, handleNameChange] = useInput();
+  const [username, handleUsernameChange] = useInput();
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
 
@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     axios
       .post("http://localhost:8080/api/login", {
-        name,
+        username,
         password,
       })
       .then((response) => {
@@ -46,12 +46,12 @@ const Login = () => {
       <PageTitle>Log in to your chatter account</PageTitle>
       <Form onSubmit={handleSubmit}>
         <Input
-          placeholder="Name"
+          placeholder="Username"
           type="text"
-          name="name"
-          id="name"
-          onChange={handleNameChange}
-          value={name}
+          name="username"
+          id="username"
+          onChange={handleUsernameChange}
+          value={username}
           fullWidth
         />
         <Input
