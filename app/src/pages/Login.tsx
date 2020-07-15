@@ -8,12 +8,12 @@ import PageTitle from "../common/PageTitle";
 import { StyledInput, Form } from "./styled";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<null | "success" | "error">(null);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     axios
       .post("http://localhost:8080/api/login", {
-        email,
+        name,
         password,
       })
       .then((response) => {
@@ -54,12 +54,12 @@ const Login = () => {
       <PageTitle>Log in to your chatter account</PageTitle>
       <Form onSubmit={handleSubmit}>
         <StyledInput
-          placeholder="E-mail address"
-          type="email"
-          name="email"
-          id="email"
-          onChange={handleEmailChange}
-          value={email}
+          placeholder="Name"
+          type="text"
+          name="name"
+          id="name"
+          onChange={handleNameChange}
+          value={name}
           fullWidth
         />
         <StyledInput
