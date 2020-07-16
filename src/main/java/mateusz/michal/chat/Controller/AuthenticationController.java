@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> createAuthenticaionToken(@RequestBody JwtTokenRequest jwtTokenRequest){
+    public ResponseEntity<String> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest){
         return ResponseEntity.ok(jwtTokenRequest.getUsername());
     }
 }
