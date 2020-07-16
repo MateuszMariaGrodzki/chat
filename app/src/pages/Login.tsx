@@ -15,7 +15,7 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8080/api/login", {
+      .post("http://localhost:8080/api/authenticate", {
         username,
         password,
       })
