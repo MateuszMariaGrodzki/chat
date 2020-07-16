@@ -8,7 +8,7 @@ import useInput from "../hooks";
 import { PageTitle, Input, Form } from "../common";
 
 const Register = () => {
-  const [username, handleUsernameChange] = useInput();
+  const [name, handleUsernameChange] = useInput();
   const [email, handleEmailChange] = useInput();
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
@@ -17,7 +17,7 @@ const Register = () => {
     e.preventDefault();
     axios
       .post("http://localhost:8080/api/register", {
-        username,
+        name,
         email,
         password,
       })
@@ -50,10 +50,10 @@ const Register = () => {
         <Input
           placeholder="Username"
           type="text"
-          name="username"
+          name="name"
           id="username"
           onChange={handleUsernameChange}
-          value={username}
+          value={name}
           fullWidth
         />
         <Input
