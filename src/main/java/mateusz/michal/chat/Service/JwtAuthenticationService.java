@@ -25,7 +25,11 @@ public class JwtAuthenticationService {
     private String SECRET_KEY;
 
     public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
-
+        if(isNameMissing(jwtTokenRequest.getUsername())){
+            return new JwtTokenResponse("name_missing");
+        } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
+            return new JwtTokenResponse("password_missing");
+        }
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
                     jwtTokenRequest.getPassword());
@@ -49,6 +53,14 @@ public class JwtAuthenticationService {
             Authentication authentication = authenticationManager.
                     authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return (UserDetails) authentication.getPrincipal();
+    }
+
+    private boolean isNameMissing(String name){
+        return name.equals("");
+    }
+
+    private boolean isPasswordMissing(String password){
+        return password.equals("");
     }
 
 }
