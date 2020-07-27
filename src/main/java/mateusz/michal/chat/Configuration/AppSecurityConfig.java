@@ -43,10 +43,10 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfiguration()).and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api//authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/chat").hasAnyAuthority("USER")
-                .anyRequest().permitAll();
+                .antMatchers("/api/chat").authenticated();
+
 
         http.formLogin().disable();
     }
