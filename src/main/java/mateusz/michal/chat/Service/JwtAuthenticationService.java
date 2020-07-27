@@ -7,6 +7,7 @@ import mateusz.michal.chat.Model.JwtTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,15 @@ public class JwtAuthenticationService {
     private String SECRET_KEY;
 
     public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
-        UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
-                jwtTokenRequest.getPassword());
-        String token = generateToken(userDetails.getUsername());
-        return new JwtTokenResponse(token);
+
+        try {
+            UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
+                    jwtTokenRequest.getPassword());
+            String token = generateToken(userDetails.getUsername());
+            return new JwtTokenResponse(token);
+        } catch (BadCredentialsException e){
+            return new JwtTokenResponse("bad_credentials");
+        }
     }
 
     private String generateToken(String username){
@@ -40,8 +46,9 @@ public class JwtAuthenticationService {
     }
 
     private UserDetails provideUserDetailsFromLoginForm(String username, String password){
-        Authentication authentication = authenticationManager.
-                authenticate(new UsernamePasswordAuthenticationToken(username,password));
+            Authentication authentication = authenticationManager.
+                    authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return (UserDetails) authentication.getPrincipal();
     }
+
 }
