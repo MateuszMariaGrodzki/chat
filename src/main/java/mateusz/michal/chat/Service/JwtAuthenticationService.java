@@ -26,7 +26,7 @@ public class JwtAuthenticationService {
 
     public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
         if(isNameMissing(jwtTokenRequest.getUsername())){
-            return new JwtTokenResponse("name_missing");
+            return new JwtTokenResponse("username_missing");
         } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
             return new JwtTokenResponse("password_missing");
         }
