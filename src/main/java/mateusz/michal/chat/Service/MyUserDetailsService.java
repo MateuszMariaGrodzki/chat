@@ -40,8 +40,13 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByName(name);
-        List<GrantedAuthority> authorities = getUserAuthorities(user.getRoles());
-        return buildUserForAuthentication(user,authorities);
+    User user = userRepository.findByName(name);
+    ArrayList<GrantedAuthority> roles = new ArrayList<>();
+    roles.add(new SimpleGrantedAuthority("USER"));
+    if(user == null){
+        throw new UsernameNotFoundException("user_not_found");
+    }
+    return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
+                roles);
     }
 }
