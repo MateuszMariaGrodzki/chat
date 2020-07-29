@@ -25,8 +25,8 @@ password_missing - parameter password is not present
 name_occupied - parameter name is presented in database  
 email_occupied - parameter email is presented in database  
 email_incorrect - email has not correct structure  
-weak_password - password is to weak.
-###Strong password must have:
+weak_password - password is to weak
+### Strong password must have:
 At least one small and big letter  
 At least one digit  
 At least one of special characters: !,@,#,$,%,^,&,*  
