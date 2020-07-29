@@ -26,17 +26,17 @@ public class JwtAuthenticationService {
 
     public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
         if(isNameMissing(jwtTokenRequest.getUsername())){
-            return new JwtTokenResponse("username_missing");
+            return new JwtTokenResponse("username_missing",null);
         } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
-            return new JwtTokenResponse("password_missing");
+            return new JwtTokenResponse("password_missing",null);
         }
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
                     jwtTokenRequest.getPassword());
             String token = generateToken(userDetails.getUsername());
-            return new JwtTokenResponse(token);
+            return new JwtTokenResponse(null,token);
         } catch (BadCredentialsException e){
-            return new JwtTokenResponse("bad_credentials");
+            return new JwtTokenResponse("bad_credentials",null);
         }
     }
 
