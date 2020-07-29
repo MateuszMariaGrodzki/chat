@@ -58,7 +58,7 @@ public class RegistrationControllerTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andReturn();
-        JsonRespond error = new JsonRespond("name_missing");
+        JsonRespond error = new JsonRespond("name_missing",false);
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
         assertThat(actualResponseBody).isEqualTo(
                 objectMapper.writeValueAsString(error));
