@@ -1,13 +1,19 @@
 package mateusz.michal.chat.Model;
 
 public class JsonRespond {
-    private String error;
+    private String errorCode;
+    private boolean isRegistered;
 
-    public JsonRespond(String error) {
-        this.error = error;
+    public JsonRespond(String errorCode, boolean isRegistered) {
+        this.errorCode = errorCode;
+        this.isRegistered = isRegistered;
     }
 
-    public String getError() {
-        return error;
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public boolean isRegistered(){
+        return isRegistered;
     }
 }
