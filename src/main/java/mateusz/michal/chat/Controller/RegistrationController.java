@@ -17,8 +17,6 @@ public class RegistrationController {
 
     @PostMapping(value = "/register",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JsonRespond> createNewUser(@RequestBody User user){
-        String answer = registrationService.saveUserToDatabase(user);
-        JsonRespond error = new JsonRespond(answer);
-        return ResponseEntity.ok(error);
+        return ResponseEntity.ok(registrationService.getResponseForUserRegistration(user));
     }
 }

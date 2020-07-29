@@ -1,6 +1,7 @@
 package mateusz.michal.chat.Service;
 
 import com.sun.istack.NotNull;
+import mateusz.michal.chat.Model.JsonRespond;
 import mateusz.michal.chat.Model.Role;
 import mateusz.michal.chat.Model.User;
 import mateusz.michal.chat.Repository.RoleRepository;
@@ -86,6 +87,15 @@ public class RegistrationService {
             User userToSave = createUser(user);
             userRepository.save(userToSave);
             return "registered";
+        }
+    }
+
+    public JsonRespond getResponseForUserRegistration(User user){
+        String errorCode = saveUserToDatabase(user);
+        if (errorCode.equals("registered")){
+            return new JsonRespond(null,true);
+        } else {
+            return new JsonRespond(errorCode,false);
         }
     }
 }
