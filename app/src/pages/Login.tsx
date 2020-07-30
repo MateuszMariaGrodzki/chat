@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
-import useInput from "../hooks";
+import { useInput } from "../hooks";
 import { PageTitle, Input, Form } from "../common";
 
 const Login = () => {
@@ -45,24 +45,8 @@ const Login = () => {
       </Helmet>
       <PageTitle>Log in to your chatter account</PageTitle>
       <Form onSubmit={handleSubmit}>
-        <Input
-          placeholder="Username"
-          type="text"
-          name="username"
-          id="username"
-          onChange={handleUsernameChange}
-          value={username}
-          fullWidth
-        />
-        <Input
-          placeholder="Password"
-          type="password"
-          name="pwd"
-          id="pwd"
-          onChange={handlePasswordChange}
-          value={password}
-          fullWidth
-        />
+        <Input placeholder="Username" type="text" name="username" id="username" onChange={handleUsernameChange} value={username} fullWidth />
+        <Input placeholder="Password" type="password" name="pwd" id="pwd" onChange={handlePasswordChange} value={password} fullWidth />
         <Box mt={2} display="flex" justifyContent="center">
           <Button variant="contained" size="large" type="submit" color="primary">
             Submit

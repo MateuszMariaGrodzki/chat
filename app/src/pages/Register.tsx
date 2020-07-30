@@ -4,16 +4,16 @@ import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
 import API from "../api";
-import useInput from "../hooks";
 import { PageTitle, Input, Form } from "../common";
-import { RegisterError, REGISTER_API_ERROR } from "../api/types";
+import { RegisterError } from "../api/types";
 import { registerFeedback } from "../api/errorMaps";
+import { useInput, useStatus } from "../hooks";
 
 const Register = () => {
   const [name, handleUsernameChange] = useInput();
   const [email, handleEmailChange] = useInput();
   const [password, handlePasswordChange] = useInput();
-  const [status, setStatus] = useState<null | "success" | "error">(null);
+  const [status, setStatus] = useStatus();
   const [error, setError] = useState<Maybe<RegisterError>>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
