@@ -17,6 +17,7 @@ const Register = () => {
   const [error, setError] = useState<Maybe<RegisterError>>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setStatus("pending");
     e.preventDefault();
     const { errorCode } = await API.register({ name, email, password });
     if (errorCode === null) {
@@ -42,7 +43,7 @@ const Register = () => {
         <Input placeholder="E-mail address" type="email" name="email" id="email" onChange={handleEmailChange} value={email} fullWidth />
         <Input placeholder="Password" type="password" name="pwd" id="pwd" onChange={handlePasswordChange} value={password} fullWidth />
         <Box mt={2} display="flex" justifyContent="center">
-          <Button variant="contained" size="large" type="submit" color="primary">
+          <Button variant="contained" size="large" type="submit" color="primary" disabled={status === "pending"}>
             Submit
           </Button>
         </Box>
