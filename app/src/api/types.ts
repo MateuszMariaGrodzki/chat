@@ -1,10 +1,4 @@
-type ErrorResponse = {
-  apiError: boolean;
-};
-
-export type POSTRequest = <T extends keyof POST>(url: T, data: POST[T]["request"]) => Promise<POST[T]["response"] | ErrorResponse>;
-
-export enum REGISTER_ERROR {
+export enum REGISTER_API_ERROR {
   name_missing = "name_missing",
   email_missing = "email_missing",
   password_missing = "password_missing",
@@ -14,6 +8,18 @@ export enum REGISTER_ERROR {
   weak_password = "weak_password",
 }
 
+export enum GENERIC_ERROR {
+  generic = "generic",
+}
+
+export type RegisterError = REGISTER_API_ERROR | GENERIC_ERROR;
+
+type ErrorResponse = {
+  errorCode: GENERIC_ERROR;
+};
+
+export type POSTRequest = <T extends keyof POST>(url: T, data: POST[T]["request"]) => Promise<POST[T]["response"] | ErrorResponse>;
+
 export interface POST {
   register: {
     request: {
@@ -22,10 +28,13 @@ export interface POST {
       password: string;
     };
     response: {
-      errorCode: REGISTER_ERROR;
-      registered: "true" | "false";
+      errorCode: Maybe<REGISTER_API_ERROR>;
+      registered: boolean;
     };
   };
+  /**
+   * example below; TODO: modify
+   */
   login: {
     request: {
       first_name: string;
