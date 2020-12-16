@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import mateusz.michal.chat.Model.JsonRespond;
 import mateusz.michal.chat.Model.User;
+import mateusz.michal.chat.Model.UserDTO;
 import mateusz.michal.chat.Service.MyUserDetailsService;
 import mateusz.michal.chat.Service.RegistrationService;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +52,7 @@ public class RegistrationControllerTest {
     @Test
     @DisplayName("Test response with name_missing error code")
     void testResponseWithNameMissing() throws Exception {
-        User user = User.builder().name("").email("saka@dsa.com").password("").build();
+        UserDTO user = UserDTO.builder().name("").email("saka@dsa.com").password("").build();
         when(registrationService.saveUserToDatabase(user)).thenReturn("name_missing");
         MvcResult mvcResult = mockMvc.perform(post("/api/register")
                 .contentType("application/json")

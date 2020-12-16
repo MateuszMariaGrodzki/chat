@@ -1,6 +1,7 @@
 package mateusz.michal.chat.Service;
 
 import mateusz.michal.chat.Model.User;
+import mateusz.michal.chat.Model.UserDTO;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,82 +31,84 @@ public class RegistrationServiceTest {
     @Test
     @DisplayName("Test saveUserToDatabase with missing name")
     void shouldNameBeMissing() {
-        User user = new User();
-        user.setName("");
-        user.setPassword("AlamaKota3@");
-        user.setEmail("Ala325@gmail.com");
-        assertEquals("name_missing",registrationService.saveUserToDatabase(user));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("");
+        userDTO.setPassword("AlamaKota3@");
+        userDTO.setEmail("Ala325@gmail.com");
+        assertEquals("name_missing",registrationService.saveUserToDatabase(userDTO));
     }
 
     @Test
     @DisplayName("Test saveUserToDatabase with missing email")
     void shouldEmailBeMissing() {
-        User user = new User();
-        user.setName("AlamaKota");
-        user.setEmail("");
-        user.setPassword("AlamaKota3@");
-        assertEquals("email_missing", registrationService.saveUserToDatabase(user));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("AlamaKota");
+        userDTO.setEmail("");
+        userDTO.setPassword("AlamaKota3@");
+        assertEquals("email_missing", registrationService.saveUserToDatabase(userDTO));
     }
 
     @Test
     @DisplayName("Test saveUserToDatabase with missing password")
     void shouldPasswordBeMissing(){
-        User user = new User();
-        user.setName("Mateusz");
-        user.setEmail("mateusz@gmail.com");
-        user.setPassword("");
-        assertEquals("password_missing", registrationService.saveUserToDatabase(user));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Mateusz");
+        userDTO.setEmail("mateusz@gmail.com");
+        userDTO.setPassword("");
+        assertEquals("password_missing", registrationService.saveUserToDatabase(userDTO));
     }
 
     @Test
     @DisplayName("Test for saveUserToDatabase with name occupied")
     void shouldNameBeInDatabase(){
-        User user = new User();
-        user.setName("Mateusz");
-        user.setEmail("mateusz@gmail.com");
-        user.setPassword("AlaMaKota3@");
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Mateusz");
+        userDTO.setEmail("mateusz@gmail.com");
+        userDTO.setPassword("AlaMaKota3@");
+        User user = User.builder().name("Mateusz").email("mateusz@gmail.com").password("aaa").build();
         when(userRepository.findByName(anyString())).thenReturn(user);
-        assertEquals("name_occupied", registrationService.saveUserToDatabase(user));
+        assertEquals("name_occupied", registrationService.saveUserToDatabase(userDTO));
     }
 
     @Test
     @DisplayName("Test for saveUserToDatabase with email occupied")
     void shouldEmailBeInDatabase(){
-        User user = new User();
-        user.setName("User1");
-        user.setEmail("mateusz@gmail.com");
-        user.setPassword("AlaMaKota");
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("User1");
+        userDTO.setEmail("mateusz@gmail.com");
+        userDTO.setPassword("AlaMaKota");
+        User user = User.builder().name("User2").email("mateusz@gmail.com").password("aaa").build();
         when(userRepository.findByEmail(anyString())).thenReturn(user);
-        assertEquals("email_occupied",registrationService.saveUserToDatabase(user));
+        assertEquals("email_occupied",registrationService.saveUserToDatabase(userDTO));
     }
 
     @Test
     @DisplayName("Test for saveUserToDatabase with incorrect email")
     void shouldEmailBeIncorrect(){
-        User user = new User();
-        user.setName("Mateusz");
-        user.setEmail("mateusz.gmail.com");
-        user.setPassword("Alokamak");
-        assertEquals("email_incorrect", registrationService.saveUserToDatabase(user));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Mateusz");
+        userDTO.setEmail("mateusz.gmail.com");
+        userDTO.setPassword("Alokamak");
+        assertEquals("email_incorrect", registrationService.saveUserToDatabase(userDTO));
     }
 
     @Test
     @DisplayName("Test for saveUserToDatabase with weak password")
     void  shouldPasswortBeWeak(){
-        User user = new User();
-        user.setName("Mateusz");
-        user.setEmail("mateusz@gmail.com");
-        user.setPassword("AlaMaKota3");
-        assertEquals("weak_password",registrationService.saveUserToDatabase(user));
-        user.setPassword("Al3@");
-        assertEquals("weak_password",registrationService.saveUserToDatabase(user));
-        user.setPassword("AlaMaKota1234!@#$KotaMaAla");
-        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
-        user.setPassword("AlaMaKota!@#$");
-        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
-        user.setPassword("ALAMAKOTA123@");
-        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
-        user.setPassword("alamakota123@");
-        assertEquals("weak_password", registrationService.saveUserToDatabase(user));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Mateusz");
+        userDTO.setEmail("mateusz@gmail.com");
+        userDTO.setPassword("AlaMaKota3");
+        assertEquals("weak_password",registrationService.saveUserToDatabase(userDTO));
+        userDTO.setPassword("Al3@");
+        assertEquals("weak_password",registrationService.saveUserToDatabase(userDTO));
+        userDTO.setPassword("AlaMaKota1234!@#$KotaMaAla");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(userDTO));
+        userDTO.setPassword("AlaMaKota!@#$");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(userDTO));
+        userDTO.setPassword("ALAMAKOTA123@");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(userDTO));
+        userDTO.setPassword("alamakota123@");
+        assertEquals("weak_password", registrationService.saveUserToDatabase(userDTO));
     }
 }
