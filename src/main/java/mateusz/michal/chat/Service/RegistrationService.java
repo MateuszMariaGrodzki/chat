@@ -1,10 +1,7 @@
 package mateusz.michal.chat.Service;
 
 import com.sun.istack.NotNull;
-import mateusz.michal.chat.Model.JsonRespond;
-import mateusz.michal.chat.Model.Role;
-import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Model.UserDTO;
+import mateusz.michal.chat.Model.*;
 import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,31 +69,31 @@ public class RegistrationService {
         return !pattern.matcher(password).matches();
     }
 
-    public String saveUserToDatabase(@NotNull UserDTO userDTO) {
+    public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
         if(isNameNotPresent(userDTO.getName())){
-            return "name_missing";
+            return RegisterFormErrorCode.NAME_MISSING;
         } else if(isEmailNotPresent(userDTO.getEmail())){
-            return "email_missing";
+            return RegisterFormErrorCode.EMAIL_MISSING;
         } else if(isPassworNotPresent(userDTO.getPassword())){
-            return "password_missing";
+            return RegisterFormErrorCode.PASSWORD_MISSING;
         } else if (isUserInDatabaseByName(userDTO.getName())){
-            return "name_occupied";
+            return RegisterFormErrorCode.NAME_OCCUPIED;
         } else if(isUserInDatabaseByEmail(userDTO.getEmail())){
-            return "email_occupied";
+            return RegisterFormErrorCode.EMAIL_OCCUPIED;
         } else if(isEmailIncorrect(userDTO.getEmail())){
-            return "email_incorrect";
+            return RegisterFormErrorCode.EMAIL_INCORRECT;
         } else if(isPasswordIncorrect(userDTO.getPassword())){
-            return "weak_password";
+            return RegisterFormErrorCode.WEAK_PASSWORD;
         } else {
             User userToSave = createUser(userDTO);
             userRepository.save(userToSave);
-            return "registered";
+            return RegisterFormErrorCode.REGISTERED;
         }
     }
 
     public JsonRespond getResponseForUserRegistration(UserDTO userDTO){
-        String errorCode = saveUserToDatabase(userDTO);
-        if (errorCode.equals("registered")){
+        RegisterFormErrorCode errorCode = saveUserToDatabase(userDTO);
+        if (errorCode.equals(RegisterFormErrorCode.REGISTERED)){
             return new JsonRespond(null,true);
         } else {
             return new JsonRespond(errorCode,false);
