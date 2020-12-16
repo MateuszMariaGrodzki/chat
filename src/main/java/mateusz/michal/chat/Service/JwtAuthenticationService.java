@@ -2,7 +2,7 @@ package mateusz.michal.chat.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import mateusz.michal.chat.Model.JwtAutenticationErrorCode;
+import mateusz.michal.chat.Model.JwtAuthenticationErrorCode;
 import mateusz.michal.chat.Model.JwtTokenRequest;
 import mateusz.michal.chat.Model.JwtTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +27,9 @@ public class JwtAuthenticationService {
 
     public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
         if(isNameMissing(jwtTokenRequest.getUsername())){
-            return new JwtTokenResponse(JwtAutenticationErrorCode.NAME_MISSING,null);
+            return new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,null);
         } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
-            return new JwtTokenResponse(JwtAutenticationErrorCode.PASSWORD_MISSING,null);
+            return new JwtTokenResponse(JwtAuthenticationErrorCode.PASSWORD_MISSING,null);
         }
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
@@ -37,7 +37,7 @@ public class JwtAuthenticationService {
             String token = generateToken(userDetails.getUsername());
             return new JwtTokenResponse(null,token);
         } catch (BadCredentialsException e){
-            return new JwtTokenResponse(JwtAutenticationErrorCode.BAD_CREDENTIALS,null);
+            return new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,null);
         }
     }
 
