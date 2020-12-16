@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import mateusz.michal.chat.Model.JsonRespond;
 import mateusz.michal.chat.Model.Role;
 import mateusz.michal.chat.Model.User;
+import mateusz.michal.chat.Model.UserDTO;
 import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,11 @@ public class RegistrationService {
     @Autowired
     UserRepository userRepository;
 
-    private User createUser(User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    private User createUser(UserDTO userDTO){
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         return user;
@@ -68,30 +72,30 @@ public class RegistrationService {
         return !pattern.matcher(password).matches();
     }
 
-    public String saveUserToDatabase(@NotNull User user) {
-        if(isNameNotPresent(user.getName())){
+    public String saveUserToDatabase(@NotNull UserDTO userDTO) {
+        if(isNameNotPresent(userDTO.getName())){
             return "name_missing";
-        } else if(isEmailNotPresent(user.getEmail())){
+        } else if(isEmailNotPresent(userDTO.getEmail())){
             return "email_missing";
-        } else if(isPassworNotPresent(user.getPassword())){
+        } else if(isPassworNotPresent(userDTO.getPassword())){
             return "password_missing";
-        } else if (isUserInDatabaseByName(user.getName())){
+        } else if (isUserInDatabaseByName(userDTO.getName())){
             return "name_occupied";
-        } else if(isUserInDatabaseByEmail(user.getEmail())){
+        } else if(isUserInDatabaseByEmail(userDTO.getEmail())){
             return "email_occupied";
-        } else if(isEmailIncorrect(user.getEmail())){
+        } else if(isEmailIncorrect(userDTO.getEmail())){
             return "email_incorrect";
-        } else if(isPasswordIncorrect(user.getPassword())){
+        } else if(isPasswordIncorrect(userDTO.getPassword())){
             return "weak_password";
         } else {
-            User userToSave = createUser(user);
+            User userToSave = createUser(userDTO);
             userRepository.save(userToSave);
             return "registered";
         }
     }
 
-    public JsonRespond getResponseForUserRegistration(User user){
-        String errorCode = saveUserToDatabase(user);
+    public JsonRespond getResponseForUserRegistration(UserDTO userDTO){
+        String errorCode = saveUserToDatabase(userDTO);
         if (errorCode.equals("registered")){
             return new JsonRespond(null,true);
         } else {
