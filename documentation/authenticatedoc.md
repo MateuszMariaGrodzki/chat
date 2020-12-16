@@ -15,9 +15,9 @@
 }
 ```
 ### If something went wrong token will be null and list of possible error codes is presented below:
-username_missing - parameter username is not present  
-password_missing - parameter password is not present  
-bad_credentials - user with specified username and password dosen't exist in database
+USERNAME_MISSING - parameter username is not present  
+PASSWORD_MISSING - parameter password is not present  
+BAD_CREDENTIALS - user with specified username and password dosen't exist in database
 ### Example of response when authentication was succesfull
 ```
 {
