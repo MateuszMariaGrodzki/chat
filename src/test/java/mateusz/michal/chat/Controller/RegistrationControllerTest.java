@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import mateusz.michal.chat.Model.JsonRespond;
+import mateusz.michal.chat.Model.RegisterFormErrorCode;
 import mateusz.michal.chat.Model.User;
 import mateusz.michal.chat.Model.UserDTO;
 import mateusz.michal.chat.Service.MyUserDetailsService;
@@ -53,13 +54,13 @@ public class RegistrationControllerTest {
     @DisplayName("Test response with name_missing error code")
     void testResponseWithNameMissing() throws Exception {
         UserDTO user = UserDTO.builder().name("").email("saka@dsa.com").password("").build();
-        when(registrationService.saveUserToDatabase(user)).thenReturn("name_missing");
+        when(registrationService.saveUserToDatabase(user)).thenReturn(RegisterFormErrorCode.NAME_MISSING);
         MvcResult mvcResult = mockMvc.perform(post("/api/register")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andReturn();
-        JsonRespond error = new JsonRespond("name_missing",false);
+        JsonRespond error = new JsonRespond(RegisterFormErrorCode.NAME_MISSING,false);
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
         assertThat(actualResponseBody).isEqualTo(
                 objectMapper.writeValueAsString(error));
