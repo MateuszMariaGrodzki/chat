@@ -1,13 +1,21 @@
 package mateusz.michal.chat.Model;
 
-public class JsonRespond {
-    private String error;
+import mateusz.michal.chat.Service.RegistrationService;
 
-    public JsonRespond(String error) {
-        this.error = error;
+public class JsonRespond {
+    private RegisterFormErrorCode errorCode;
+    private boolean isRegistered;
+
+    public JsonRespond(RegisterFormErrorCode errorCode, boolean isRegistered) {
+        this.errorCode = errorCode;
+        this.isRegistered = isRegistered;
     }
 
-    public String getError() {
-        return error;
+    public RegisterFormErrorCode getErrorCode() {
+        return errorCode;
+    }
+
+    public boolean isRegistered(){
+        return isRegistered;
     }
 }
