@@ -1,47 +1,38 @@
-export enum REGISTER_API_ERROR {
-  name_missing = "name_missing",
-  email_missing = "email_missing",
-  password_missing = "password_missing",
-  name_occupied = "name_occupied",
-  email_occupied = "email_occupied",
-  email_incorrect = "email_incorrect",
-  weak_password = "weak_password",
+export const enum REGISTER_API_ERROR {
+  NAME_MISSING = "NAME_MISSING",
+  EMAIL_MISSING = "EMAIL_MISSING",
+  PASSWORD_MISSING = "PASSWORD_MISSING",
+  NAME_OCCUPIED = "NAME_OCCUPIED",
+  EMAIL_OCCUPIED = "EMAIL_OCCUPIED",
+  EMAIL_INCORRECT = "EMAIL_INCORRECT",
+  WEAK_PASSWORD = "WEAK_PASSWORD",
 }
 
 export enum GENERIC_ERROR {
-  generic = "generic",
+  GENERIC = "GENERIC",
 }
 
 export type RegisterError = REGISTER_API_ERROR | GENERIC_ERROR;
 
-type ErrorResponse = {
+export interface GenericError {
   errorCode: GENERIC_ERROR;
-};
+}
 
-export type POSTRequest = <T extends keyof POST>(url: T, data: POST[T]["request"]) => Promise<POST[T]["response"] | ErrorResponse>;
+export namespace Register {
+  export interface Request {
+    name: string;
+    email: string;
+    password: string;
+  }
 
-export interface POST {
-  register: {
-    request: {
-      name: string;
-      email: string;
-      password: string;
-    };
-    response: {
-      errorCode: Maybe<REGISTER_API_ERROR>;
-      registered: boolean;
-    };
-  };
-  /**
-   * example below; TODO: modify
-   */
-  login: {
-    request: {
-      first_name: string;
-      last_name: string;
-    };
-    response: {
-      loginErorCode: string;
-    };
-  };
+  interface ValidResponse {
+    errorCode: null;
+    registered: true;
+  }
+
+  interface ErrorResponse {
+    errorCode: RegisterError;
+    registered: false;
+  }
+  export type Response = ValidResponse | ErrorResponse;
 }
