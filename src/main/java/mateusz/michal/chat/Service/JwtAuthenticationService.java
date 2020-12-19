@@ -2,6 +2,7 @@ package mateusz.michal.chat.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import mateusz.michal.chat.Model.JwtAuthenticationErrorCode;
 import mateusz.michal.chat.Model.JwtTokenRequest;
 import mateusz.michal.chat.Model.JwtTokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,9 @@ public class JwtAuthenticationService {
 
     public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
         if(isNameMissing(jwtTokenRequest.getUsername())){
-            return new JwtTokenResponse("username_missing",null);
+            return new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,null);
         } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
-            return new JwtTokenResponse("password_missing",null);
+            return new JwtTokenResponse(JwtAuthenticationErrorCode.PASSWORD_MISSING,null);
         }
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
@@ -36,7 +37,7 @@ public class JwtAuthenticationService {
             String token = generateToken(userDetails.getUsername());
             return new JwtTokenResponse(null,token);
         } catch (BadCredentialsException e){
-            return new JwtTokenResponse("bad_credentials",null);
+            return new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,null);
         }
     }
 
