@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import { useHistory } from "react-router-dom";
 
 import { Input, Form } from "../../common";
 import API from "../../api";
 import { RegisterError } from "../../api/types";
 import { getErrorText } from "../../api/errorMaps";
 import { useInput, useStatus } from "../../hooks";
+import { paths } from "../../config/paths";
 
 const RegisterForm = () => {
   const [name, handleUsernameChange] = useInput();
@@ -14,6 +16,8 @@ const RegisterForm = () => {
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useStatus();
   const [error, setError] = useState<Maybe<RegisterError>>(null);
+
+  const history = useHistory();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setStatus("pending");
@@ -24,12 +28,14 @@ const RegisterForm = () => {
       setError(errorCode);
     } else {
       setStatus("success");
+      history.push(paths.registerSuccess);
     }
   };
 
   const handleSnackbarClose = () => {
     setStatus(null);
   };
+
   return (
     <>
       <Form onSubmit={handleSubmit}>

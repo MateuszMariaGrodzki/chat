@@ -3,11 +3,12 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Container, CssBaseline } from "@material-ui/core";
 
+import { paths } from "./config/paths";
 import Header from "./components/Header";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import { paths } from "./config/paths";
+import RegisterSuccess from "./pages/RegisterSuccess";
 
 const App = () => (
   <>
@@ -20,6 +21,9 @@ const App = () => (
       <Header />
       <Container>
         <Switch>
+          <Route path={paths.registerSuccess}>
+            <RegisterSuccess />
+          </Route>
           <Route path={paths.register}>
             <Register />
           </Route>
