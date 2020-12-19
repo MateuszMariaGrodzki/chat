@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --config ./jest.config.js",
     "start": "webpack serve --mode development --hot",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "type-check": "tsc"
   },
   "keywords": [],
   "author": "",
