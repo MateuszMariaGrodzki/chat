@@ -5,7 +5,7 @@ import { Alert } from "@material-ui/lab";
 import { Input, Form } from "../../common";
 import API from "../../api";
 import { RegisterError } from "../../api/types";
-import { registerFeedback } from "../../api/errorMaps";
+import { getErrorText } from "../../api/errorMaps";
 import { useInput, useStatus } from "../../hooks";
 
 const RegisterForm = () => {
@@ -43,7 +43,7 @@ const RegisterForm = () => {
         </Box>
       </Form>
       <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert severity="error">{registerFeedback[error]}</Alert>
+        <Alert severity="error">{getErrorText(error)}</Alert>
       </Snackbar>
     </>
   );

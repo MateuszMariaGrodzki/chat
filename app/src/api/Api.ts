@@ -17,7 +17,7 @@ class API {
       .catch((error: unknown) => {
         console.error(error);
         return {
-          errorCode: GENERIC_ERROR.generic,
+          errorCode: GENERIC_ERROR.GENERIC,
         };
       });
   }
