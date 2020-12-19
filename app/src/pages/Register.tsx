@@ -19,12 +19,12 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setStatus("pending");
     e.preventDefault();
-    const { errorCode } = await API.register({ name, email, password });
-    if (errorCode === null) {
-      setStatus("success");
-    } else {
+    const { errorCode, ...data } = await API.register({ name, email, password });
+    if (errorCode !== null) {
       setStatus("error");
       setError(errorCode);
+    } else {
+      setStatus("success");
     }
   };
 

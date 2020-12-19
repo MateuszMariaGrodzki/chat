@@ -1,31 +1,29 @@
 import Axios from "axios";
 
-import { POST, POSTRequest, GENERIC_ERROR } from "./types";
+import { GENERIC_ERROR, Register } from "./types";
 
 // TODO: move to app config
 const apiURL = "http://localhost:8080/api";
 
 class API {
-  public static post: POSTRequest = (url, data) => {
-    return Axios.post<POST[typeof url]["response"]>(`${apiURL}/${url}`, data)
+  public static post<T, K>(url: string, data: T) {
+    return Axios.post<K>(`${apiURL}/${url}`, data)
       .then((response) => {
         if (response.status !== 200 || !response.data) {
-          return {
-            errorCode: GENERIC_ERROR.generic,
-          };
+          throw Error(`Server response status ${response.status}`);
         }
         return response.data;
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.error(error);
         return {
           errorCode: GENERIC_ERROR.generic,
         };
       });
-  };
+  }
 
-  public static register(data: POST["register"]["request"]) {
-    return this.post("register", data);
+  public static register(data: Register.Request) {
+    return this.post<Register.Request, Register.Response>("register", data);
   }
 }
 
