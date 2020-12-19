@@ -1,10 +1,10 @@
 package mateusz.michal.chat.Model;
 
 public class JwtTokenResponse {
-    JwtAuthenticationErrorCode errorCode;
-    String token;
-    String name;
-    String email;
+    private JwtAuthenticationErrorCode errorCode;
+    private String token;
+    private String name;
+    private String email;
 
     public JwtTokenResponse(JwtAuthenticationErrorCode errorCode, String token, String name, String email) {
         this.errorCode = errorCode;
@@ -20,4 +20,8 @@ public class JwtTokenResponse {
     public JwtAuthenticationErrorCode getErrorCode(){
         return errorCode;
     }
+
+    public String getName() { return name; }
+
+    public String getEmail() { return email; }
 }
