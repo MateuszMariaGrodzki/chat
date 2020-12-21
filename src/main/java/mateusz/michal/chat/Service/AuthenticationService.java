@@ -2,6 +2,7 @@ package mateusz.michal.chat.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.JwtAuthenticationErrorCode;
 import mateusz.michal.chat.Model.JwtTokenRequest;
 import mateusz.michal.chat.Model.JwtTokenResponse;
@@ -26,6 +27,9 @@ public class AuthenticationService {
     @Autowired
     UserService userRepository;
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
     @Value("${SECRETKEY}")
     private String SECRET_KEY;
 
@@ -40,22 +44,13 @@ public class AuthenticationService {
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
                     jwtTokenRequest.getPassword());
-            String token = generateToken(userDetails.getUsername());
+            String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userRepository.findByName(jwtTokenRequest.getUsername());
             return new JwtTokenResponse(null,token,user.getName(),user.getEmail());
         } catch (BadCredentialsException e){
             return new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,
                     null,null,null);
         }
-    }
-
-    private String generateToken(String username){
-        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-        String token = JWT.create()
-                .withSubject(username)
-                .withIssuedAt(new Date())
-                .sign(algorithm);
-        return token;
     }
 
     private UserDetails provideUserDetailsFromLoginForm(String username, String password){
