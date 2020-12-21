@@ -1,7 +1,5 @@
 package mateusz.michal.chat.Service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.JwtAuthenticationErrorCode;
 import mateusz.michal.chat.Model.JwtTokenRequest;
@@ -16,7 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.servlet.http.Cookie;
+
 
 @Service
 public class AuthenticationService {
@@ -51,6 +50,14 @@ public class AuthenticationService {
             return new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,
                     null,null,null);
         }
+    }
+
+    public Cookie generateRefreshCookie(String token){
+        Cookie cookie = new Cookie("token",token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        return cookie;
     }
 
     private UserDetails provideUserDetailsFromLoginForm(String username, String password){
