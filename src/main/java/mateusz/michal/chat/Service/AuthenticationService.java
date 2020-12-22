@@ -54,8 +54,8 @@ public class AuthenticationService {
 
     public Cookie generateRefreshCookie(String token){
         Cookie cookie = new Cookie("token",token);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
         cookie.setPath("/");
         return cookie;
     }
