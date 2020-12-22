@@ -18,6 +18,6 @@ public class RegistrationController {
 
     @PostMapping(value = "/register",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JsonRespond> createNewUser(@RequestBody UserDTO userDto){
-        return ResponseEntity.ok(registrationService.getResponseForUserRegistration(userDto));
+        return registrationService.getResponseForUserRegistration(userDto);
     }
 }
