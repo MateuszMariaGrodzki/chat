@@ -52,6 +52,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api//authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/chat").authenticated()
+                .antMatchers("/api/user").authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
