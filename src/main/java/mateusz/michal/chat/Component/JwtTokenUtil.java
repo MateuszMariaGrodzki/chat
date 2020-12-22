@@ -5,7 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import mateusz.michal.chat.Model.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -29,15 +31,8 @@ public class JwtTokenUtil {
         return token;
     }
 
-    public DecodedJWT decodeAndVerifyJwt(String token){
-        DecodedJWT decodedJWT = null;
-            try{
-                JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY))
-                .build();
-                decodedJWT = verifier.verify(token);
-                } catch (JWTVerificationException exception){
-                    exception.printStackTrace();
-                }
-                return decodedJWT;
+    public boolean decodeAndVerifyJwt(String token, UserDetails userDetails){
+       String usernameFromToken = getUsernameFromToken(token);
+       return usernameFromToken.equals(userDetails.getUsername());
     }
 }
