@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import { Input, Form } from "../../common";
 import API from "../../api";
-import { RegisterError } from "../../api/types";
+import { RegisterError, isValidRegisterResponse } from "../../api/types";
 import { getErrorText } from "../../api/errorMaps";
 import { useInput, useStatus } from "../../hooks";
 import { paths } from "../../config/paths";
@@ -22,13 +22,14 @@ const RegisterForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setStatus("pending");
     e.preventDefault();
-    const { errorCode, ...data } = await API.register({ name, email, password });
-    if (errorCode !== null) {
-      setStatus("error");
-      setError(errorCode);
-    } else {
+    const response = await API.register({ name, email, password });
+    // TODO: save user in app state
+    if (isValidRegisterResponse(response)) {
       setStatus("success");
       history.push(paths.registerSuccess);
+    } else {
+      setStatus("error");
+      setError(response.errorCode);
     }
   };
 
