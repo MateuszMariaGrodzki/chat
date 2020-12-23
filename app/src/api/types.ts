@@ -46,7 +46,7 @@ export namespace Register {
 }
 
 export function isValidRegisterResponse(response: Register.Response): response is Register.ValidResponse {
-  return response.errorCode === null && "registered" in response;
+  return response.errorCode === null && "registered" in response && typeof response.registered === "boolean";
 }
 
 export namespace Login {
@@ -55,7 +55,7 @@ export namespace Login {
     password: string;
   }
 
-  interface ValidResponse {
+  export interface ValidResponse {
     errorCode: null;
     token: string;
     name: string;
@@ -69,5 +69,10 @@ export namespace Login {
     email: null;
   }
 
-  export type Response = ValidResponse | ErrorResponse;
+  export type Response = ValidResponse | ErrorResponse | GenericError;
+}
+
+export function isValidLoginResponse(response: Login.Response): response is Login.ValidResponse {
+  const missingElement = ["token", "name", "email"].find((element) => !(element in response && typeof element === "string"));
+  return response.errorCode === null && !missingElement;
 }

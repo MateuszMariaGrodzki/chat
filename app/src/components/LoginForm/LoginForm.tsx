@@ -5,7 +5,7 @@ import { Alert } from "@material-ui/lab";
 import { useInput } from "../../hooks";
 import { Input, Form } from "../../common";
 import API from "../../api";
-import { LoginError } from "../../api/types";
+import { LoginError, isValidLoginResponse } from "../../api/types";
 import { getErrorText } from "../../api/errorMaps";
 
 const LoginForm = () => {
@@ -14,21 +14,19 @@ const LoginForm = () => {
   const [status, setStatus] = useState<null | "success" | "error">(null);
   const [error, setError] = useState<Maybe<LoginError>>(null);
 
+  // temporary - will be replaced with global app state
   const [userLogin, setUserLogin] = useState<Maybe<string>>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { errorCode, ...data } = await API.login({ name: username, password });
+    const response = await API.login({ name: username, password });
 
-    if (errorCode !== null) {
-      setStatus("error");
-      setError(errorCode);
-    } else {
+    if (isValidLoginResponse(response)) {
       setStatus("success");
-      // TODO: fix typing
-      // @ts-ignore
-      setUserLogin(data.name);
-      // TODO: save user data in app state
+      setUserLogin(response.name);
+    } else {
+      setStatus("error");
+      setError(response.errorCode);
     }
   };
 
@@ -47,7 +45,7 @@ const LoginForm = () => {
         </Box>
       </Form>
       <Snackbar open={status === "success"} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert severity="success">Logged in successfully!</Alert>
+        <Alert severity="success">Logged in as {userLogin}!</Alert>
       </Snackbar>
       <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose}>
         <Alert severity="error">{getErrorText(error)}</Alert>
