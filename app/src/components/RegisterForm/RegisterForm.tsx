@@ -23,6 +23,7 @@ const RegisterForm = () => {
     setStatus("pending");
     e.preventDefault();
     const { errorCode, ...data } = await API.register({ name, email, password });
+    // TODO: save user in app state
     if (errorCode !== null) {
       setStatus("error");
       setError(errorCode);

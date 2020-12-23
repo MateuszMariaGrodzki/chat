@@ -8,11 +8,18 @@ export const enum REGISTER_API_ERROR {
   WEAK_PASSWORD = "WEAK_PASSWORD",
 }
 
+export const enum LOGIN_API_ERROR {
+  USERNAME_MISSING = "USERNAME_MISSING",
+  PASSWORD_MISSING = "PASSWORD_MISSING",
+  BAD_CREDENTIALS = "BAD_CREDENTIALS",
+}
+
 export enum GENERIC_ERROR {
   GENERIC = "GENERIC",
 }
 
 export type RegisterError = REGISTER_API_ERROR | GENERIC_ERROR;
+export type LoginError = LOGIN_API_ERROR | GENERIC_ERROR;
 
 export interface GenericError {
   errorCode: GENERIC_ERROR;
@@ -34,5 +41,29 @@ export namespace Register {
     errorCode: RegisterError;
     registered: false;
   }
+
+  export type Response = ValidResponse | ErrorResponse;
+}
+
+export namespace Login {
+  export interface Request {
+    name: string;
+    password: string;
+  }
+
+  interface ValidResponse {
+    errorCode: null;
+    token: string;
+    name: string;
+    email: string;
+  }
+
+  interface ErrorResponse {
+    errorCode: LoginError;
+    token: null;
+    name: null;
+    email: null;
+  }
+
   export type Response = ValidResponse | ErrorResponse;
 }

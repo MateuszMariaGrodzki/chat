@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-import { GENERIC_ERROR, Register } from "./types";
+import { GENERIC_ERROR, Register, Login } from "./types";
 
 // TODO: move to app config
 const apiURL = "http://localhost:8080/api";
@@ -24,6 +24,10 @@ class API {
 
   public static register(data: Register.Request) {
     return this.post<Register.Request, Register.Response>("register", data);
+  }
+
+  public static login(data: Login.Request) {
+    return this.post<Login.Request, Login.Response>("authenticate", data);
   }
 }
 
