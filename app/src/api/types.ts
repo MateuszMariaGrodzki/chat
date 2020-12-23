@@ -32,17 +32,21 @@ export namespace Register {
     password: string;
   }
 
-  interface ValidResponse {
+  export interface ValidResponse {
     errorCode: null;
     registered: true;
   }
 
   interface ErrorResponse {
-    errorCode: RegisterError;
+    errorCode: REGISTER_API_ERROR;
     registered: false;
   }
 
-  export type Response = ValidResponse | ErrorResponse;
+  export type Response = ValidResponse | ErrorResponse | GenericError;
+}
+
+export function isValidRegisterResponse(response: Register.Response): response is Register.ValidResponse {
+  return response.errorCode === null && "registered" in response;
 }
 
 export namespace Login {

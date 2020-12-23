@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-import { GENERIC_ERROR, Register, Login } from "./types";
+import { GENERIC_ERROR, Register, Login, GenericError } from "./types";
 
 // TODO: move to app config
 const apiURL = "http://localhost:8080/api";
@@ -18,7 +18,7 @@ class API {
         console.error(error);
         return {
           errorCode: GENERIC_ERROR.GENERIC,
-        };
+        } as GenericError;
       });
   }
 
