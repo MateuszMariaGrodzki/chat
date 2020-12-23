@@ -1,21 +1,29 @@
 package mateusz.michal.chat.Controller;
 
+import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.JwtTokenRequest;
 import mateusz.michal.chat.Model.JwtTokenResponse;
-import mateusz.michal.chat.Service.JwtAuthenticationService;
+import mateusz.michal.chat.Service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api")
 public class AuthenticationController {
 
     @Autowired
-    JwtAuthenticationService jwtAuthenticationService;
+    AuthenticationService authenticationService;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest){
-        return ResponseEntity.ok(jwtAuthenticationService.authenticate(jwtTokenRequest));
+    public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest,
+                                                                      HttpServletResponse response){
+        response.addCookie(authenticationService.generateRefreshCookie(jwtTokenUtil.generateToken(jwtTokenRequest.getUsername())));
+        return ResponseEntity.ok(authenticationService.authenticate(jwtTokenRequest));
     }
 }

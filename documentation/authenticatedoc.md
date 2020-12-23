@@ -11,7 +11,9 @@
 ```
 {
     "errorCode": "error code or null",
-    "token": "token or null"
+    "token": "token or null",
+    "name": "user name or null",
+    "email": "user email or null"
 }
 ```
 ### If something went wrong token will be null and list of possible error codes is presented below:
@@ -22,6 +24,8 @@ BAD_CREDENTIALS - user with specified username and password dosen't exist in dat
 ```
 {
     "errorCode": null,
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYWNpZWsxMjgiLCJpYXQiOjE1OTU4NDc1ODZ9.XztiRFOq-CpeKQY1t5kUediNzucNAJ1739C6-VUsb60"
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNYWNpZWsxMjgiLCJpYXQiOjE1OTU4NDc1ODZ9.XztiRFOq-CpeKQY1t5kUediNzucNAJ1739C6-VUsb60",
+    "name": "username",
+    "email": "useremail"
 }
 ```

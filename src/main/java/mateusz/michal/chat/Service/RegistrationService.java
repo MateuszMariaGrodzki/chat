@@ -5,6 +5,9 @@ import mateusz.michal.chat.Model.*;
 import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -91,12 +94,13 @@ public class RegistrationService {
         }
     }
 
-    public JsonRespond getResponseForUserRegistration(UserDTO userDTO){
+    public ResponseEntity<JsonRespond> getResponseForUserRegistration(UserDTO userDTO){
         RegisterFormErrorCode errorCode = saveUserToDatabase(userDTO);
         if (errorCode.equals(RegisterFormErrorCode.REGISTERED)){
-            return new JsonRespond(null,true);
+            return ResponseEntity.ok(new JsonRespond(null,true));
         } else {
-            return new JsonRespond(errorCode,false);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new JsonRespond(errorCode,false));
         }
     }
 }
