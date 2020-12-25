@@ -1,36 +1,33 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
 import { useInput } from "../../hooks";
 import { Input, Form } from "../../common";
+import API from "../../api";
+import { LoginError, isValidLoginResponse } from "../../api/types";
+import { getErrorText } from "../../api/errorMaps";
 
 const LoginForm = () => {
   const [username, handleUsernameChange] = useInput();
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
+  const [error, setError] = useState<Maybe<LoginError>>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // temporary - will be replaced with global app state
+  const [userLogin, setUserLogin] = useState<Maybe<string>>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8080/api/authenticate", {
-        username,
-        password,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          // TODO: check also backend response when provided; handle errors
-          setStatus("success");
-        } else {
-          setStatus("error");
-        }
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-        setStatus("error");
-      });
+    const response = await API.login({ name: username, password });
+
+    if (isValidLoginResponse(response)) {
+      setStatus("success");
+      setUserLogin(response.name);
+    } else {
+      setStatus("error");
+      setError(response.errorCode);
+    }
   };
 
   const handleSnackbarClose = () => {
@@ -48,10 +45,10 @@ const LoginForm = () => {
         </Box>
       </Form>
       <Snackbar open={status === "success"} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert severity="success">Logged in successfully!</Alert>
+        <Alert severity="success">Logged in as {userLogin}!</Alert>
       </Snackbar>
       <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert severity="error">Oops! Something went wrong...</Alert>
+        <Alert severity="error">{getErrorText(error)}</Alert>
       </Snackbar>
     </>
   );

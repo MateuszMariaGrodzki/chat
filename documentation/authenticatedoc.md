@@ -1,13 +1,18 @@
 # Login form
+
 ### Login form is on `/api/authenticate` endpoint
+
 ### Required JSON as presented below:
+
 ```
 {
     "username": "Maciek128",
     "password": "dzemmalinowy135"
 }
 ```
+
 ### and you will get response as follows
+
 ```
 {
     "errorCode": "error code or null",
@@ -16,11 +21,15 @@
     "email": "user email or null"
 }
 ```
+
 ### If something went wrong token will be null and list of possible error codes is presented below:
+
 USERNAME_MISSING - parameter username is not present  
 PASSWORD_MISSING - parameter password is not present  
-BAD_CREDENTIALS - user with specified username and password dosen't exist in database
+BAD_CREDENTIALS - user with specified username and password doesn't exist in database
+
 ### Example of response when authentication was succesfull
+
 ```
 {
     "errorCode": null,
