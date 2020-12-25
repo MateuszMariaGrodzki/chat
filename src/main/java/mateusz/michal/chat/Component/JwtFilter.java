@@ -2,6 +2,7 @@ package mateusz.michal.chat.Component;
 
 import mateusz.michal.chat.Model.User;
 import mateusz.michal.chat.Repository.UserRepository;
+import mateusz.michal.chat.Service.CookieService;
 import mateusz.michal.chat.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,11 +28,14 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    CookieService cookieService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        Cookie tokenCookie = getTokenCookieFromCookies(request.getCookies());
+        Cookie tokenCookie = cookieService.getTokenCookieFromCookies(request.getCookies());
         if(tokenCookie != null) {
             String username = jwtTokenUtil.getUsernameFromToken(tokenCookie.getValue());
             UserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
@@ -46,15 +50,4 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
-    private Cookie getTokenCookieFromCookies(Cookie[] cookies){
-        if (cookies == null){
-            return null;
-        }
-        for (Cookie cookie : cookies){
-            if (cookie.getName().equals("token")){
-                return cookie;
-            }
-        }
-        return null;
-    }
 }
