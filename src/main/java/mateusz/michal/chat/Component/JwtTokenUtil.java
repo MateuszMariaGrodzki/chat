@@ -3,6 +3,7 @@ package mateusz.michal.chat.Component;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import mateusz.michal.chat.Model.User;
@@ -19,7 +20,13 @@ public class JwtTokenUtil {
     private String SECRET_KEY;
 
     public String getUsernameFromToken(String token){
-        return JWT.decode(token).getSubject();
+        String name = "";
+        try {
+            name = JWT.decode(token).getSubject();
+        } catch(JWTDecodeException exception){
+            return null;
+        }
+        return name;
     }
 
     public String generateToken(String username){

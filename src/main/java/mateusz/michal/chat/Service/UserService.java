@@ -61,8 +61,12 @@ public class UserService {
             return new UserProfilDTO();
         } else {
             String username = jwtTokenUtil.getUsernameFromToken(cookie.getValue());
-            User user = findByName(username);
-            return new UserProfilDTO(user.getName(),user.getEmail());
+            if(username == null){
+                return new UserProfilDTO();
+            } else {
+                User user = findByName(username);
+                return new UserProfilDTO(user.getName(),user.getEmail());
+            }
         }
     }
 }
