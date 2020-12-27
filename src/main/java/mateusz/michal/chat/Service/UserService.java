@@ -1,10 +1,9 @@
 package mateusz.michal.chat.Service;
 
-import lombok.AllArgsConstructor;
+
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.Role;
 import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Model.UserDTO;
 import mateusz.michal.chat.Model.UserProfilDTO;
 import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -34,6 +35,9 @@ public class UserService {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    CookieService cookieService;
+
     public User findUserByEmail(String email){
         return userRepository.findByEmail(email);
     }
@@ -51,9 +55,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserProfilDTO loadUserProfilDTOFromDataBaseByJwtToken(String token){
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        User user = findByName(username);
-        return new UserProfilDTO(user.getName(),user.getEmail());
+    public UserProfilDTO loadUserProfilDTOFromDataBaseByJwtToken(HttpServletRequest request){
+        Cookie cookie = cookieService.getTokenCookieFromCookies(request.getCookies());
+        if(cookie == null){
+            return new UserProfilDTO();
+        } else {
+            String username = jwtTokenUtil.getUsernameFromToken(cookie.getValue());
+            if(username == null){
+                return new UserProfilDTO();
+            } else {
+                User user = findByName(username);
+                return new UserProfilDTO(user.getName(),user.getEmail());
+            }
+        }
     }
 }
