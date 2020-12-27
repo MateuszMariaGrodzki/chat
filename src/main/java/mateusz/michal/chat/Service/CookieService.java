@@ -18,4 +18,12 @@ public class CookieService {
         }
         return null;
     }
+
+    public Cookie generateRefreshCookie(String token){
+        Cookie cookie = new Cookie("token",token);
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        return cookie;
+    }
 }

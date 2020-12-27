@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 
 @Service
@@ -29,10 +30,13 @@ public class AuthenticationService {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    CookieService cookieService;
+
     @Value("${SECRETKEY}")
     private String SECRET_KEY;
 
-    public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest){
+    public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
         if(isNameMissing(jwtTokenRequest.getUsername())){
             return new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,
                     null,null,null);
@@ -45,19 +49,12 @@ public class AuthenticationService {
                     jwtTokenRequest.getPassword());
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userRepository.findByName(jwtTokenRequest.getUsername());
+            response.addCookie(cookieService.generateRefreshCookie(token));
             return new JwtTokenResponse(null,token,user.getName(),user.getEmail());
         } catch (BadCredentialsException e){
             return new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,
                     null,null,null);
         }
-    }
-
-    public Cookie generateRefreshCookie(String token){
-        Cookie cookie = new Cookie("token",token);
-        cookie.setHttpOnly(false);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        return cookie;
     }
 
     private UserDetails provideUserDetailsFromLoginForm(String username, String password){
