@@ -23,7 +23,6 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest,
                                                                       HttpServletResponse response){
-        response.addCookie(authenticationService.generateRefreshCookie(jwtTokenUtil.generateToken(jwtTokenRequest.getUsername())));
-        return ResponseEntity.ok(authenticationService.authenticate(jwtTokenRequest));
+        return ResponseEntity.ok(authenticationService.authenticate(jwtTokenRequest, response));
     }
 }
