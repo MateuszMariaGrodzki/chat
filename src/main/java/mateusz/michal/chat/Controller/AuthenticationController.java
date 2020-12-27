@@ -23,6 +23,6 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest,
                                                                       HttpServletResponse response){
-        return ResponseEntity.ok(authenticationService.authenticate(jwtTokenRequest, response));
+        return authenticationService.authenticate(jwtTokenRequest, response);
     }
 }
