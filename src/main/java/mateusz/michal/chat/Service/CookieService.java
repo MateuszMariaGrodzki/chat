@@ -21,7 +21,7 @@ public class CookieService {
 
     public Cookie generateRefreshCookie(String token){
         Cookie cookie = new Cookie("token",token);
-        cookie.setHttpOnly(false);
+        cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");
         return cookie;
