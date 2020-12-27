@@ -7,6 +7,8 @@ import mateusz.michal.chat.Model.JwtTokenResponse;
 import mateusz.michal.chat.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,9 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
 
 @Service
 public class AuthenticationService {
@@ -36,13 +36,15 @@ public class AuthenticationService {
     @Value("${SECRETKEY}")
     private String SECRET_KEY;
 
-    public JwtTokenResponse authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
+    public ResponseEntity<JwtTokenResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
         if(isNameMissing(jwtTokenRequest.getUsername())){
-            return new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,
-                    null,null,null);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,
+                    null,null,null));
         } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
-            return new JwtTokenResponse(JwtAuthenticationErrorCode.PASSWORD_MISSING,
-                    null, null,null);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new JwtTokenResponse(JwtAuthenticationErrorCode.PASSWORD_MISSING,
+                    null, null,null));
         }
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
@@ -50,10 +52,12 @@ public class AuthenticationService {
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userRepository.findByName(jwtTokenRequest.getUsername());
             response.addCookie(cookieService.generateRefreshCookie(token));
-            return new JwtTokenResponse(null,token,user.getName(),user.getEmail());
+            return ResponseEntity.ok(new JwtTokenResponse(null,
+                    token,user.getName(),user.getEmail()));
         } catch (BadCredentialsException e){
-            return new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,
-                    null,null,null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,
+                    null,null,null));
         }
     }
 
