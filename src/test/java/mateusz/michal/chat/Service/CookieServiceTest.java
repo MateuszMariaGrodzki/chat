@@ -64,4 +64,21 @@ public class CookieServiceTest {
         //then
         Assertions.assertNull(returnCookie);
     }
+
+    @Test
+    @DisplayName("Test getTokenCookieFromCookies when token cookie is Present among cookies")
+    public void shouldReturnTokenCookie(){
+        // given
+        Cookie cookie = new Cookie("cookie" , "value");
+        Cookie tokenCookie = new Cookie("token", "realToken");
+        Cookie[] cookies = new Cookie[2];
+        cookies[0] = cookie;
+        cookies[1] = tokenCookie;
+
+        //when
+        Cookie returnCookie = cookieService.getTokenCookieFromCookies(cookies);
+
+        //then
+        Assertions.assertEquals("realToken",returnCookie.getValue());
+    }
 }
