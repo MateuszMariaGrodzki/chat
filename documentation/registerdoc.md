@@ -31,4 +31,7 @@ At least one small and big letter
 At least one digit  
 At least one of special characters: !,@,#,$,%,^,&,*  
 Cannot have white characters  
-Cannot be shorter than 8 and longer than 15  
+Cannot be shorter than 8 and longer than 15 
+### HTTP status codes for each response:
+if user was succesfully registered and saved into database http status is 200  
+otherwise http status is 422
