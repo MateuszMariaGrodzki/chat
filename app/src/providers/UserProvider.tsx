@@ -17,8 +17,6 @@ export const UserContextProvider: React.FC = ({children}) => {
 
   const fetchUser = useCallback(async () => {
     const fetchedUser = await API.getUser();
-    console.log(">> fetched user", fetchedUser);
-    
     if (!isValidUserResponse(fetchedUser)) {
       return;
     }
