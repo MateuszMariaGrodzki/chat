@@ -31,4 +31,17 @@ public class CookieServiceTest {
         //then
         Assertions.assertNull(cookie);
     }
+
+    @Test
+    @DisplayName("Test getTokenCookieFromCookies when cookie array has 0 elements")
+    public void shouldReturnNullWhenArrayHasZeroElements(){
+        // given
+        Cookie[] cookies = new Cookie[0];
+
+        //when
+        Cookie cookie = cookieService.getTokenCookieFromCookies(cookies);
+
+        //then
+        Assertions.assertNull(cookie);
+    }
 }
