@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.Cookie;
+import java.util.Arrays;
 
 public class CookieServiceTest {
 
@@ -43,5 +44,24 @@ public class CookieServiceTest {
 
         //then
         Assertions.assertNull(cookie);
+    }
+
+    @Test
+    @DisplayName("Test getTokenCookieFromCookies when cookie array has cookies but token cookie is not present")
+    public void shouldReturnNullWhenArrayDontHaveCookieWithToken(){
+        // given
+        Cookie cookie = new Cookie("cookie1", "value1");
+        Cookie cookie2 = new Cookie("cookie2", "value2");
+        Cookie cookie3 = new Cookie("cookie3", "value3");
+        Cookie[] cookies = new Cookie[3];
+        cookies[0] = cookie;
+        cookies[1] = cookie2;
+        cookies[2] = cookie3;
+
+        //when
+        Cookie returnCookie = cookieService.getTokenCookieFromCookies(cookies);
+
+        //then
+        Assertions.assertNull(returnCookie);
     }
 }
