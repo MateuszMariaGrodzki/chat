@@ -27,8 +27,8 @@ const Header = () => {
             </Button>
           </>
         )}
-        {isLoggedIn && <Button component={StyledLink} to="/register" color="primary">
-          Logout (non-f)
+        {isLoggedIn && <Button color="primary">
+          Logout (non-functional)
         </Button>}
       </Toolbar>
     </AppBar>

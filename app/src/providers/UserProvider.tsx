@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { User, UserContextValue } from "./types";
+import { UserContextValue } from "./types";
 
 const defaultValue: UserContextValue = {
   user: undefined,
@@ -10,7 +10,7 @@ const defaultValue: UserContextValue = {
 const UserContext = createContext(defaultValue);
 
 export const UserContextProvider: React.FC = ({children}) => {
-  const [user, setUser] = useState<User>(undefined);
+  const [user, setUser] = useState<UserContextValue["user"]>(undefined);
   useEffect(() => {
     setTimeout(() => {
       setUser(null);
