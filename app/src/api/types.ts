@@ -73,6 +73,20 @@ export namespace Login {
 }
 
 export function isValidLoginResponse(response: Login.Response): response is Login.ValidResponse {
-  const missingElement = ["token", "name", "email"].find((element) => !(element in response && typeof element === "string"));
-  return response.errorCode === null && !missingElement;
+  const missingField = ["token", "name", "email"].find((element) => !(element in response && typeof element === "string"));
+  return response.errorCode === null && !missingField;
+}
+
+export namespace User {
+  export interface ValidResponse {
+    name: Maybe<string>;
+    email: Maybe<string>;
+  }
+
+  export type Response = ValidResponse | GenericError;
+}
+
+export function isValidUserResponse(response: User.Response): response is User.ValidResponse {
+  const missingField = ["name", "email"].find(field => !(field in response));
+  return !("errorCode" in response) && !missingField;
 }
