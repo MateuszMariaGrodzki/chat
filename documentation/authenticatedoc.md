@@ -38,3 +38,7 @@ BAD_CREDENTIALS - user with specified username and password doesn't exist in dat
     "email": "useremail"
 }
 ```
+### HTTP status code for each response:
+When error code is USERNAME_MISSING oraz PASSWORD_MISSING http code is 422  
+When error code is BAD_CREDENTIALS http status code is 401
+Otherwise http status code is 200
