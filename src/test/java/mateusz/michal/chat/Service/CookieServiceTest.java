@@ -81,4 +81,56 @@ public class CookieServiceTest {
         //then
         Assertions.assertEquals("realToken",returnCookie.getValue());
     }
+
+    @Test
+    @DisplayName("Test generateRefreshCookie has good cookie name")
+    public void shouldCookieNameByToken(){
+        // given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertEquals("token",cookie.getName());
+    }
+
+    @Test
+    @DisplayName("Test is generateRefreshCookie create httpOnly Cookie")
+    public void shouldCokkieByHttpOnly(){
+        //given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertTrue(cookie.isHttpOnly());
+    }
+
+    @Test
+    @DisplayName("Test is generateRefreshCookie create not secure Cookie")
+    public void shouldCookieByNotSecured(){
+        //given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertFalse(cookie.getSecure());
+    }
+
+    @Test
+    @DisplayName("Test is generateRefreshCookie create Cookie with path /")
+    public void shouldPathBeRoot(){
+        //given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertEquals(cookie.getPath(),"/");
+    }
 }
