@@ -1,7 +1,7 @@
 import { exhaustive } from "../utils/ehxaustive";
 import { REGISTER_API_ERROR, GENERIC_ERROR, LOGIN_API_ERROR } from "./types";
 
-export const getErrorText = (error: REGISTER_API_ERROR | LOGIN_API_ERROR | GENERIC_ERROR) => {
+export const getErrorText = (error: REGISTER_API_ERROR | LOGIN_API_ERROR | GENERIC_ERROR | null) => {
   switch (error) {
     case REGISTER_API_ERROR.EMAIL_INCORRECT:
       return "Email is incorrect";
@@ -22,6 +22,7 @@ export const getErrorText = (error: REGISTER_API_ERROR | LOGIN_API_ERROR | GENER
     case LOGIN_API_ERROR.BAD_CREDENTIALS:
       return "Login or password incorrect";
     case GENERIC_ERROR.GENERIC:
+    case null:
       return "Unknown error. Try again later!";
     default:
       exhaustive(error);
