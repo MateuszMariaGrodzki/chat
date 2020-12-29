@@ -81,4 +81,18 @@ public class CookieServiceTest {
         //then
         Assertions.assertEquals("realToken",returnCookie.getValue());
     }
+
+    @Test
+    @DisplayName("Test generateRefreshCookie has good cookie name")
+    public void shouldCookieNameByToken(){
+        // given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertEquals("token",cookie.getName());
+    }
+    
 }
