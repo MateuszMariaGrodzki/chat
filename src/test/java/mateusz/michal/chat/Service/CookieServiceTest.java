@@ -120,4 +120,17 @@ public class CookieServiceTest {
         //then
         Assertions.assertFalse(cookie.getSecure());
     }
+
+    @Test
+    @DisplayName("Test is generateRefreshCookie create Cookie with path /")
+    public void shouldPathBeRoot(){
+        //given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertEquals(cookie.getPath(),"/");
+    }
 }
