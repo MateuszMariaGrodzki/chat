@@ -94,5 +94,17 @@ public class CookieServiceTest {
         //then
         Assertions.assertEquals("token",cookie.getName());
     }
-    
+
+    @Test
+    @DisplayName("Test is generateRefreshCookie create httpOnly Cookie")
+    public void shouldCokkieByHttpOnly(){
+        //given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertTrue(cookie.isHttpOnly());
+    }
 }
