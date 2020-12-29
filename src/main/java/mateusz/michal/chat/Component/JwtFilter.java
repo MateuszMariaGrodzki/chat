@@ -25,7 +25,7 @@ import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-    private List<String> notFilterEndpoints = Arrays.asList("/api/register","/api/user","/api/login");
+    private List<String> notFilterEndpoints = Arrays.asList("/api/register","/api/user","/api/authenticate");
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
