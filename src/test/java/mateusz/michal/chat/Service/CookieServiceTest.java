@@ -107,4 +107,17 @@ public class CookieServiceTest {
         //then
         Assertions.assertTrue(cookie.isHttpOnly());
     }
+
+    @Test
+    @DisplayName("Test is generateRefreshCookie create not secure Cookie")
+    public void shouldCookieByNotSecured(){
+        //given
+        String token = "aaa";
+
+        //when
+        Cookie cookie = cookieService.generateRefreshCookie(token);
+
+        //then
+        Assertions.assertFalse(cookie.getSecure());
+    }
 }
