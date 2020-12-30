@@ -6,7 +6,7 @@
 
 ```
 {
-    "username": "Maciek128",
+    "name": "Maciek128",
     "password": "dzemmalinowy135"
 }
 ```
