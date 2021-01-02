@@ -1,6 +1,7 @@
 package mateusz.michal.chat.Configuration;
 
 import mateusz.michal.chat.Component.JwtFilter;
+import mateusz.michal.chat.Component.MyLogoutHandler;
 import mateusz.michal.chat.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.http.Cookie;
-import java.io.IOException;
 import java.util.Arrays;
 
 @Configuration
@@ -36,6 +35,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     JwtFilter jwtFilter;
+
+    @Autowired
+    MyLogoutHandler myLogoutHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -65,26 +67,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
                         .logoutUrl("/api/logout")
                         .logoutSuccessUrl("/api/authenticate")
-                        .addLogoutHandler((request, response, auth) -> {
-                            Cookie[] cookies = request.getCookies();
-                            if(cookies == null){
-                                try {
-                                    response.sendError(403);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                for (Cookie cookie : request.getCookies()) {
-                                    String cookieName = cookie.getName();
-                                    Cookie cookieToDelete = new Cookie(cookieName, null);
-                                    cookieToDelete.setMaxAge(0);
-                                    cookieToDelete.setHttpOnly(true);
-                                    cookieToDelete.setSecure(false);
-                                    cookieToDelete.setPath("/");
-                                    response.addCookie(cookieToDelete);
-                                }
-                            }
-                        })
+                        .addLogoutHandler(myLogoutHandler)
                 );
     }
 
