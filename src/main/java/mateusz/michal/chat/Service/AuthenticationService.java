@@ -37,7 +37,7 @@ public class AuthenticationService {
     private String SECRET_KEY;
 
     public ResponseEntity<JwtTokenResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
-        if(isNameMissing(jwtTokenRequest.getUsername())){
+        if(isNameMissing(jwtTokenRequest.getName())){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,
                     null,null,null));
@@ -47,10 +47,10 @@ public class AuthenticationService {
                     null, null,null));
         }
         try {
-            UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getUsername(),
+            UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getName(),
                     jwtTokenRequest.getPassword());
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
-            User user = userRepository.findByName(jwtTokenRequest.getUsername());
+            User user = userRepository.findByName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
             return ResponseEntity.ok(new JwtTokenResponse(null,
                     token,user.getName(),user.getEmail()));
