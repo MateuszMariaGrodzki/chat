@@ -27,9 +27,7 @@ const Header = () => {
             </Button>
           </>
         )}
-        {isLoggedIn && <Button color="primary">
-          Logout (non-functional)
-        </Button>}
+        {isLoggedIn && <Button color="secondary">Logout (non-functional)</Button>}
       </Toolbar>
     </AppBar>
   );

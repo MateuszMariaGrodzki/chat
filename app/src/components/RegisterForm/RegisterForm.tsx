@@ -23,7 +23,7 @@ const RegisterForm = () => {
     setStatus("pending");
     e.preventDefault();
     const response = await API.register({ name, email, password });
-    // TODO: save user in app state
+    // TODO: save user in app state, when backend does it
     if (isValidRegisterResponse(response)) {
       setStatus("success");
       history.push(paths.registerSuccess);
