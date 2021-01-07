@@ -6,6 +6,7 @@ class API {
   private static apiURL = "http://localhost:8080/api";
   private static axiosConfig: AxiosRequestConfig = {
     validateStatus: (status) => status < 500,
+    withCredentials: true,
   };
 
   public static get<Response>(url: string) {
