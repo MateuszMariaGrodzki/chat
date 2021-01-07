@@ -5,7 +5,6 @@ import mateusz.michal.chat.Model.*;
 import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
