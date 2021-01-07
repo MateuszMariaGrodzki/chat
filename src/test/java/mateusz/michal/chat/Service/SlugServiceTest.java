@@ -19,7 +19,7 @@ public class SlugServiceTest {
 
     @Test
     @DisplayName("Test generateSlug with all polish signs")
-    public void generateSlugWithAllPolishSigns(){
+    public void generateSlugWithAllPolishSignsTest(){
         //given
         String inputName = "ąćęłńóśźż";
 
@@ -32,7 +32,7 @@ public class SlugServiceTest {
 
     @Test
     @DisplayName("Test generateSlug with spaces")
-    public void generateSlugWithSpaces(){
+    public void generateSlugWithSpacesTest(){
         //given
         String inputName = "jan kowalski";
 
@@ -45,7 +45,7 @@ public class SlugServiceTest {
 
     @Test
     @DisplayName("Test generateSlug with Big polish letters and space")
-    public void generateSlugWithBigPolishLettersAndSpaces(){
+    public void generateSlugWithBigPolishLettersAndSpacesTest(){
         //given
         String inputName = "ĄĆĘ ŁŃÓŚ ŹŻ";
 
@@ -54,5 +54,44 @@ public class SlugServiceTest {
 
         //then
         Assertions.assertEquals("ace-lnos-zz",result);
+    }
+
+    @Test
+    @DisplayName("Test generateSlug when ending with empty slug")
+    public void generateSlugWithSlugEndpingEmptyTest(){
+        //given
+        String inputName = "@@@";
+
+        //when
+        String result = slugService.generateSlugFromName(inputName);
+
+        //then
+        Assertions.assertEquals("",result);
+    }
+
+    @Test
+    @DisplayName("Test generateSlug with big letters and no polish sign and no spaces")
+    public void generateSlugWithBigLettersNoSpacesNoPolishSignsTest(){
+        //given
+        String inputName = "JANKOWALSKI";
+
+        //when
+        String result = slugService.generateSlugFromName(inputName);
+
+        //then
+        Assertions.assertEquals("jankowalski",result);
+    }
+
+    @Test
+    @DisplayName("Test generateSlug with forbidden signs")
+    public void generateSlugWithForbiddenSignsTest(){
+        //given
+        String inputString = "J@#%@<.>2kowalSKć'][;ma";
+
+        //when
+        String result = slugService.generateSlugFromName(inputString);
+
+        //then
+        Assertions.assertEquals("j2kowalskcma",result);
     }
 }
