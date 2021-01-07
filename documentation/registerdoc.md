@@ -22,6 +22,7 @@
 NAME_MISSING - parameter name is not present  
 EMAIL_MISSING - parameter email is not present  
 PASSWORD_MISSING - parameter password is not present  
+NAME_INCORRECT - name starts or ends with space  
 NAME_OCCUPIED - parameter name is presented in database  
 EMAIL_OCCUPIED - parameter email is presented in database  
 EMAIL_INCORRECT - email has not correct structure  
