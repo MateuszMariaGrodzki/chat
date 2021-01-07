@@ -1,9 +1,16 @@
 package mateusz.michal.chat.Service;
 
+import mateusz.michal.chat.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
 
 @Service
 public class SlugService {
+
+    @Autowired
+    UserRepository userRepository;
 
     public String generateSlugFromName(String name) {
         StringBuilder result = new StringBuilder();
@@ -45,5 +52,15 @@ public class SlugService {
             }
         }
         return result.toString();
+    }
+
+    public String generateUniqueSlug(String name){
+        String convertedSlug = generateSlugFromName(name);
+
+        while(userRepository.findBySlug(convertedSlug) != null){
+            Random random = new Random();
+            convertedSlug += random.nextInt(1000);
+        }
+        return convertedSlug;
     }
 }
