@@ -42,6 +42,10 @@ public class RegistrationService {
         return name.equals("");
     }
 
+    private boolean isNameIncorrect(String name){
+        return (name.startsWith(" ") || name.endsWith(" "));
+    }
+
     private boolean isEmailNotPresent(String email){
         return email.equals("");
     }
@@ -79,6 +83,8 @@ public class RegistrationService {
             return RegisterFormErrorCode.EMAIL_MISSING;
         } else if(isPassworNotPresent(userDTO.getPassword())){
             return RegisterFormErrorCode.PASSWORD_MISSING;
+        } else if(isNameIncorrect(userDTO.getName())) {
+            return RegisterFormErrorCode.NAME_INCORRECT;
         } else if (isUserInDatabaseByName(userDTO.getName())){
             return RegisterFormErrorCode.NAME_OCCUPIED;
         } else if(isUserInDatabaseByEmail(userDTO.getEmail())){
