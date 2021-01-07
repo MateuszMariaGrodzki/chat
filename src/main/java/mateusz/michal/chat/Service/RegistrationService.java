@@ -27,11 +27,15 @@ public class RegistrationService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SlugService slugService;
+
     private User createUser(UserDTO userDTO){
         User user = new User();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        user.setSlug(slugService.generateUniqueSlug(user.getName()));
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         return user;
