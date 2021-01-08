@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -46,7 +47,7 @@ public class RegistrationService {
     }
 
     private boolean isNameIncorrect(String name){
-        return (name.startsWith(" ") || name.endsWith(" "));
+        return (name.startsWith(" ") || name.endsWith(" ") || isNameHasSpecialCharacters(name));
     }
 
     private boolean isEmailNotPresent(String email){
@@ -55,6 +56,15 @@ public class RegistrationService {
 
     private boolean isPassworNotPresent(String password){
         return password.equals("");
+    }
+
+    private boolean isNameHasSpecialCharacters(String name){
+        for(char c : name.toCharArray()){
+            if(!(Character.isLetterOrDigit(c))){
+                return true;
+            }
+        }
+        return false;
     }
 
 
