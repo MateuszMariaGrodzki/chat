@@ -66,7 +66,7 @@ public class SlugServiceTest {
         String result = slugService.generateSlugFromName(inputName);
 
         //then
-        Assertions.assertEquals("",result);
+        Assertions.assertTrue(result.length() <= 5);
     }
 
     @Test
