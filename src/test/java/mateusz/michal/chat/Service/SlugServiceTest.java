@@ -94,4 +94,30 @@ public class SlugServiceTest {
         //then
         Assertions.assertEquals("j2kowalskcma",result);
     }
+
+    @Test
+    @DisplayName("Test generateSlug with funky string")
+    public void generateSlugWithFunkyStringTest(){
+        //given
+        String inputString = "Tĥïŝ ĩš â fůňķŷ Šťŕĭńġ";
+
+        //when
+        String result = slugService.generateSlugFromName(inputString);
+
+        //then
+        Assertions.assertEquals("this-is-a-funky-string",result);
+    }
+
+    @Test
+    @DisplayName("Test generateSlug with corner letter and digit cases")
+    public void generateSlugWithCornerLetterAndDigitCasesTest(){
+        //given
+        String inputString = "/09:`az{";
+
+        //when
+        String result = slugService.generateSlugFromName(inputString);
+
+        //then
+        Assertions.assertEquals("09az",result);
+    }
 }
