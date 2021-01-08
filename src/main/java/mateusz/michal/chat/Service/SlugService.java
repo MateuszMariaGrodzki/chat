@@ -25,6 +25,10 @@ public class SlugService {
                 result.append(c);
             }
         }
+        if(result.length() == 0){
+            int number = new Random().nextInt(10000);
+            return String.valueOf(number);
+        }
         return result.toString();
     }
 
