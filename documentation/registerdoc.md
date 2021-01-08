@@ -22,11 +22,14 @@
 NAME_MISSING - parameter name is not present  
 EMAIL_MISSING - parameter email is not present  
 PASSWORD_MISSING - parameter password is not present  
-NAME_INCORRECT - name starts or ends with space  
+NAME_INCORRECT - name does not satisfy certian conditions listed below (after error codes)  
 NAME_OCCUPIED - parameter name is presented in database  
 EMAIL_OCCUPIED - parameter email is presented in database  
 EMAIL_INCORRECT - email has not correct structure  
-WEAK_PASSWORD - password is to weak
+WEAK_PASSWORD - password is to weak (below is list of all conditions)
+### Name conditions:
+Name cannot start or ends with space  
+Only digits and letters are allowed
 ### Strong password must have:
 At least one small and big letter  
 At least one digit  
