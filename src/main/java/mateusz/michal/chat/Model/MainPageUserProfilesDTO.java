@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MainPageUserProfilesDTO {
-    String errorCode;
+    UsersViewOnPageErrorCodes error;
     List<UserNameAndSlug> data;
 }
