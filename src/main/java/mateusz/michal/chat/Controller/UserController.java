@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<MainPageUserProfilesDTO> getUsersListToPage(@RequestParam int page){
+    public ResponseEntity<MainPageUserProfilesDTO> getUsersListToPage(@RequestParam(defaultValue = "1") int page){
         return userService.getUserListByPage(page);
     }
 }
