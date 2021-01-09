@@ -72,7 +72,15 @@ public class UserService {
         }
     }
 
-   
+    public ResponseEntity<MainPageUserProfilesDTO> getUserListByPage(int page) {
+        if(page <= 0) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
+                    body(new MainPageUserProfilesDTO(UsersViewOnPageErrorCodes.INCORRECT_PAGE, null));
+        }
+        List<User> users = userRepository.findByIdBetween(10*(page - 1) + 1, 10*page);
+        List<UserNameAndSlug> mappedUsers = mapUserNameAndSlugFromUser(users);
+        return ResponseEntity.ok(new MainPageUserProfilesDTO(null,mappedUsers));
+    }
 
     private List<UserNameAndSlug> mapUserNameAndSlugFromUser(List<User> users){
         List<UserNameAndSlug> result = new ArrayList<>();
