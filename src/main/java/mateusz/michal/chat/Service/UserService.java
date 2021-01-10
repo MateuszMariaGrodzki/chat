@@ -85,7 +85,7 @@ public class UserService {
     private List<UserNameAndSlug> mapUserNameAndSlugFromUser(List<User> users){
         List<UserNameAndSlug> result = new ArrayList<>();
         for (User user : users){
-            result.add(new UserNameAndSlug(user.getName(),"slug"));
+            result.add(new UserNameAndSlug(user.getName(),user.getSlug()));
         }
         return result;
     }
