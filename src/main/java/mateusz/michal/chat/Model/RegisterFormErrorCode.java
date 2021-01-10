@@ -6,6 +6,7 @@ public enum RegisterFormErrorCode {
     PASSWORD_MISSING,
     NAME_OCCUPIED,
     EMAIL_OCCUPIED,
+    NAME_INCORRECT,
     EMAIL_INCORRECT,
     WEAK_PASSWORD,
     REGISTERED
