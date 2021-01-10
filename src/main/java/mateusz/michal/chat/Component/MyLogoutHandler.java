@@ -1,5 +1,7 @@
 package mateusz.michal.chat.Component;
 
+import mateusz.michal.chat.Service.CookieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
@@ -8,19 +10,22 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Component
 public class MyLogoutHandler implements LogoutHandler {
+
+    @Autowired
+    CookieService cookieService;
 
     @Override
     public void logout(HttpServletRequest request,
                        HttpServletResponse response,
                        Authentication authentication) {
         Cookie[] cookies = request.getCookies();
-        if(cookies == null){
+        Cookie tokenCookie = cookieService.getTokenCookieFromCookies(cookies);
+        if(cookies == null || tokenCookie == null){
             try {
-                response.sendError(403);
+                response.sendError(401);
             } catch (IOException e) {
                 e.printStackTrace();
             }
