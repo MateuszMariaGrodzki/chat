@@ -5,7 +5,7 @@ import { useUserContext } from "@providers/UserProvider";
 import { StyledLink } from "./styled";
 
 const Header = () => {
-  const { user } = useUserContext();
+  const { user, logout } = useUserContext();
   const isUnfetched = user === undefined;
   const isGuest = user === null;
   const isLoggedIn = Boolean(user);
@@ -27,7 +27,11 @@ const Header = () => {
             </Button>
           </>
         )}
-        {isLoggedIn && <Button color="secondary">Logout (non-functional)</Button>}
+        {isLoggedIn && (
+          <Button color="secondary" onClick={logout}>
+            Logout
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

@@ -1,6 +1,6 @@
 import Axios, { AxiosRequestConfig } from "axios";
 
-import { GENERIC_ERROR, Register, Login, GenericError, User } from "./types";
+import { GENERIC_ERROR, Register, Login, GenericError, User, Logout } from "./types";
 
 class API {
   private static apiURL = "http://localhost:8080/api";
@@ -45,6 +45,10 @@ class API {
 
   public static login(data: Login.Request) {
     return this.post<Login.Request, Login.Response>("authenticate", data);
+  }
+
+  public static logout() {
+    return this.get<Logout.Response>("logout");
   }
 
   public static getUser() {

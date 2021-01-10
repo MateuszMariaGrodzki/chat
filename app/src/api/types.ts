@@ -87,6 +87,17 @@ export namespace User {
 }
 
 export function isValidUserResponse(response: User.Response): response is User.ValidResponse {
-  const missingField = ["name", "email"].find(field => !(field in response));
+  const missingField = ["name", "email"].find((field) => !(field in response));
   return !("errorCode" in response) && !missingField;
+}
+
+export namespace Logout {
+  export interface ValidResponse {}
+
+  export type Response = ValidResponse | GenericError;
+}
+
+export function isValidLogoutResponse(response: Logout.Response): response is Logout.ValidResponse {
+  const hasError = "errorCode" in response;
+  return !hasError;
 }
