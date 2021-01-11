@@ -8,5 +8,17 @@
     "jsx": "react",
     "esModuleInterop": true,
     "strict": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@api/*": ["api/*"],
+      "@common/*": ["common/*"],
+      "@components/*": ["components/*"],
+      "@config/*": ["config/*"],
+      "@hooks/*": ["hooks/*"],
+      "@pages/*": ["pages/*"],
+      "@providers/*": ["providers/*"],
+      "@types/*": ["types/*"],
+      "@utils/*": ["utils/*"]
+    }
   }
 }

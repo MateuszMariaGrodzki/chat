@@ -1,8 +1,9 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-import { PageTitle, Text } from "../common";
-import LoginForm from "../components/LoginForm";
+import { PageTitle } from "@common/PageTitle";
+import { Text } from "@common/Text";
+import LoginForm from "@components/LoginForm";
 
 const RegisterSuccess = () => {
   return (

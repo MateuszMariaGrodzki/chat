@@ -3,12 +3,14 @@ import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
 
-import { Input, Form } from "../../common";
-import API from "../../api";
-import { RegisterError, isValidRegisterResponse } from "../../api/types";
-import { getErrorText } from "../../api/errorMaps";
-import { useInput, useStatus } from "../../hooks";
-import { paths } from "../../config/paths";
+import { Input } from "@common/Input";
+import { Form } from "@common/Form";
+import API from "@api/Api";
+import { RegisterError, isValidRegisterResponse } from "@api/types";
+import { getErrorText } from "@api/errorMaps";
+import { useInput } from "@hooks/useInput";
+import { useStatus } from "@hooks/useStatus";
+import { paths } from "@config/paths";
 
 const RegisterForm = () => {
   const [name, handleUsernameChange] = useInput();

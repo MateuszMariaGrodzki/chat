@@ -1,9 +1,9 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import {  CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 
-import AppRouter from "./components/Router";
-import { UserContextProvider } from "./providers/UserProvider";
+import AppRouter from "@components/Router";
+import { UserContextProvider } from "@providers/UserProvider";
 
 const App = () => (
   <>
@@ -13,7 +13,7 @@ const App = () => (
     </Helmet>
     <CssBaseline />
     <UserContextProvider>
-      <AppRouter/>
+      <AppRouter />
     </UserContextProvider>
   </>
 );

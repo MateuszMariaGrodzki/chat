@@ -1,7 +1,7 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 
-import { useUserContext } from "../../providers/UserProvider";
+import { useUserContext } from "@providers/UserProvider";
 import { StyledLink } from "./styled";
 
 const Header = () => {
