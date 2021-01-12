@@ -12,7 +12,8 @@ class API {
   public static get<Response>(url: string) {
     return Axios.get<Response>(`${this.apiURL}/${url}`, this.axiosConfig)
       .then((response) => {
-        if (!response.data) {
+        const isStatusOk = response.status >= 200 && response.status < 400;
+        if (!response.data && !isStatusOk) {
           throw Error(`Server response status ${response.status}`);
         }
         return response.data;
@@ -27,7 +28,8 @@ class API {
   public static post<Request, Response>(url: string, data: Request) {
     return Axios.post<Response>(`${this.apiURL}/${url}`, data, this.axiosConfig)
       .then((response) => {
-        if (!response.data) {
+        const isStatusOk = response.status >= 200 && response.status < 400;
+        if (!response.data && !isStatusOk) {
           throw Error(`Server response status ${response.status}`);
         }
         return response.data;

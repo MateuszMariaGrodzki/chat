@@ -92,12 +92,13 @@ export function isValidUserResponse(response: User.Response): response is User.V
 }
 
 export namespace Logout {
-  export interface ValidResponse {}
+  // no data returned
+  export type ValidResponse = undefined;
 
   export type Response = ValidResponse | GenericError;
 }
 
 export function isValidLogoutResponse(response: Logout.Response): response is Logout.ValidResponse {
-  const hasError = "errorCode" in response;
+  const hasError = response && "errorCode" in response;
   return !hasError;
 }
