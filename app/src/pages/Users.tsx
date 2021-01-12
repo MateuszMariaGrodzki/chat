@@ -2,18 +2,18 @@ import React from "react";
 import { Helmet } from "react-helmet";
 
 import { PageTitle } from "@common/PageTitle";
-import { Text } from "@common/Text";
+import UsersList from "@components/UsersList";
 
-const UsersList = () => {
+const Users = () => {
   return (
     <>
       <Helmet>
         <title>Chat App - Users</title>
       </Helmet>
       <PageTitle>Our chatters</PageTitle>
-      <Text>...</Text>
+      <UsersList />
     </>
   );
 };
 
-export default UsersList;
+export default Users;

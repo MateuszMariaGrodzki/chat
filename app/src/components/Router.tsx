@@ -9,7 +9,7 @@ import Register from "@pages/Register";
 import Login from "@pages/Login";
 import Home from "@pages/Home";
 import RegisterSuccess from "@pages/RegisterSuccess";
-import UsersList from "@pages/UsersList";
+import Users from "@pages/Users";
 
 const AppRouter: React.FC = () => {
   const { user } = useUserContext();
@@ -21,7 +21,7 @@ const AppRouter: React.FC = () => {
           {user && (
             <>
               <Route path={paths.users}>
-                <UsersList />
+                <Users />
               </Route>
             </>
           )}
