@@ -26,9 +26,4 @@ public class AuthenticationController {
                                                                       HttpServletResponse response){
         return authenticationService.authenticate(jwtTokenRequest, response);
     }
-
-    @GetMapping("/authenticate")
-    public void logout(){
-    }
-
 }
