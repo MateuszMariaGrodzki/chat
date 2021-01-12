@@ -66,8 +66,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
                         .logoutUrl("/api/logout")
-                        .logoutSuccessUrl("/api/authenticate")
-                        .addLogoutHandler(myLogoutHandler)
+                        .logoutSuccessHandler(myLogoutHandler)
                 );
     }
 
