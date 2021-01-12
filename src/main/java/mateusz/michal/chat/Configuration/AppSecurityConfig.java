@@ -56,7 +56,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfiguration()).and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate","/api/register","/api/user").permitAll()
+                .antMatchers("/api/authenticate","/api/register","/api/user", "/api/users").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/api/chat","/api/logout").authenticated()
                 .anyRequest().denyAll()
@@ -66,8 +66,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
                         .logoutUrl("/api/logout")
-                        .logoutSuccessUrl("/api/authenticate")
-                        .addLogoutHandler(myLogoutHandler)
+                        .logoutSuccessHandler(myLogoutHandler)
                 );
     }
 
