@@ -2,19 +2,21 @@ package mateusz.michal.chat.Service;
 
 
 import mateusz.michal.chat.Component.JwtTokenUtil;
-import mateusz.michal.chat.Model.Role;
-import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Model.UserProfilDTO;
+import mateusz.michal.chat.Model.*;
 import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -68,5 +70,23 @@ public class UserService {
                 return new UserProfilDTO(user.getName(),user.getEmail());
             }
         }
+    }
+
+    public ResponseEntity<MainPageUserProfilesDTO> getUserListByPage(int page) {
+        if(page <= 0) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
+                    body(new MainPageUserProfilesDTO(UsersViewOnPageErrorCodes.INCORRECT_PAGE, null));
+        }
+        List<User> users = userRepository.findByIdBetween(10*(page - 1) + 1, 10*page);
+        List<UserNameAndSlug> mappedUsers = mapUserNameAndSlugFromUser(users);
+        return ResponseEntity.ok(new MainPageUserProfilesDTO(null,mappedUsers));
+    }
+
+    private List<UserNameAndSlug> mapUserNameAndSlugFromUser(List<User> users){
+        List<UserNameAndSlug> result = new ArrayList<>();
+        for (User user : users){
+            result.add(new UserNameAndSlug(user.getName(),user.getSlug()));
+        }
+        return result;
     }
 }
