@@ -2,6 +2,8 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 
 import { useUserContext } from "@providers/UserProvider";
+import { paths } from "@config/paths";
+
 import { StyledLink } from "./styled";
 
 const Header = () => {
@@ -19,15 +21,22 @@ const Header = () => {
         {isUnfetched && "Loading..."}
         {isGuest && (
           <>
-            <Button component={StyledLink} to="/register" color="primary">
+            <Button component={StyledLink} to={paths.register} color="primary">
               Register
             </Button>
-            <Button component={StyledLink} to="/login">
+            <Button component={StyledLink} to={paths.login}>
               Login
             </Button>
           </>
         )}
-        {isLoggedIn && <Button color="secondary">Logout (non-functional)</Button>}
+        {isLoggedIn && (
+          <>
+            <Button component={StyledLink} to={paths.users} color="primary">
+              Users
+            </Button>
+            <Button color="secondary">Logout</Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );
