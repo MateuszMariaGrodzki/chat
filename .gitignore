@@ -38,3 +38,5 @@ app/yarn-error.log
 
 ### App build ###
 app/dist
+
+*.properties

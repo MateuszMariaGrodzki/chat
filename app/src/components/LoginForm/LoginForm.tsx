@@ -3,13 +3,14 @@ import { Button, Box, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { useHistory } from "react-router-dom";
 
-import { useInput } from "../../hooks";
-import { Input, Form } from "../../common";
-import API from "../../api";
-import { LoginError, isValidLoginResponse } from "../../api/types";
-import { getErrorText } from "../../api/errorMaps";
-import { useUserContext } from "../../providers/UserProvider";
-import { paths } from "../../config/paths";
+import { useInput } from "@hooks/useInput";
+import { Input } from "@common/Input";
+import { Form } from "@common/Form";
+import API from "@api/Api";
+import { LoginError, isValidLoginResponse } from "@api/types";
+import { getErrorText } from "@api/errorMaps";
+import { useUserContext } from "@providers/UserProvider";
+import { paths } from "@config/paths";
 
 const LoginForm = () => {
   const [username, handleUsernameChange] = useInput();
