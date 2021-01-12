@@ -87,6 +87,23 @@ export namespace User {
 }
 
 export function isValidUserResponse(response: User.Response): response is User.ValidResponse {
-  const missingField = ["name", "email"].find(field => !(field in response));
+  const missingField = ["name", "email"].find((field) => !(field in response));
   return !("errorCode" in response) && !missingField;
+}
+
+export namespace UsersList {
+  export interface ValidResponse {
+    data: ListedUser[];
+    error: null;
+  }
+
+  interface ErrorResponse {}
+
+  export type Response = ValidResponse | ErrorResponse | GenericError;
+}
+
+export function isValidUsersResponse(response: UsersList.Response): response is UsersList.ValidResponse {
+  const isDataMissing = "data" in response;
+  const hasError = "error" in response;
+  return !(hasError && !isDataMissing);
 }
