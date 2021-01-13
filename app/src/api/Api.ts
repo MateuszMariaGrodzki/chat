@@ -1,6 +1,6 @@
 import Axios, { AxiosRequestConfig } from "axios";
 
-import { GENERIC_ERROR, Register, Login, GenericError, User } from "./types";
+import { GENERIC_ERROR, Register, Login, GenericError, User, Logout } from "./types";
 
 class API {
   private static apiURL = "http://localhost:8080/api";
@@ -12,7 +12,8 @@ class API {
   public static get<Response>(url: string) {
     return Axios.get<Response>(`${this.apiURL}/${url}`, this.axiosConfig)
       .then((response) => {
-        if (!response.data) {
+        const isStatusOk = response.status >= 200 && response.status < 400;
+        if (!response.data && !isStatusOk) {
           throw Error(`Server response status ${response.status}`);
         }
         return response.data;
@@ -27,7 +28,8 @@ class API {
   public static post<Request, Response>(url: string, data: Request) {
     return Axios.post<Response>(`${this.apiURL}/${url}`, data, this.axiosConfig)
       .then((response) => {
-        if (!response.data) {
+        const isStatusOk = response.status >= 200 && response.status < 400;
+        if (!response.data && !isStatusOk) {
           throw Error(`Server response status ${response.status}`);
         }
         return response.data;
@@ -45,6 +47,10 @@ class API {
 
   public static login(data: Login.Request) {
     return this.post<Login.Request, Login.Response>("authenticate", data);
+  }
+
+  public static logout() {
+    return this.get<Logout.Response>("logout");
   }
 
   public static getUser() {
