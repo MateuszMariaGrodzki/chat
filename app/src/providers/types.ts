@@ -10,4 +10,5 @@ export interface UserContextValue {
    */
   user: User | null | undefined;
   setUser: (user: User | null) => void;
+  logout: () => void;
 }

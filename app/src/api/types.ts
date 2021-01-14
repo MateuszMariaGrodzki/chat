@@ -106,4 +106,15 @@ export function isValidUsersResponse(response: UsersList.Response): response is 
   const isDataMissing = "data" in response;
   const hasError = "error" in response;
   return !(hasError && !isDataMissing);
+
+export namespace Logout {
+  // no data returned
+  export type ValidResponse = undefined;
+
+  export type Response = ValidResponse | GenericError;
+}
+
+export function isValidLogoutResponse(response: Logout.Response): response is Logout.ValidResponse {
+  const hasError = response && "errorCode" in response;
+  return !hasError;
 }

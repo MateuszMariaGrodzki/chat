@@ -7,7 +7,7 @@ import { paths } from "@config/paths";
 import { StyledLink } from "./styled";
 
 const Header = () => {
-  const { user } = useUserContext();
+  const { user, logout } = useUserContext();
   const isUnfetched = user === undefined;
   const isGuest = user === null;
   const isLoggedIn = Boolean(user);
@@ -34,7 +34,7 @@ const Header = () => {
             <Button component={StyledLink} to={paths.users} color="primary">
               Users
             </Button>
-            <Button color="secondary">Logout</Button>
+            <Button color="secondary" onClick={logout}>Logout</Button>
           </>
         )}
       </Toolbar>

@@ -1,13 +1,14 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import API from "@api/Api";
-import { isValidUserResponse } from "@api/types";
+import { isValidUserResponse, isValidLogoutResponse } from "@api/types";
 
 import { UserContextValue } from "./types";
 
 const defaultValue: UserContextValue = {
   user: undefined,
   setUser: (_user) => {},
+  logout: () => {},
 };
 
 const UserContext = createContext(defaultValue);
@@ -30,11 +31,18 @@ export const UserContextProvider: React.FC = ({ children }) => {
     }
   }, []);
 
+  const logout = useCallback(async () => {
+    const response = await API.logout();
+    if (isValidLogoutResponse(response)) {
+      setUser(null);
+    }
+  }, []);
+
   useEffect(() => {
     fetchUser();
   }, []);
 
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser, logout }}>{children}</UserContext.Provider>;
 };
 
 export const useUserContext = () => useContext(UserContext);
