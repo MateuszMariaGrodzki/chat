@@ -1,6 +1,7 @@
 package mateusz.michal.chat.Configuration;
 
 import mateusz.michal.chat.Component.JwtFilter;
+import mateusz.michal.chat.Component.MyLogoutHandler;
 import mateusz.michal.chat.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,6 +36,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     JwtFilter jwtFilter;
 
+    @Autowired
+    MyLogoutHandler myLogoutHandler;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService)
@@ -51,14 +56,18 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfiguration()).and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/chat").authenticated()
-                .antMatchers("/api/user").permitAll()
+                .antMatchers("/api/authenticate","/api/register","/api/user", "/api/users").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/api/chat","/api/logout").authenticated()
                 .anyRequest().denyAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.formLogin().disable();
+        http.logout(logout -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+                        .logoutUrl("/api/logout")
+                        .logoutSuccessHandler(myLogoutHandler)
+                );
     }
 
     @Bean

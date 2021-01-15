@@ -30,6 +30,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "slug")
+    private String slug;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Message> messageList;
 
