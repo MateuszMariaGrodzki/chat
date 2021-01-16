@@ -1,4 +1,4 @@
-import { exhaustive } from "../utils/ehxaustive";
+import { exhaustive } from "@utils/ehxaustive";
 import { REGISTER_API_ERROR, GENERIC_ERROR, LOGIN_API_ERROR } from "./types";
 
 export const getErrorText = (error: REGISTER_API_ERROR | LOGIN_API_ERROR | GENERIC_ERROR | null) => {
