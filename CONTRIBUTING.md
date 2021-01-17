@@ -19,6 +19,7 @@ We use branch naming convention with group tokens as prefix. Please apply to the
 | :---------: | :--------------------: | :------------------------: |
 |   `feat/`   |      New feature       | `feat/json-serialization`  |
 |   `bug/`    | Fixing an existing bug | `bug/register-redirection` |
+| `refactor/` | Refactoring code       | `refactor/register-form`   |
 | `hotfix/`\* |      Hot fixes to      | `hotfix/user-profile-page` |
 
 _\*We are not using `hotfix/` prefix until we start application versioning_
@@ -31,4 +32,5 @@ Every opened pull request should have a title which consists of prefix followed 
 | :--------: | :--------------------: | :---------------------------------------------: |
 | `Feature:` |      New feature       |        `Feature: Add JSON serialization`        |
 | `Bugfix:`  | Fixing an existing bug | `Bugfix: Add proper redirection after register` |
+| `Refactor:`|    Refactoring code    | `Refactor: Refactored register service`         |
 | `Hotfix:`  |      Hot fixes to      |     `Hotfix: Fix user profile page button`      |
