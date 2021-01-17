@@ -4,10 +4,10 @@
 
 ### Requirements
 
-- `JDK` **&ge;8**
+- `JDK` **&ge;8**\
 **Download link:**   [Java](https://www.oracle.com/pl/java/technologies/javase-jdk15-downloads.html)
 - `MySQL`
-**Download link:**   [MySQL](https://dev.mysql.com/downloads/windows/installer/8.0.html)
+**Download link:**\   [MySQL](https://dev.mysql.com/downloads/windows/installer/8.0.html)
 
 ### How to
 
