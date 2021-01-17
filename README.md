@@ -5,9 +5,9 @@
 ### Requirements
 
 - `JDK` **&ge;8**
-**Download link:** [Java](https://www.oracle.com/pl/java/technologies/javase-jdk15-downloads.html)
+**Download link:**   [Java](https://www.oracle.com/pl/java/technologies/javase-jdk15-downloads.html)
 - `MySQL`
-**Download link:** [MySQL](https://dev.mysql.com/downloads/windows/installer/8.0.html)
+**Download link:**   [MySQL](https://dev.mysql.com/downloads/windows/installer/8.0.html)
 
 ### How to
 
@@ -25,7 +25,7 @@ mvnw spring-boot:run
 ```
 
 3. Application will start on port 8080
-4. To terminate procces press twice **Ctrl+C**
+4. To terminate proces press twice **Ctrl+C**
 
 ## Run client app
 

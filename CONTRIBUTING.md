@@ -32,4 +32,5 @@ Every opened pull request should have a title which consists of prefix followed 
 | :--------: | :--------------------: | :---------------------------------------------: |
 | `Feature:` |      New feature       |        `Feature: Add JSON serialization`        |
 | `Bugfix:`  | Fixing an existing bug | `Bugfix: Add proper redirection after register` |
+| `Refactor:`|    Refactoring code    | `Refactor: Refactored register service`         |
 | `Hotfix:`  |      Hot fixes to      |     `Hotfix: Fix user profile page button`      |
