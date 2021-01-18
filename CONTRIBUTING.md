@@ -20,8 +20,8 @@ We use branch naming convention with group tokens as prefix. Please apply to the
 |   `feat/`   |      New feature       | `feat/json-serialization`  |
 |   `bug/`    | Fixing an existing bug | `bug/register-redirection` |
 | `refactor/` |    Refactoring code    | `refactor/register-form`   |
-|   `test`    |    Adding tests        | `test/cookie-service`      |
-|   `docs`    |  Update documentation  | `docs/register-endpoint`   |
+|   `test/`   |    Adding tests        | `test/cookie-service`      |
+|   `docs/`   |  Update documentation  | `docs/register-endpoint`   |
 | `hotfix/`\* |      Hot fixes to      | `hotfix/user-profile-page` |
 
 _\*We are not using `hotfix/` prefix until we start application versioning_
