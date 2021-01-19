@@ -47,7 +47,7 @@ public class RegistrationService {
     }
 
     private boolean isNameIncorrect(String name){
-        return (name.startsWith(" ") || name.endsWith(" ") || isNameHasSpecialCharacters(name));
+        return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
     }
 
     private boolean isEmailNotPresent(String email){
@@ -58,7 +58,7 @@ public class RegistrationService {
         return password.equals("");
     }
 
-    private boolean isNameHasSpecialCharacters(String name){
+    private boolean hasNameSpecialCharacters(String name){
         for(char c : name.toCharArray()){
             if(!(Character.isLetterOrDigit(c))){
                 return true;
