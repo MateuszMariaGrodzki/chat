@@ -67,6 +67,18 @@ public class RegistrationService {
         return false;
     }
 
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isEmailNull(String email){
+        return email == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
+    }
+
 
     private boolean isUserInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
