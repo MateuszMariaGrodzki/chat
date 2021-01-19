@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -28,6 +27,9 @@ public class RegistrationService {
 
     @Autowired
     SlugService slugService;
+
+    @Autowired
+    JsonFactory jsonFactory;
 
     private User createUser(UserDTO userDTO){
         User user = new User();
@@ -175,13 +177,19 @@ public class RegistrationService {
         }
     }
 
-    public ResponseEntity<JsonRespond> getResponseForUserRegistration(UserDTO userDTO){
-        RegisterFormErrorCode errorCode = saveUserToDatabase(userDTO);
-        if (errorCode.equals(RegisterFormErrorCode.REGISTERED)){
-            return ResponseEntity.ok(new JsonRespond(null,true));
+    public ResponseEntity<IJsonResponse> getResponseForUserRegistration(UserDTO userDTO){
+        List<MyError> errors = validateRegistrationRequest(userDTO);
+        if (errors.size() == 0){
+            User user = createUser(userDTO);
+            userRepository.save(user);
+            return ResponseEntity.ok(
+                    jsonFactory.createResponse(ResponseEnum.DATA,null,
+                            new SimpleDataResponse("user has been succesfully registered and saved into database"),
+                            null));
         } else {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new JsonRespond(errorCode,false));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                    errors,null,null));
         }
+
     }
 }
