@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JsonDataResponse implements IJsonResponse {
-    IData iData;
+    IData data;
     IMetaData metaData;
 }
