@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -99,6 +97,58 @@ public class RegistrationService {
         Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
                 "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*])(?!=.*\\s).{8,15}");
         return !pattern.matcher(password).matches();
+    }
+
+    private List<MyError> validateRegistrationRequest(UserDTO userDTO){
+        List<MyError> errors = new ArrayList<>();
+        if(isNameNull(userDTO.getName())){
+            errors.add(new MyError(400,RegisterFormErrorCode.NAME_NULL,
+                    "parameter name is null"));
+            userDTO.setName("");
+        }
+        if (isEmailNull(userDTO.getEmail())){
+            errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
+                    "parameter email is null"));
+            userDTO.setEmail("");
+        }
+        if(isPasswordNull(userDTO.getPassword())){
+            errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
+                    "parameter password is null"));
+            userDTO.setPassword("");
+        }
+        if(isNameNotPresent(userDTO.getName())){
+            errors.add(new MyError(422,RegisterFormErrorCode.NAME_MISSING,
+                    "parameter name isn't present"));
+        }
+        if(isEmailNotPresent(userDTO.getEmail())){
+            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
+                    "parameter email isn't present"));
+        }
+        if(isPassworNotPresent(userDTO.getPassword())){
+            errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
+                    "parameter password isn't present"));
+        }
+        if(isUserInDatabaseByName(userDTO.getName())){
+            errors.add(new MyError(422,RegisterFormErrorCode.NAME_OCCUPIED,
+                    "there is user with that name in database"));
+        }
+        if(isUserInDatabaseByEmail(userDTO.getEmail())){
+            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
+                    "there is user with that email in database"));
+        }
+        if(isNameIncorrect(userDTO.getName())){
+            errors.add(new MyError(422,RegisterFormErrorCode.NAME_INCORRECT,
+                    "there are some not allowed characters in name"));
+        }
+        if(isEmailIncorrect(userDTO.getEmail())){
+            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
+                    "email has bad format"));
+        }
+        if(isPasswordIncorrect(userDTO.getPassword())){
+            errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
+                    "password is too weak"));
+        }
+        return errors;
     }
 
     public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
