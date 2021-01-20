@@ -204,7 +204,15 @@ public class RegistrationService {
                             new SimpleDataResponse("user has been succesfully registered and saved into database"),
                             null));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonFactory.createResponse(ResponseEnum.ERROR,
+            for(MyError error : errors){
+                if(error.getStatus() == 400){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                            body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                            errors,null,null));
+                }
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
+                    body(jsonFactory.createResponse(ResponseEnum.ERROR,
                     errors,null,null));
         }
 
