@@ -122,34 +122,40 @@ public class RegistrationService {
         return errors;
     }
 
+    private List<MyError> validateUserEmail(String email){
+        List<MyError> errors = new ArrayList<>();
+        if (isEmailNull(email)){
+            errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
+                    "parameter email is null"));
+        } else {
+            if(isEmailNotPresent(email)){
+                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
+                        "parameter email isn't present"));
+            }
+            if(isUserInDatabaseByEmail(email)){
+                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
+                        "there is user with that email in database"));
+            }
+            if(isEmailIncorrect(email)){
+                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
+                        "email has bad format"));
+            }
+        }
+        return errors;
+    }
+
     private List<MyError> validateRegistrationRequest(UserDTO userDTO){
         List<MyError> errors = new ArrayList<>();
         errors.addAll(validateUserName(userDTO.getName()));
-        if (isEmailNull(userDTO.getEmail())){
-            errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
-                    "parameter email is null"));
-            userDTO.setEmail("");
-        }
+        errors.addAll(validateUserEmail(userDTO.getEmail()));
         if(isPasswordNull(userDTO.getPassword())){
             errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
                     "parameter password is null"));
             userDTO.setPassword("");
         }
-        if(isEmailNotPresent(userDTO.getEmail())){
-            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
-                    "parameter email isn't present"));
-        }
         if(isPassworNotPresent(userDTO.getPassword())){
             errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
                     "parameter password isn't present"));
-        }
-        if(isUserInDatabaseByEmail(userDTO.getEmail())){
-            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
-                    "there is user with that email in database"));
-        }
-        if(isEmailIncorrect(userDTO.getEmail())){
-            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
-                    "email has bad format"));
         }
         if(isPasswordIncorrect(userDTO.getPassword())){
             errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
