@@ -144,23 +144,29 @@ public class RegistrationService {
         return errors;
     }
 
+    private List<MyError> validateUserPassword(String password){
+        List<MyError> errors = new ArrayList<>();
+        if(isPasswordNull(password)){
+            errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
+                    "parameter password is null"));
+        } else {
+            if(isPassworNotPresent(password)){
+                errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
+                        "parameter password isn't present"));
+            }
+            if(isPasswordIncorrect(password)){
+                errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
+                        "password is too weak"));
+            }
+        }
+        return errors;
+    }
+
     private List<MyError> validateRegistrationRequest(UserDTO userDTO){
         List<MyError> errors = new ArrayList<>();
         errors.addAll(validateUserName(userDTO.getName()));
         errors.addAll(validateUserEmail(userDTO.getEmail()));
-        if(isPasswordNull(userDTO.getPassword())){
-            errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
-                    "parameter password is null"));
-            userDTO.setPassword("");
-        }
-        if(isPassworNotPresent(userDTO.getPassword())){
-            errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
-                    "parameter password isn't present"));
-        }
-        if(isPasswordIncorrect(userDTO.getPassword())){
-            errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
-                    "password is too weak"));
-        }
+        errors.addAll(validateUserPassword(userDTO.getPassword()));
         return errors;
     }
 
