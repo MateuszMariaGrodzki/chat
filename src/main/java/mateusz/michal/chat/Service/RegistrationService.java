@@ -94,7 +94,7 @@ public class RegistrationService {
         return !pattern.matcher(email).matches();
     }
 
-    public boolean isPasswordIncorrect(String password) {
+    private boolean isPasswordIncorrect(String password) {
         Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
                 "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*])(?!=.*\\s).{8,15}");
         return !pattern.matcher(password).matches();
@@ -112,11 +112,11 @@ public class RegistrationService {
             }
             if(isUserInDatabaseByName(name)){
                 errors.add(new MyError(422,RegisterFormErrorCode.NAME_OCCUPIED,
-                        "there is user with that name in database"));
+                        "In database exist user with that name"));
             }
             if(isNameIncorrect(name)){
                 errors.add(new MyError(422,RegisterFormErrorCode.NAME_INCORRECT,
-                        "there are some not allowed characters in name"));
+                        "name can only have letters and digits"));
             }
         }
         return errors;
@@ -134,7 +134,7 @@ public class RegistrationService {
             }
             if(isUserInDatabaseByEmail(email)){
                 errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
-                        "there is user with that email in database"));
+                        "In database exist user with that email"));
             }
             if(isEmailIncorrect(email)){
                 errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
@@ -201,7 +201,7 @@ public class RegistrationService {
             userRepository.save(user);
             return ResponseEntity.ok(
                     jsonFactory.createResponse(ResponseEnum.DATA,null,
-                            new SimpleDataResponse("user has been succesfully registered and saved into database"),
+                            new SimpleDataResponse("user has been succesfully registered and saved in database"),
                             null));
         } else {
             for(MyError error : errors){
