@@ -79,7 +79,6 @@ public class RegistrationService {
         return password == null;
     }
 
-
     private boolean isUserInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
         return user.isPresent();
@@ -101,13 +100,31 @@ public class RegistrationService {
         return !pattern.matcher(password).matches();
     }
 
-    private List<MyError> validateRegistrationRequest(UserDTO userDTO){
+    private List<MyError> validateUserName(String name){
         List<MyError> errors = new ArrayList<>();
-        if(isNameNull(userDTO.getName())){
+        if(isNameNull(name)){
             errors.add(new MyError(400,RegisterFormErrorCode.NAME_NULL,
                     "parameter name is null"));
-            userDTO.setName("");
+        } else {
+            if(isNameNotPresent(name)){
+                errors.add(new MyError(422,RegisterFormErrorCode.NAME_MISSING,
+                        "parameter name isn't present"));
+            }
+            if(isUserInDatabaseByName(name)){
+                errors.add(new MyError(422,RegisterFormErrorCode.NAME_OCCUPIED,
+                        "there is user with that name in database"));
+            }
+            if(isNameIncorrect(name)){
+                errors.add(new MyError(422,RegisterFormErrorCode.NAME_INCORRECT,
+                        "there are some not allowed characters in name"));
+            }
         }
+        return errors;
+    }
+
+    private List<MyError> validateRegistrationRequest(UserDTO userDTO){
+        List<MyError> errors = new ArrayList<>();
+        errors.addAll(validateUserName(userDTO.getName()));
         if (isEmailNull(userDTO.getEmail())){
             errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
                     "parameter email is null"));
@@ -118,10 +135,6 @@ public class RegistrationService {
                     "parameter password is null"));
             userDTO.setPassword("");
         }
-        if(isNameNotPresent(userDTO.getName())){
-            errors.add(new MyError(422,RegisterFormErrorCode.NAME_MISSING,
-                    "parameter name isn't present"));
-        }
         if(isEmailNotPresent(userDTO.getEmail())){
             errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
                     "parameter email isn't present"));
@@ -130,17 +143,9 @@ public class RegistrationService {
             errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
                     "parameter password isn't present"));
         }
-        if(isUserInDatabaseByName(userDTO.getName())){
-            errors.add(new MyError(422,RegisterFormErrorCode.NAME_OCCUPIED,
-                    "there is user with that name in database"));
-        }
         if(isUserInDatabaseByEmail(userDTO.getEmail())){
             errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
                     "there is user with that email in database"));
-        }
-        if(isNameIncorrect(userDTO.getName())){
-            errors.add(new MyError(422,RegisterFormErrorCode.NAME_INCORRECT,
-                    "there are some not allowed characters in name"));
         }
         if(isEmailIncorrect(userDTO.getEmail())){
             errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
