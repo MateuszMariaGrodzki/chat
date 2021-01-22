@@ -84,7 +84,7 @@ public class AuthenticationService {
 
     private List<MyError> validateUserName(String name){
         List<MyError> errors = new ArrayList<>();
-        if(isPasswordNull(name)){
+        if(isNameNull(name)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.NAME_NULL,
                     "parameter name is null"));
         } else {
@@ -95,5 +95,7 @@ public class AuthenticationService {
         }
         return errors;
     }
+
+    
 
 }
