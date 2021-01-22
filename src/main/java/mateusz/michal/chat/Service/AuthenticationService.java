@@ -1,10 +1,8 @@
 package mateusz.michal.chat.Service;
 
-import lombok.AllArgsConstructor;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +34,6 @@ public class AuthenticationService {
 
     @Autowired
     JsonFactory jsonFactory;
-
-    @Value("${SECRETKEY}")
-    private String SECRET_KEY;
 
     public ResponseEntity<IJsonResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
         List<MyError> errors = validateAuthenticationRequest(jwtTokenRequest);
