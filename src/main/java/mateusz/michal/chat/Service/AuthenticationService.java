@@ -1,5 +1,6 @@
 package mateusz.michal.chat.Service;
 
+import lombok.AllArgsConstructor;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,18 +34,25 @@ public class AuthenticationService {
     @Autowired
     CookieService cookieService;
 
+    @Autowired
+    JsonFactory jsonFactory;
+
     @Value("${SECRETKEY}")
     private String SECRET_KEY;
 
-    public ResponseEntity<JwtTokenResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
-        if(isNameMissing(jwtTokenRequest.getName())){
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new JwtTokenResponse(JwtAuthenticationErrorCode.NAME_MISSING,
-                    null,null,null));
-        } else if (isPasswordMissing(jwtTokenRequest.getPassword())){
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new JwtTokenResponse(JwtAuthenticationErrorCode.PASSWORD_MISSING,
-                    null, null,null));
+    public ResponseEntity<IJsonResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
+        List<MyError> errors = validateAuthenticationRequest(jwtTokenRequest);
+        if(errors.size() != 0){
+            for (MyError error : errors){
+                if (error.getStatus() == 400){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                            body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                                    errors,null,null));
+                }
+            }
+            return ResponseEntity.status(422).
+                    body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                            errors,null,null));
         }
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getName(),
@@ -51,12 +60,15 @@ public class AuthenticationService {
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userRepository.findByName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
-            return ResponseEntity.ok(new JwtTokenResponse(null,
-                    token,user.getName(),user.getEmail()));
+            return ResponseEntity.ok(jsonFactory.createResponse(ResponseEnum.DATA,
+                    null,new JwtTokenResponse(null,
+                    token,user.getName(),user.getEmail()),null));
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new JwtTokenResponse(JwtAuthenticationErrorCode.BAD_CREDENTIALS,
-                    null,null,null));
+                    .body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                            Arrays.asList(new MyError(401,
+                                    JwtAuthenticationErrorCode.BAD_CREDENTIALS,"bad credentials")),
+                            null, null));
         }
     }
 
