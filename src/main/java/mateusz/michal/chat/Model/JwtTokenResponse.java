@@ -1,6 +1,6 @@
 package mateusz.michal.chat.Model;
 
-public class JwtTokenResponse {
+public class JwtTokenResponse implements IData {
     private JwtAuthenticationErrorCode errorCode;
     private String token;
     private String name;
