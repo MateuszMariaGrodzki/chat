@@ -1,10 +1,7 @@
 package mateusz.michal.chat.Service;
 
 import mateusz.michal.chat.Component.JwtTokenUtil;
-import mateusz.michal.chat.Model.JwtAuthenticationErrorCode;
-import mateusz.michal.chat.Model.JwtTokenRequest;
-import mateusz.michal.chat.Model.JwtTokenResponse;
-import mateusz.michal.chat.Model.User;
+import mateusz.michal.chat.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AuthenticationService {
@@ -81,6 +80,20 @@ public class AuthenticationService {
 
     private boolean isPasswordNull(String password){
         return password == null;
+    }
+
+    private List<MyError> validateUserName(String name){
+        List<MyError> errors = new ArrayList<>();
+        if(isPasswordNull(name)){
+            errors.add(new MyError(400, JwtAuthenticationErrorCode.NAME_NULL,
+                    "parameter name is null"));
+        } else {
+            if(isNameMissing(name)){
+                errors.add(new MyError(422, JwtAuthenticationErrorCode.NAME_MISSING,
+                        "parameter name is not present"));
+            }
+        }
+        return errors;
     }
 
 }
