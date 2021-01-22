@@ -109,4 +109,11 @@ public class AuthenticationService {
         }
         return errors;
     }
+
+    private List<MyError> validateAuthenticationRequest(JwtTokenRequest jwtTokenRequest){
+        List<MyError> errors = new ArrayList<>();
+        errors.addAll(validateUserName(jwtTokenRequest.getName()));
+        errors.addAll(validateUserPassword(jwtTokenRequest.getPassword()));
+        return errors;
+    }
 }
