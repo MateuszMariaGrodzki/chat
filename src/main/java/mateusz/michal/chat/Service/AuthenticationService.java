@@ -56,8 +56,8 @@ public class AuthenticationService {
             User user = userRepository.findByName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
             return ResponseEntity.ok(jsonFactory.createResponse(ResponseEnum.DATA,
-                    null,new JwtTokenResponse(null,
-                    token,user.getName(),user.getEmail()),null));
+                    null,new JwtTokenResponse(token,
+                            user.getName(),user.getEmail()),null));
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(jsonFactory.createResponse(ResponseEnum.ERROR,
