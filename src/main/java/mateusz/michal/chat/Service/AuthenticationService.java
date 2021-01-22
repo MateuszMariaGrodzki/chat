@@ -75,4 +75,12 @@ public class AuthenticationService {
         return password.equals("");
     }
 
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
+    }
+
 }
