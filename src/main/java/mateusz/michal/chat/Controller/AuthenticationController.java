@@ -1,6 +1,7 @@
 package mateusz.michal.chat.Controller;
 
 import mateusz.michal.chat.Component.JwtTokenUtil;
+import mateusz.michal.chat.Model.IJsonResponse;
 import mateusz.michal.chat.Model.JwtTokenRequest;
 import mateusz.michal.chat.Model.JwtTokenResponse;
 import mateusz.michal.chat.Service.AuthenticationService;
@@ -22,8 +23,8 @@ public class AuthenticationController {
     JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest,
-                                                                      HttpServletResponse response){
+    public ResponseEntity<IJsonResponse> createAuthenticationToken(@RequestBody JwtTokenRequest jwtTokenRequest,
+                                                                   HttpServletResponse response){
         return authenticationService.authenticate(jwtTokenRequest, response);
     }
 }
