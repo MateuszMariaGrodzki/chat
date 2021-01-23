@@ -39,7 +39,7 @@ The example of structure of each error:
     "title": "In database exist user with that name"
 }
 ```
-Short describe of fields:
+Short description of fields:
 - status: http status represented as integer and corresponding to each error
 - code: an application-specific error code, expressed as a string value
 - title: a short, human-readable summary of the problem  
