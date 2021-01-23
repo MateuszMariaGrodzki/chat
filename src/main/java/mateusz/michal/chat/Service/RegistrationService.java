@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.regex.Matcher;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -31,6 +28,9 @@ public class RegistrationService {
     @Autowired
     SlugService slugService;
 
+    @Autowired
+    JsonFactory jsonFactory;
+
     private User createUser(UserDTO userDTO){
         User user = new User();
         user.setName(userDTO.getName());
@@ -47,7 +47,7 @@ public class RegistrationService {
     }
 
     private boolean isNameIncorrect(String name){
-        return (name.startsWith(" ") || name.endsWith(" ") || isNameHasSpecialCharacters(name));
+        return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
     }
 
     private boolean isEmailNotPresent(String email){
@@ -58,7 +58,7 @@ public class RegistrationService {
         return password.equals("");
     }
 
-    private boolean isNameHasSpecialCharacters(String name){
+    private boolean hasNameSpecialCharacters(String name){
         for(char c : name.toCharArray()){
             if(!(Character.isLetterOrDigit(c))){
                 return true;
@@ -67,6 +67,17 @@ public class RegistrationService {
         return false;
     }
 
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isEmailNull(String email){
+        return email == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
+    }
 
     private boolean isUserInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
@@ -83,10 +94,80 @@ public class RegistrationService {
         return !pattern.matcher(email).matches();
     }
 
-    public boolean isPasswordIncorrect(String password) {
+    private boolean isPasswordIncorrect(String password) {
         Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
                 "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*])(?!=.*\\s).{8,15}");
         return !pattern.matcher(password).matches();
+    }
+
+    private List<MyError> validateUserName(String name){
+        List<MyError> errors = new ArrayList<>();
+        if(isNameNull(name)){
+            errors.add(new MyError(400,RegisterFormErrorCode.NAME_NULL,
+                    "parameter name is null"));
+        } else {
+            if(isNameNotPresent(name)){
+                errors.add(new MyError(422,RegisterFormErrorCode.NAME_MISSING,
+                        "parameter name isn't present"));
+            }
+            if(isUserInDatabaseByName(name)){
+                errors.add(new MyError(422,RegisterFormErrorCode.NAME_OCCUPIED,
+                        "In database exist user with that name"));
+            }
+            if(isNameIncorrect(name)){
+                errors.add(new MyError(422,RegisterFormErrorCode.NAME_INCORRECT,
+                        "name can only have letters and digits"));
+            }
+        }
+        return errors;
+    }
+
+    private List<MyError> validateUserEmail(String email){
+        List<MyError> errors = new ArrayList<>();
+        if (isEmailNull(email)){
+            errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
+                    "parameter email is null"));
+        } else {
+            if(isEmailNotPresent(email)){
+                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
+                        "parameter email isn't present"));
+            }
+            if(isUserInDatabaseByEmail(email)){
+                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
+                        "In database exist user with that email"));
+            }
+            if(isEmailIncorrect(email)){
+                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
+                        "email has bad format"));
+            }
+        }
+        return errors;
+    }
+
+    private List<MyError> validateUserPassword(String password){
+        List<MyError> errors = new ArrayList<>();
+        if(isPasswordNull(password)){
+            errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
+                    "parameter password is null"));
+        } else {
+            if(isPassworNotPresent(password)){
+                errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
+                        "parameter password isn't present"));
+            }
+            if(isPasswordIncorrect(password)){
+                errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
+                        "password is too weak"));
+            }
+        }
+        return errors;
+    }
+
+    private List<MyError> validateRegistrationRequest(UserDTO userDTO){
+        List<MyError> errors = new ArrayList<>();
+        errors.addAll(validateUserName(userDTO.getName()));
+        errors.addAll(validateUserEmail(userDTO.getEmail()));
+        errors.addAll(validateUserPassword(userDTO.getPassword()));
+        return errors;
     }
 
     public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
@@ -113,13 +194,27 @@ public class RegistrationService {
         }
     }
 
-    public ResponseEntity<JsonRespond> getResponseForUserRegistration(UserDTO userDTO){
-        RegisterFormErrorCode errorCode = saveUserToDatabase(userDTO);
-        if (errorCode.equals(RegisterFormErrorCode.REGISTERED)){
-            return ResponseEntity.ok(new JsonRespond(null,true));
+    public ResponseEntity<IJsonResponse> getResponseForUserRegistration(UserDTO userDTO){
+        List<MyError> errors = validateRegistrationRequest(userDTO);
+        if (errors.size() == 0){
+            User user = createUser(userDTO);
+            userRepository.save(user);
+            return ResponseEntity.ok(
+                    jsonFactory.createResponse(ResponseEnum.DATA,null,
+                            new SimpleDataResponse("user has been succesfully registered and saved in database"),
+                            null));
         } else {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new JsonRespond(errorCode,false));
+            for(MyError error : errors){
+                if(error.getStatus() == 400){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                            body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                            errors,null,null));
+                }
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
+                    body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                    errors,null,null));
         }
+
     }
 }
