@@ -202,7 +202,7 @@ Structure:
     "title": "password is too weak"
 }
 ```
-Description: Password dosen't satisfy below conditions:\
+Description: Password doesn't satisfy below conditions:\
 Conditions to valid password:
 - at least one small and big letter
 - at least one digit 
