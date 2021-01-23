@@ -23,7 +23,7 @@ If request satisfy all conditions then response body will be exactly like below:
 ```
 HTTP status for data response: 200 
 ## JSON error response:
-When some problems occured on server side the response will have a table of errors:
+When some problems occured on server side the response will have an array of errors:
 ```
 {
     "errors": [
