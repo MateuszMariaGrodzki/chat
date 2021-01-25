@@ -32,21 +32,18 @@ public class AuthenticationService {
     @Autowired
     CookieService cookieService;
 
-    @Autowired
-    JsonFactory jsonFactory;
-
     public ResponseEntity<IJsonResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
         List<MyError> errors = validateAuthenticationRequest(jwtTokenRequest);
         if(errors.size() != 0){
             for (MyError error : errors){
                 if (error.getStatus() == 400){
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                            body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                            body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                                     errors,null,null));
                 }
             }
             return ResponseEntity.status(422).
-                    body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                             errors,null,null));
         }
         try {
@@ -55,12 +52,12 @@ public class AuthenticationService {
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userRepository.findByName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
-            return ResponseEntity.ok(jsonFactory.createResponse(ResponseEnum.DATA,
+            return ResponseEntity.ok(JsonResponseFactory.createResponse(ResponseEnum.DATA,
                     null,new JwtTokenResponse(token,
                             user.getName(),user.getEmail()),null));
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                    .body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                             Arrays.asList(new MyError(401,
                                     JwtAuthenticationErrorCode.BAD_CREDENTIALS,"bad credentials")),
                             null, null));
