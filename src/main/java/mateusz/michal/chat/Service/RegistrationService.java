@@ -28,8 +28,6 @@ public class RegistrationService {
     @Autowired
     SlugService slugService;
 
-    @Autowired
-    JsonFactory jsonFactory;
 
     private User createUser(UserDTO userDTO){
         User user = new User();
@@ -42,7 +40,7 @@ public class RegistrationService {
         return user;
     }
 
-    private boolean isNameNotPresent(String name){
+    private boolean isNameEmptyString(String name){
         return name.equals("");
     }
 
@@ -50,11 +48,11 @@ public class RegistrationService {
         return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
     }
 
-    private boolean isEmailNotPresent(String email){
+    private boolean isEmailEmptyString(String email){
         return email.equals("");
     }
 
-    private boolean isPassworNotPresent(String password){
+    private boolean isPassworEmptyString(String password){
         return password.equals("");
     }
 
@@ -106,7 +104,7 @@ public class RegistrationService {
             errors.add(new MyError(400,RegisterFormErrorCode.NAME_NULL,
                     "parameter name is null"));
         } else {
-            if(isNameNotPresent(name)){
+            if(isNameEmptyString(name)){
                 errors.add(new MyError(422,RegisterFormErrorCode.NAME_MISSING,
                         "parameter name isn't present"));
             }
@@ -128,7 +126,7 @@ public class RegistrationService {
             errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
                     "parameter email is null"));
         } else {
-            if(isEmailNotPresent(email)){
+            if(isEmailEmptyString(email)){
                 errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
                         "parameter email isn't present"));
             }
@@ -150,7 +148,7 @@ public class RegistrationService {
             errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
                     "parameter password is null"));
         } else {
-            if(isPassworNotPresent(password)){
+            if(isPassworEmptyString(password)){
                 errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
                         "parameter password isn't present"));
             }
@@ -171,11 +169,11 @@ public class RegistrationService {
     }
 
     public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
-        if(isNameNotPresent(userDTO.getName())){
+        if(isNameEmptyString(userDTO.getName())){
             return RegisterFormErrorCode.NAME_MISSING;
-        } else if(isEmailNotPresent(userDTO.getEmail())){
+        } else if(isEmailEmptyString(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_MISSING;
-        } else if(isPassworNotPresent(userDTO.getPassword())){
+        } else if(isPassworEmptyString(userDTO.getPassword())){
             return RegisterFormErrorCode.PASSWORD_MISSING;
         } else if(isNameIncorrect(userDTO.getName())) {
             return RegisterFormErrorCode.NAME_INCORRECT;
@@ -200,21 +198,20 @@ public class RegistrationService {
             User user = createUser(userDTO);
             userRepository.save(user);
             return ResponseEntity.ok(
-                    jsonFactory.createResponse(ResponseEnum.DATA,null,
+                    JsonResponseFactory.createResponse(ResponseEnum.DATA,null,
                             new SimpleDataResponse("user has been succesfully registered and saved in database"),
                             null));
         } else {
             for(MyError error : errors){
                 if(error.getStatus() == 400){
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                            body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                            body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                             errors,null,null));
                 }
             }
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
-                    body(jsonFactory.createResponse(ResponseEnum.ERROR,
+                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                     errors,null,null));
         }
-
     }
 }
