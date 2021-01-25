@@ -28,6 +28,28 @@ public class RegistrationService {
     @Autowired
     SlugService slugService;
 
+    public ResponseEntity<IJsonResponse> getResponseForUserRegistration(UserDTO userDTO){
+        List<MyError> errors = validateRegistrationRequest(userDTO);
+        if (errors.size() == 0){
+            User user = createUser(userDTO);
+            userRepository.save(user);
+            return ResponseEntity.ok(
+                    JsonResponseFactory.createResponse(ResponseEnum.DATA,null,
+                            new SimpleDataResponse("user has been succesfully registered and saved in database"),
+                            null));
+        } else {
+            for(MyError error : errors){
+                if(error.getStatus() == 400){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                            body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                            errors,null,null));
+                }
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
+                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                    errors,null,null));
+        }
+    }
 
     private User createUser(UserDTO userDTO){
         User user = new User();
@@ -40,64 +62,16 @@ public class RegistrationService {
         return user;
     }
 
-    private boolean isNameEmptyString(String name){
-        return name.equals("");
+    // method that validate request form
+    private List<MyError> validateRegistrationRequest(UserDTO userDTO){
+        List<MyError> errors = new ArrayList<>();
+        errors.addAll(validateUserName(userDTO.getName()));
+        errors.addAll(validateUserEmail(userDTO.getEmail()));
+        errors.addAll(validateUserPassword(userDTO.getPassword()));
+        return errors;
     }
 
-    private boolean isNameIncorrect(String name){
-        return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
-    }
-
-    private boolean isEmailEmptyString(String email){
-        return email.equals("");
-    }
-
-    private boolean isPassworEmptyString(String password){
-        return password.equals("");
-    }
-
-    private boolean hasNameSpecialCharacters(String name){
-        for(char c : name.toCharArray()){
-            if(!(Character.isLetterOrDigit(c))){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isNameNull(String name){
-        return name == null;
-    }
-
-    private boolean isEmailNull(String email){
-        return email == null;
-    }
-
-    private boolean isPasswordNull(String password){
-        return password == null;
-    }
-
-    private boolean isUserInDatabaseByName(String name){
-        Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
-        return user.isPresent();
-    }
-
-    private boolean isUserInDatabaseByEmail(String email){
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
-        return user.isPresent();
-    }
-
-    private boolean isEmailIncorrect(String email){
-        Pattern pattern = Pattern.compile("[a-zA-Z]+[\\.a-zA-Z0-9]*@[a-zA-Z0-9]+\\.[a-z]{2,}[a-z]*");
-        return !pattern.matcher(email).matches();
-    }
-
-    private boolean isPasswordIncorrect(String password) {
-        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
-                "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*])(?!=.*\\s).{8,15}");
-        return !pattern.matcher(password).matches();
-    }
-
+    // methods that validate each property
     private List<MyError> validateUserName(String name){
         List<MyError> errors = new ArrayList<>();
         if(isNameNull(name)){
@@ -160,14 +134,66 @@ public class RegistrationService {
         return errors;
     }
 
-    private List<MyError> validateRegistrationRequest(UserDTO userDTO){
-        List<MyError> errors = new ArrayList<>();
-        errors.addAll(validateUserName(userDTO.getName()));
-        errors.addAll(validateUserEmail(userDTO.getEmail()));
-        errors.addAll(validateUserPassword(userDTO.getPassword()));
-        return errors;
+    // methods that validate single elements of properties
+    private boolean isNameEmptyString(String name){
+        return name.equals("");
     }
 
+    private boolean isNameIncorrect(String name){
+        return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
+    }
+
+    private boolean isEmailEmptyString(String email){
+        return email.equals("");
+    }
+
+    private boolean isPassworEmptyString(String password){
+        return password.equals("");
+    }
+
+    private boolean hasNameSpecialCharacters(String name){
+        for(char c : name.toCharArray()){
+            if(!(Character.isLetterOrDigit(c))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isEmailNull(String email){
+        return email == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
+    }
+
+    private boolean isUserInDatabaseByName(String name){
+        Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
+        return user.isPresent();
+    }
+
+    private boolean isUserInDatabaseByEmail(String email){
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
+        return user.isPresent();
+    }
+
+    private boolean isEmailIncorrect(String email){
+        Pattern pattern = Pattern.compile("[a-zA-Z]+[\\.a-zA-Z0-9]*@[a-zA-Z0-9]+\\.[a-z]{2,}[a-z]*");
+        return !pattern.matcher(email).matches();
+    }
+
+    private boolean isPasswordIncorrect(String password) {
+        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
+                "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*])(?!=.*\\s).{8,15}");
+        return !pattern.matcher(password).matches();
+    }
+    
+    // TODO delete this after test refactoring
     public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
         if(isNameEmptyString(userDTO.getName())){
             return RegisterFormErrorCode.NAME_MISSING;
@@ -189,29 +215,6 @@ public class RegistrationService {
             User userToSave = createUser(userDTO);
             userRepository.save(userToSave);
             return RegisterFormErrorCode.REGISTERED;
-        }
-    }
-
-    public ResponseEntity<IJsonResponse> getResponseForUserRegistration(UserDTO userDTO){
-        List<MyError> errors = validateRegistrationRequest(userDTO);
-        if (errors.size() == 0){
-            User user = createUser(userDTO);
-            userRepository.save(user);
-            return ResponseEntity.ok(
-                    JsonResponseFactory.createResponse(ResponseEnum.DATA,null,
-                            new SimpleDataResponse("user has been succesfully registered and saved in database"),
-                            null));
-        } else {
-            for(MyError error : errors){
-                if(error.getStatus() == 400){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                            body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                            errors,null,null));
-                }
-            }
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
-                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                    errors,null,null));
         }
     }
 }
