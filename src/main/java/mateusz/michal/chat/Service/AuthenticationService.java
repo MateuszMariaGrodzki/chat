@@ -70,22 +70,15 @@ public class AuthenticationService {
         return (UserDetails) authentication.getPrincipal();
     }
 
-    private boolean isNameMissing(String name){
-        return name.equals("");
+    // method that validate request form
+    private List<MyError> validateAuthenticationRequest(JwtTokenRequest jwtTokenRequest){
+        List<MyError> errors = new ArrayList<>();
+        errors.addAll(validateUserName(jwtTokenRequest.getName()));
+        errors.addAll(validateUserPassword(jwtTokenRequest.getPassword()));
+        return errors;
     }
 
-    private boolean isPasswordMissing(String password){
-        return password.equals("");
-    }
-
-    private boolean isNameNull(String name){
-        return name == null;
-    }
-
-    private boolean isPasswordNull(String password){
-        return password == null;
-    }
-
+    // methods that validate each property
     private List<MyError> validateUserName(String name){
         List<MyError> errors = new ArrayList<>();
         if(isNameNull(name)){
@@ -114,10 +107,20 @@ public class AuthenticationService {
         return errors;
     }
 
-    private List<MyError> validateAuthenticationRequest(JwtTokenRequest jwtTokenRequest){
-        List<MyError> errors = new ArrayList<>();
-        errors.addAll(validateUserName(jwtTokenRequest.getName()));
-        errors.addAll(validateUserPassword(jwtTokenRequest.getPassword()));
-        return errors;
+    // methods that validate single elements of properties
+    private boolean isNameMissing(String name){
+        return name.equals("");
+    }
+
+    private boolean isPasswordMissing(String password){
+        return password.equals("");
+    }
+
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
     }
 }
