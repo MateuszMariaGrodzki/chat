@@ -3,6 +3,8 @@ package mateusz.michal.chat.Service;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CookieService {
@@ -25,6 +27,20 @@ public class CookieService {
         cookie.setSecure(false);
         cookie.setPath("/");
         return cookie;
+    }
+
+    public Cookie[] deleteAllCookiesFromBrowser(Cookie[] cookies){
+        Cookie[] deletedCookies = new Cookie[cookies.length];
+        for(int i = 0 ; i < cookies.length ; ++i){
+            String cookieName = cookies[i].getName();
+            Cookie cookieToDelete = new Cookie(cookieName, null);
+            cookieToDelete.setMaxAge(0);
+            cookieToDelete.setHttpOnly(true);
+            cookieToDelete.setSecure(false);
+            cookieToDelete.setPath("/");
+            deletedCookies[i] = cookieToDelete;
+        }
+        return deletedCookies;
     }
 
 }
