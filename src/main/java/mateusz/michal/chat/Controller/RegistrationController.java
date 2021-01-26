@@ -1,7 +1,6 @@
 package mateusz.michal.chat.Controller;
 
-import mateusz.michal.chat.Model.JsonRespond;
-import mateusz.michal.chat.Model.User;
+import mateusz.michal.chat.Model.IJsonResponse;
 import mateusz.michal.chat.Model.UserDTO;
 import mateusz.michal.chat.Service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class RegistrationController {
     RegistrationService registrationService;
 
     @PostMapping(value = "/register",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JsonRespond> createNewUser(@RequestBody UserDTO userDto){
+    public ResponseEntity<IJsonResponse> createNewUser(@RequestBody UserDTO userDto){
         return registrationService.getResponseForUserRegistration(userDto);
     }
 }
