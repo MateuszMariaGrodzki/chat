@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class JsonFactory {
+public class JsonResponseFactory {
 
-    public IJsonResponse createResponse(ResponseEnum responseEnum,
+    public static IJsonResponse createResponse(ResponseEnum responseEnum,
                                         List<MyError> errors,
                                         IData data,
                                         IMetaData metaData){
