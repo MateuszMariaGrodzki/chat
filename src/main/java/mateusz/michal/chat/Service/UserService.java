@@ -3,47 +3,30 @@ package mateusz.michal.chat.Service;
 
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.*;
-import mateusz.michal.chat.Repository.RoleRepository;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @Autowired
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder){
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    UserRepository userRepository;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     CookieService cookieService;
-
-    public User findUserByEmail(String email){
-        return userRepository.findByEmail(email);
-    }
 
     public User loadUserByUserName(String name) throws UsernameNotFoundException{
         User user = userRepository.findByName(name);
@@ -52,15 +35,6 @@ public class UserService {
         } else {
             return user;
         }
-    }
-
-    public User findById(int id){ return userRepository.findById(id);}
-
-    public User saveUser(User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByRole("USER");
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-        return userRepository.save(user);
     }
 
     public ResponseEntity<IJsonResponse> loadUserProfilDTOFromDataBaseByJwtToken(HttpServletRequest request){

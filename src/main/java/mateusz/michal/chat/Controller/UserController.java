@@ -1,9 +1,7 @@
 package mateusz.michal.chat.Controller;
 
 import mateusz.michal.chat.Model.IJsonResponse;
-import mateusz.michal.chat.Model.JwtToken;
 import mateusz.michal.chat.Model.MainPageUserProfilesDTO;
-import mateusz.michal.chat.Model.UserProfilDTO;
 import mateusz.michal.chat.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
