@@ -34,14 +34,14 @@ public class AuthenticationService {
 
     public ResponseEntity<IJsonResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
         List<MyError> errors = validateAuthenticationRequest(jwtTokenRequest);
-        if(errors.size() != 0){
-            for (MyError error : errors){
-                if (error.getStatus() == 400){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                            body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                                    errors,null,null));
-                }
+        for (MyError error : errors){
+            if (error.getStatus() == 400){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                        body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                                errors,null,null));
             }
+        }
+        if(errors.size() != 0){
             return ResponseEntity.status(422).
                     body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                             errors,null,null));
