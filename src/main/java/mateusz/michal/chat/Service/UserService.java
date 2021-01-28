@@ -8,6 +8,7 @@ import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +45,13 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User findByName(String name){
-        return userRepository.findByName(name);
+    public User loadUserByUserName(String name) throws UsernameNotFoundException{
+        User user = userRepository.findByName(name);
+        if (user == null) {
+            throw new UsernameNotFoundException("User don't exists");
+        } else {
+            return user;
+        }
     }
 
     public User findById(int id){ return userRepository.findById(id);}
@@ -57,17 +63,37 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserProfilDTO loadUserProfilDTOFromDataBaseByJwtToken(HttpServletRequest request){
+    public ResponseEntity<IJsonResponse> loadUserProfilDTOFromDataBaseByJwtToken(HttpServletRequest request){
         Cookie cookie = cookieService.getTokenCookieFromCookies(request.getCookies());
         if(cookie == null){
-            return new UserProfilDTO();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                            Arrays.asList(new MyError(401,UserProfilErrorCode.UNAUTHORIZED_USER,
+                                    "server dosen't recive cookie with token")),null,null)
+            );
         } else {
             String username = jwtTokenUtil.getUsernameFromToken(cookie.getValue());
             if(username == null){
-                return new UserProfilDTO();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                                Arrays.asList(new MyError(400,UserProfilErrorCode.USERNAME_NULL,
+                                        "decoded token has null username")),null,null)
+                );
             } else {
-                User user = findByName(username);
-                return new UserProfilDTO(user.getName(),user.getEmail());
+                User user;
+                try{
+                    user = loadUserByUserName(username);
+                    return ResponseEntity.ok(
+                            JsonResponseFactory.createResponse(ResponseEnum.DATA,
+                                    null,new UserProfilDTO(user.getName(),user.getEmail()),null)
+                    );
+                } catch (UsernameNotFoundException e){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                                    Arrays.asList(new MyError(400,UserProfilErrorCode.UNKNOWN_USER,
+                                            "token is valid but user is not registered")),null,null)
+                    );
+                }
             }
         }
     }
