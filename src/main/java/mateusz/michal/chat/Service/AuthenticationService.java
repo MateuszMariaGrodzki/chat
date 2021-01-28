@@ -84,11 +84,9 @@ public class AuthenticationService {
         if(isNameNull(name)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.NAME_NULL,
                     "parameter name is null"));
-        } else {
-            if(isNameMissing(name)){
-                errors.add(new MyError(422, JwtAuthenticationErrorCode.NAME_MISSING,
-                        "parameter name is not present"));
-            }
+        } else if(isNameMissing(name)){
+            errors.add(new MyError(422, JwtAuthenticationErrorCode.NAME_MISSING,
+                    "parameter name is not present"));
         }
         return errors;
     }
