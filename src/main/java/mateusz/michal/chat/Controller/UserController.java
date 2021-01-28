@@ -1,5 +1,6 @@
 package mateusz.michal.chat.Controller;
 
+import mateusz.michal.chat.Model.IJsonResponse;
 import mateusz.michal.chat.Model.JwtToken;
 import mateusz.michal.chat.Model.MainPageUserProfilesDTO;
 import mateusz.michal.chat.Model.UserProfilDTO;
@@ -18,8 +19,8 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/user")
-    public ResponseEntity<UserProfilDTO> getUserInfo(HttpServletRequest request){
-        return ResponseEntity.ok(userService.loadUserProfilDTOFromDataBaseByJwtToken(request));
+    public ResponseEntity<IJsonResponse> getUserInfo(HttpServletRequest request){
+        return userService.loadUserProfilDTOFromDataBaseByJwtToken(request);
     }
 
     @GetMapping("/users")
