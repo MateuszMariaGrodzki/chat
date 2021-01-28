@@ -24,7 +24,7 @@ public class AuthenticationService {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserService userRepository;
+    UserService userService;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -50,7 +50,7 @@ public class AuthenticationService {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getName(),
                     jwtTokenRequest.getPassword());
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
-            User user = userRepository.findByName(jwtTokenRequest.getName());
+            User user = userService.loadUserByUserName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
             return ResponseEntity.ok(JsonResponseFactory.createResponse(ResponseEnum.DATA,
                     null,new JwtTokenResponse(token,
