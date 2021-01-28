@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfilDTO {
+public class UserProfilDTO implements IData {
     String name;
     String email;
 }
