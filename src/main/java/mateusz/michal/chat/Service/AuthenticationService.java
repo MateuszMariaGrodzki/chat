@@ -96,11 +96,9 @@ public class AuthenticationService {
         if(isPasswordNull(password)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.PASSWORD_NULL,
                     "parameter password is null"));
-        } else {
-            if(isPasswordMissing(password)){
+        } else if(isPasswordMissing(password)){
                 errors.add(new MyError(422, JwtAuthenticationErrorCode.PASSWORD_MISSING,
                         "parameter password is not present"));
-            }
         }
         return errors;
     }
