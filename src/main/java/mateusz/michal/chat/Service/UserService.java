@@ -44,32 +44,26 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                             Arrays.asList(new MyError(401,UserProfilErrorCode.UNAUTHORIZED_USER,
-                                    "server dosen't recive cookie with token")),null,null)
-            );
-        } else {
-            String username = jwtTokenUtil.getUsernameFromToken(cookie.getValue());
-            if(username == null){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                                Arrays.asList(new MyError(400,UserProfilErrorCode.USERNAME_NULL,
-                                        "decoded token has null username")),null,null)
-                );
-            } else {
-                User user;
-                try{
-                    user = loadUserByUserName(username);
-                    return ResponseEntity.ok(
-                            JsonResponseFactory.createResponse(ResponseEnum.DATA,
-                                    null,new UserProfilDTO(user.getName(),user.getEmail()),null)
-                    );
-                } catch (UsernameNotFoundException e){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                            JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                                    Arrays.asList(new MyError(400,UserProfilErrorCode.UNKNOWN_USER,
-                                            "token is valid but user is not registered")),null,null)
-                    );
-                }
-            }
+                                    "server dosen't recive cookie with token")),null,null));
+        }
+        String username = jwtTokenUtil.getUsernameFromToken(cookie.getValue());
+        if(username == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                            Arrays.asList(new MyError(400,UserProfilErrorCode.USERNAME_NULL,
+                                    "decoded token has null username")),null,null));
+        }
+        User user;
+        try{
+            user = loadUserByUserName(username);
+            return ResponseEntity.ok(
+                    JsonResponseFactory.createResponse(ResponseEnum.DATA,
+                            null,new UserProfilDTO(user.getName(),user.getEmail()),null));
+        } catch (UsernameNotFoundException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                            Arrays.asList(new MyError(400,UserProfilErrorCode.UNKNOWN_USER,
+                                    "token is valid but user is not registered")),null,null));
         }
     }
 
