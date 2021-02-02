@@ -1,10 +1,13 @@
 package mateusz.michal.chat.Service;
 
 
+import com.fasterxml.jackson.core.JsonFactory;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.*;
 import mateusz.michal.chat.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -72,17 +75,21 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<MainPageUserProfilesDTO> getUserListByPage(int page) {
-        if(page <= 0) {
+    public ResponseEntity<IJsonResponse> getUserListByPage(Pageable pageable) {
+        if(pageable.getPageSize() <= 0) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
-                    body(new MainPageUserProfilesDTO(UsersViewOnPageErrorCodes.INCORRECT_PAGE, null));
+                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                            Arrays.asList(new MyError(422,UsersViewOnPageErrorCodes.INCORRECT_PAGE,
+                                    "page must be a natural number")),null,null));
         }
-        List<User> users = userRepository.findByIdBetween(10*(page - 1) + 1, 10*page);
+        Page<User> users = userRepository.findAll(pageable);
         List<UserNameAndSlug> mappedUsers = mapUserNameAndSlugFromUser(users);
-        return ResponseEntity.ok(new MainPageUserProfilesDTO(null,mappedUsers));
+        int maxpages = users.getTotalPages();
+        return ResponseEntity.ok(JsonResponseFactory.createResponse(ResponseEnum.DATA,null,
+                new MainPageUserProfilesDTO(mappedUsers),new PageMetadata(maxpages)));
     }
 
-    private List<UserNameAndSlug> mapUserNameAndSlugFromUser(List<User> users){
+    private List<UserNameAndSlug> mapUserNameAndSlugFromUser(Page<User> users){
         List<UserNameAndSlug> result = new ArrayList<>();
         for (User user : users){
             result.add(new UserNameAndSlug(user.getName(),user.getSlug()));
