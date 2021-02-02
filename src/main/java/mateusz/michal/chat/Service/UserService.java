@@ -1,7 +1,5 @@
 package mateusz.michal.chat.Service;
 
-
-import com.fasterxml.jackson.core.JsonFactory;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Model.*;
 import mateusz.michal.chat.Repository.UserRepository;
