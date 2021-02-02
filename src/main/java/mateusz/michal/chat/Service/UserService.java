@@ -68,12 +68,6 @@ public class UserService {
     }
 
     public ResponseEntity<IJsonResponse> getUserListByPage(Pageable pageable) {
-        if(pageable.getPageSize() <= 0) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
-                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                            Arrays.asList(new MyError(422,UsersViewOnPageErrorCodes.INCORRECT_PAGE,
-                                    "page must be a natural number")),null,null));
-        }
         Page<User> users = userRepository.findAll(pageable);
         List<UserNameAndSlug> mappedUsers = mapUserNameAndSlugFromUser(users);
         int maxpages = users.getTotalPages();
