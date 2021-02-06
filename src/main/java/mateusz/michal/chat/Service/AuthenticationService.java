@@ -34,18 +34,19 @@ public class AuthenticationService {
 
     public ResponseEntity<IJsonResponse> authenticate(JwtTokenRequest jwtTokenRequest, HttpServletResponse response){
         List<MyError> errors = validateAuthenticationRequest(jwtTokenRequest);
-        if(errors.size() != 0){
-            for (MyError error : errors){
-                if (error.getStatus() == 400){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                            body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                                    errors,null,null));
-                }
+        for (MyError error : errors){
+            if (error.getStatus() == 400){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                        body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                                errors,null,null));
             }
+        }
+        if(errors.size() != 0){
             return ResponseEntity.status(422).
                     body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
                             errors,null,null));
         }
+      
         try {
             UserDetails userDetails = provideUserDetailsFromLoginForm(jwtTokenRequest.getName(),
                     jwtTokenRequest.getPassword());
@@ -84,11 +85,9 @@ public class AuthenticationService {
         if(isNameNull(name)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.NAME_NULL,
                     "parameter name is null"));
-        } else {
-            if(isNameMissing(name)){
-                errors.add(new MyError(422, JwtAuthenticationErrorCode.NAME_MISSING,
-                        "parameter name is not present"));
-            }
+        } else if(isNameMissing(name)){
+            errors.add(new MyError(422, JwtAuthenticationErrorCode.NAME_MISSING,
+                    "parameter name is not present"));
         }
         return errors;
     }
@@ -98,11 +97,9 @@ public class AuthenticationService {
         if(isPasswordNull(password)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.PASSWORD_NULL,
                     "parameter password is null"));
-        } else {
-            if(isPasswordMissing(password)){
+        } else if(isPasswordMissing(password)){
                 errors.add(new MyError(422, JwtAuthenticationErrorCode.PASSWORD_MISSING,
                         "parameter password is not present"));
-            }
         }
         return errors;
     }

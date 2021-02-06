@@ -33,7 +33,7 @@ public class MyLogoutHandler implements LogoutSuccessHandler {
         Cookie tokenCookie = cookieService.getTokenCookieFromCookies(cookies);
         if(cookies == null){
             MyError myError = new MyError(400,LogoutErrorCode.COOKIES_NULL,
-                    "server does not recive cookies from client");
+                    "server does not receive cookies from client");
             String object = generateJsonObjectForResponse(myError,ResponseEnum.ERROR);
             response.setContentType("application/json");
             response.getWriter().print(object);
