@@ -5,33 +5,31 @@ import { useHistory } from "react-router-dom";
 
 import { Input } from "@common/Input";
 import { Form } from "@common/Form";
-import API from "@api/Api";
-import { RegisterError, isValidRegisterResponse } from "@api/types";
-import { getErrorText } from "@api/errorMaps";
 import { useInput } from "@hooks/useInput";
 import { useStatus } from "@hooks/useStatus";
 import { paths } from "@config/paths";
+import RegisterAPI from "@api/RegisterAPI";
 
 const RegisterForm = () => {
   const [name, handleUsernameChange] = useInput();
   const [email, handleEmailChange] = useInput();
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useStatus();
-  const [error, setError] = useState<Maybe<RegisterError>>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const history = useHistory();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setStatus("pending");
     e.preventDefault();
-    const response = await API.register({ name, email, password });
+    const response = await RegisterAPI.post({ name, email, password });
     // TODO: save user in app state, when backend does it
-    if (isValidRegisterResponse(response)) {
+    if (RegisterAPI.validate(response)) {
       setStatus("success");
       history.push(paths.registerSuccess);
     } else {
       setStatus("error");
-      setError(response.errorCode);
+      setErrors(response.errors.map((error) => error.title));
     }
   };
 
@@ -51,9 +49,11 @@ const RegisterForm = () => {
           </Button>
         </Box>
       </Form>
-      <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert severity="error">{getErrorText(error)}</Alert>
-      </Snackbar>
+      {errors.map((error) => (
+        <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose} key={error}>
+          <Alert severity="error">{error}</Alert>
+        </Snackbar>
+      ))}
     </>
   );
 };
