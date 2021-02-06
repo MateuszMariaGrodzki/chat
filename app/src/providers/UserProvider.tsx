@@ -1,7 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-import API from "@api/Api";
-import { isValidLogoutResponse } from "@api/types";
+import LogoutAPI from "@api/LogoutAPI";
 import UserAPI from "@api/UserAPI";
 
 import { UserContextValue } from "./types";
@@ -36,10 +35,11 @@ export const UserContextProvider: React.FC = ({ children }) => {
   }, []);
 
   const logout = useCallback(async () => {
-    const response = await API.logout();
-    // @ts-ignore
-    if (isValidLogoutResponse(response)) {
+    const response = await LogoutAPI.get();
+    if (LogoutAPI.validate(response)) {
       setUser(null);
+    } else {
+      // TODO: error -> something went wrong logging user out
     }
   }, []);
 
