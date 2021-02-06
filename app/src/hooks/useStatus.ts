@@ -1,3 +1,5 @@
 import { useState } from "react";
 
-export const useStatus = () => useState<null | "success" | "error" | "pending">(null);
+type Status = null | "success" | "error" | "pending";
+
+export const useStatus = (initialStatus: Status = null) => useState<null | "success" | "error" | "pending">(initialStatus);
