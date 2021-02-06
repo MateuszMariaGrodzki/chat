@@ -25,7 +25,7 @@ mvnw spring-boot:run
 ```
 
 3. Application will start on port 8080
-4. To terminate proces press twice **Ctrl+C**
+4. To terminate process press **Ctrl+C** twice
 
 ## Run client app
 
