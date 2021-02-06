@@ -16,8 +16,7 @@ class LoginAPI extends BaseAPI {
   private static URL = "authenticate";
 
   public static validate(response: BaseResponse<LoginResponse>): response is ValidResponse<LoginResponse> {
-    const missingField = ["token", "name", "email"].find((element) => !(element in response && typeof element === "string"));
-    return !missingField;
+    return "data" in response && ["token", "name", "email"].every((element) => element in response.data && typeof element === "string");
   }
 
   public static async post(data: LoginRequest) {
