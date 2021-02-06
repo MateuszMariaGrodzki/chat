@@ -17,8 +17,7 @@ class UserAPI extends BaseAPI {
   private static URL = "user";
 
   public static validate(response: BaseResponse<UserResponse>): response is ValidResponse<UserResponse> {
-    const missingField = ["name", "email"].find((field) => !(field in response));
-    return !missingField;
+    return "data" in response && ["name", "email"].every((field) => field in response.data);
   }
 
   public static async get() {
