@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { CssBaseline } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
 
 import AppRouter from "@components/Router";
 import { UserContextProvider } from "@providers/UserProvider";
@@ -14,7 +15,9 @@ const App = () => (
     </Helmet>
     <CssBaseline />
     <UserContextProvider>
-      <AppRouter />
+      <SnackbarProvider variant="error">
+        <AppRouter />
+      </SnackbarProvider>
     </UserContextProvider>
   </>
 );
