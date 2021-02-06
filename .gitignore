@@ -1,18 +1,3 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -29,14 +14,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-### Node deps ###
-app/node_modules
-app/package-lock.json
-app/yarn.lock
-app/yarn-error.log
-
-### App build ###
-app/dist
-
-*.properties
