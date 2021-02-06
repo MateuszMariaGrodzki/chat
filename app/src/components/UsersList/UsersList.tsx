@@ -4,21 +4,25 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 
 import { Text } from "@common/Text";
-import API from "@api/Api";
-import { isValidUsersResponse } from "@api/types";
+import UsersAPI from "@api/UsersAPI";
+import { useStatus } from "@hooks/useStatus";
 
 import { StyledTableContainer } from "./styled";
 
 const UsersList = () => {
   const [users, setUsers] = useState<ListedUser[]>([]);
+  const [status, setStatus] = useStatus("pending");
 
   const fetchUsers = useCallback(async () => {
-    const response = await API.getUsers();
-    if (isValidUsersResponse(response)) {
-      setUsers(response.data);
+    const response = await UsersAPI.get();
+    if (UsersAPI.validate(response)) {
+      setUsers(response.data.data);
+      setStatus("success");
+    } else {
+      // TODO: error while fetching users
+      setStatus("error");
     }
   }, []);
 
@@ -26,7 +30,7 @@ const UsersList = () => {
     fetchUsers();
   }, []);
 
-  if (users.length <= 0) {
+  if (status === "pending") {
     return <Text>Loading users...</Text>;
   }
 
