@@ -106,6 +106,7 @@ export function isValidUsersResponse(response: UsersList.Response): response is 
   const isDataMissing = "data" in response;
   const hasError = "error" in response;
   return !(hasError && !isDataMissing);
+}
 
 export namespace Logout {
   // no data returned
@@ -118,3 +119,21 @@ export function isValidLogoutResponse(response: Logout.Response): response is Lo
   const hasError = response && "errorCode" in response;
   return !hasError;
 }
+
+export interface APIError {
+  status: number;
+  code: string;
+  title: string;
+}
+
+export type ValidResponse<ResponseData, ResponseMetaData = null> = {
+  data: ResponseData;
+  metaData: ResponseMetaData;
+};
+
+export type ErrorResponse = {
+  errors: APIError[];
+  metaData: null;
+};
+
+export type BaseResponse<ResponseData, ResponseMetaData = null> = ValidResponse<ResponseData, ResponseMetaData> | ErrorResponse;

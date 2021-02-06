@@ -1,7 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import API from "@api/Api";
-import { isValidUserResponse, isValidLogoutResponse } from "@api/types";
+import { isValidLogoutResponse } from "@api/types";
+import UserAPI from "@api/UserAPI";
 
 import { UserContextValue } from "./types";
 
@@ -17,14 +18,16 @@ export const UserContextProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserContextValue["user"]>(undefined);
 
   const fetchUser = useCallback(async () => {
-    const fetchedUser = await API.getUser();
-    if (!isValidUserResponse(fetchedUser)) {
+    const response = await UserAPI.get();
+    if (!UserAPI.validate(response)) {
+      // TODO: error -> something went wrong fetching user
       return;
     }
-    if (fetchedUser.email && fetchedUser.name) {
+    const { name, email } = response.data;
+    if (name && email) {
       setUser({
-        name: fetchedUser.name,
-        email: fetchedUser.email,
+        name,
+        email,
       });
     } else {
       setUser(null);
@@ -33,6 +36,7 @@ export const UserContextProvider: React.FC = ({ children }) => {
 
   const logout = useCallback(async () => {
     const response = await API.logout();
+    // @ts-ignore
     if (isValidLogoutResponse(response)) {
       setUser(null);
     }
