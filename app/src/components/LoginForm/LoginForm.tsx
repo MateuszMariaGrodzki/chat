@@ -6,9 +6,7 @@ import { useHistory } from "react-router-dom";
 import { useInput } from "@hooks/useInput";
 import { Input } from "@common/Input";
 import { Form } from "@common/Form";
-import API from "@api/Api";
-import { LoginError, isValidLoginResponse } from "@api/types";
-import { getErrorText } from "@api/errorMaps";
+import LoginAPI from "@api/LoginAPI";
 import { useUserContext } from "@providers/UserProvider";
 import { paths } from "@config/paths";
 
@@ -16,22 +14,23 @@ const LoginForm = () => {
   const [username, handleUsernameChange] = useInput();
   const [password, handlePasswordChange] = useInput();
   const [status, setStatus] = useState<null | "success" | "error">(null);
-  const [error, setError] = useState<Maybe<LoginError>>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const { setUser, user } = useUserContext();
   const history = useHistory();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await API.login({ name: username, password });
+    const response = await LoginAPI.post({ name: username, password });
 
-    if (isValidLoginResponse(response)) {
+    if (LoginAPI.validate(response)) {
+      const { name, email } = response.data;
       setStatus("success");
-      setUser({ name: response.name, email: response.email });
+      setUser({ name, email });
       history.push(paths.home);
     } else {
       setStatus("error");
-      setError(response.errorCode);
+      setErrors(response.errors.map((error) => error.title));
     }
   };
 
@@ -52,9 +51,11 @@ const LoginForm = () => {
       <Snackbar open={status === "success"} autoHideDuration={3000} onClose={handleSnackbarClose}>
         <Alert severity="success">Logged in as {user?.name}!</Alert>
       </Snackbar>
-      <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert severity="error">{getErrorText(error)}</Alert>
-      </Snackbar>
+      {errors.map((error) => (
+        <Snackbar open={status === "error"} autoHideDuration={3000} onClose={handleSnackbarClose} key={error}>
+          <Alert severity="error">{error}</Alert>
+        </Snackbar>
+      ))}
     </>
   );
 };
