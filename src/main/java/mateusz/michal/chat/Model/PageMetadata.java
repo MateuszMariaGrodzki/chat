@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfilDTO implements IData {
-    String name;
-    String email;
+public class PageMetadata implements IMetaData {
+    int maxPages;
 }

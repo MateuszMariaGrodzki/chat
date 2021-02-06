@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MainPageUserProfilesDTO implements IData {
-    List<UserNameAndSlug> data;
+@NoArgsConstructor
+public class JsonErrorResponse implements IJsonResponse {
+    List<MyError> errors;
+    IMetaData metaData;
 }

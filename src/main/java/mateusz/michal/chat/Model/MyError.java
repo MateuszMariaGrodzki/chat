@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserProfilDTO implements IData {
-    String name;
-    String email;
+@NoArgsConstructor
+public class MyError {
+    int status;
+    IMyEnum code;
+    String title;
 }

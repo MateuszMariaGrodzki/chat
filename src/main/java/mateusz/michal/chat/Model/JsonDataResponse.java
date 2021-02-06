@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserProfilDTO implements IData {
-    String name;
-    String email;
+@NoArgsConstructor
+public class JsonDataResponse implements IJsonResponse {
+    IData data;
+    IMetaData metaData;
 }
