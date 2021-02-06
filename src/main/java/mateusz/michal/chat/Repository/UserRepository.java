@@ -1,16 +1,16 @@
 package mateusz.michal.chat.Repository;
 
 import mateusz.michal.chat.Model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface UserRepository extends CrudRepository<User , Integer> {
+public interface UserRepository extends CrudRepository<User , Integer>, PagingAndSortingRepository<User, Integer> {
     User findByEmail(String email);
     User findByName(String name);
-    User findById(int id);
-    List<User> findByIdBetween(int first, int second);
+    Page<User> findAll(Pageable pageable);
     User findBySlug(String slug);
 }
