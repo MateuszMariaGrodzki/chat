@@ -21,6 +21,7 @@ export const UserContextProvider: React.FC = ({ children }) => {
     const response = await UserAPI.get();
     if (!UserAPI.validate(response)) {
       // TODO: error -> something went wrong fetching user
+      setUser(null);
       return;
     }
     const { name, email } = response.data;
