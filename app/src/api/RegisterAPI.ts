@@ -8,14 +8,14 @@ interface RegisterRequest {
 }
 
 interface RegisterResponse {
-  registered: true;
+  message: string;
 }
 
 class RegisterAPI extends BaseAPI {
   private static URL = "register";
 
   public static validate(response: BaseResponse<RegisterResponse>): response is ValidResponse<RegisterResponse> {
-    return "data" in response && typeof response.data.registered === "boolean";
+    return Boolean("data" in response && response.data.message);
   }
 
   public static async post(data: RegisterRequest) {
