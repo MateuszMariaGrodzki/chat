@@ -5,9 +5,8 @@ import org.springframework.data.web.config.PageableHandlerMethodArgumentResolver
 import org.springframework.stereotype.Component;
 
 @Component
-public class PageConfig implements
+public class PageConfig implements PageableHandlerMethodArgumentResolverCustomizer {
 
-        PageableHandlerMethodArgumentResolverCustomizer {
     @Override
     public void customize(PageableHandlerMethodArgumentResolver pr) {
         pr.setOneIndexedParameters(true);

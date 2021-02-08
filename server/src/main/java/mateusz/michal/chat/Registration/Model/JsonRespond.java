@@ -1,7 +1,5 @@
 package mateusz.michal.chat.Registration.Model;
 
-import mateusz.michal.chat.Registration.Model.RegisterFormErrorCode;
-
 public class JsonRespond {
     private RegisterFormErrorCode errorCode;
     private boolean isRegistered;

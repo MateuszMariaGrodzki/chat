@@ -3,8 +3,6 @@ package mateusz.michal.chat.Authorization.Service;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class CookieService {
