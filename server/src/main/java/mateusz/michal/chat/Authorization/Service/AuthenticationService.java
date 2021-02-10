@@ -5,7 +5,6 @@ import mateusz.michal.chat.Authorization.Model.JwtTokenRequest;
 import mateusz.michal.chat.Authorization.Model.JwtTokenResponse;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Structure.RespondStructure.MyError;
-import mateusz.michal.chat.Structure.RespondStructure.ResponseEnum;
 import mateusz.michal.chat.User.Model.User;
 import mateusz.michal.chat.User.Service.UserService;
 import mateusz.michal.chat.Structure.RespondStructure.IJsonResponse;

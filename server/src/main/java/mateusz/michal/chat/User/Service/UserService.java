@@ -3,7 +3,6 @@ package mateusz.michal.chat.User.Service;
 import mateusz.michal.chat.Authorization.Service.CookieService;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Structure.RespondStructure.MyError;
-import mateusz.michal.chat.Structure.RespondStructure.ResponseEnum;
 import mateusz.michal.chat.User.Model.*;
 import mateusz.michal.chat.User.Repository.UserRepository;
 import mateusz.michal.chat.Structure.RespondStructure.IJsonResponse;
