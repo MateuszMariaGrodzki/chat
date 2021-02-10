@@ -14,5 +14,7 @@ public enum RegisterFormErrorCode implements IMyEnum {
     NAME_INCORRECT,
     EMAIL_INCORRECT,
     WEAK_PASSWORD,
+    SHORT_PASSWORD,
+    LONG_PASSWORD,
     REGISTERED
 }
