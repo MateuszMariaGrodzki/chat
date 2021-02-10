@@ -1,14 +1,14 @@
 package mateusz.michal.chat.Controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import mateusz.michal.chat.Model.JsonRespond;
-import mateusz.michal.chat.Model.RegisterFormErrorCode;
-import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Model.UserDTO;
-import mateusz.michal.chat.Service.MyUserDetailsService;
-import mateusz.michal.chat.Service.RegistrationService;
+import mateusz.michal.chat.Registration.Model.JsonRespond;
+import mateusz.michal.chat.Registration.Model.RegisterFormErrorCode;
+import mateusz.michal.chat.User.Model.User;
+import mateusz.michal.chat.Registration.Model.UserDTO;
+import mateusz.michal.chat.Registration.Controller.RegistrationController;
+import mateusz.michal.chat.Authorization.Service.MyUserDetailsService;
+import mateusz.michal.chat.Registration.Service.RegistrationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,5 +1,6 @@
 package mateusz.michal.chat.Service;
 
+import mateusz.michal.chat.Authorization.Service.CookieService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.Cookie;
-import java.util.Arrays;
 
 public class CookieServiceTest {
 

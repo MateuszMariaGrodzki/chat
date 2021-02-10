@@ -1,9 +1,10 @@
 package mateusz.michal.chat.Service;
 
-import mateusz.michal.chat.Model.RegisterFormErrorCode;
-import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Model.UserDTO;
-import mateusz.michal.chat.Repository.UserRepository;
+import mateusz.michal.chat.Registration.Model.RegisterFormErrorCode;
+import mateusz.michal.chat.User.Model.User;
+import mateusz.michal.chat.Registration.Model.UserDTO;
+import mateusz.michal.chat.Registration.Service.RegistrationService;
+import mateusz.michal.chat.User.Repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

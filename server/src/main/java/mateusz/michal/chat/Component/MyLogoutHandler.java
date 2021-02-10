@@ -1,13 +1,15 @@
 package mateusz.michal.chat.Component;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import mateusz.michal.chat.Model.*;
-import mateusz.michal.chat.Service.CookieService;
+import mateusz.michal.chat.Authorization.Model.LogoutErrorCode;
+import mateusz.michal.chat.Authorization.Service.CookieService;
+import mateusz.michal.chat.Structure.RespondStructure.JsonResponseFactory;
+import mateusz.michal.chat.Structure.RespondStructure.MyError;
+import mateusz.michal.chat.Structure.RespondStructure.ResponseEnum;
+import mateusz.michal.chat.Structure.RespondStructure.SimpleDataResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -32,9 +34,9 @@ public class MyLogoutHandler implements LogoutSuccessHandler {
         Cookie[] cookies = request.getCookies();
         Cookie tokenCookie = cookieService.getTokenCookieFromCookies(cookies);
         if(cookies == null){
-            MyError myError = new MyError(400,LogoutErrorCode.COOKIES_NULL,
+            MyError myError = new MyError(400, LogoutErrorCode.COOKIES_NULL,
                     "server does not receive cookies from client");
-            String object = generateJsonObjectForResponse(myError,ResponseEnum.ERROR);
+            String object = generateJsonObjectForResponse(myError, ResponseEnum.ERROR);
             response.setContentType("application/json");
             response.getWriter().print(object);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

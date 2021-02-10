@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mateusz.michal.chat.User.Model.User;
 
 import javax.persistence.*;
 import java.util.Date;
