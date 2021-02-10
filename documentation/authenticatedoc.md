@@ -4,7 +4,7 @@
 
 | Id |URL|Description|Reference|
 |:-:|:-:|:-:|:-:|
-|1|`/api/authenticate`|Endpoint for user authentication|[click](#apiauthenticate endpoint)|
+|1|`/api/authenticate`|Endpoint for user authentication|[click](#apiauthenticate-endpoint)|
 
 
 ## api/authenticate endpoint
