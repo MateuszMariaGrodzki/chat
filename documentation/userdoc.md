@@ -4,8 +4,8 @@
 
 | Id |URL|Description|Reference|
 |:-:|:-:|:-:|:-:|
-|1|`/api/user`|Endpoint for retrieving user name and email by token  |[click](#api/user-endpoint)|
-|2|`/api/users`|Endpoint for retrieving list of users with name and slug | [click](#api/users-endpoint)|
+|1|`/api/user`|Endpoint for retrieving user name and email by token  |[click](#apiuser-endpoint)|
+|2|`/api/users`|Endpoint for retrieving list of users with name and slug | [click](#apiusers-endpoint)|
 
 
 ## api/user endpoint
