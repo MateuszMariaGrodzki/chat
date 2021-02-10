@@ -45,14 +45,12 @@ public class AuthenticationService {
         for (MyError error : errors){
             if (error.getStatus() == 400){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                        body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                                errors,null,null));
+                        body(JsonResponseFactory.createResponse(errors));
             }
         }
         if(errors.size() != 0){
             return ResponseEntity.status(422).
-                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                            errors,null,null));
+                    body(JsonResponseFactory.createResponse(errors));
         }
       
         try {
@@ -61,15 +59,15 @@ public class AuthenticationService {
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userService.loadUserByUserName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
-            return ResponseEntity.ok(JsonResponseFactory.createResponse(ResponseEnum.DATA,
-                    null,new JwtTokenResponse(token,
-                            user.getName(),user.getEmail()),null));
+            return ResponseEntity.ok(JsonResponseFactory.createResponse(new JwtTokenResponse(token,
+                            user.getName(),user.getEmail())));
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                    .body(JsonResponseFactory.createResponse(
                             Arrays.asList(new MyError(401,
-                                    JwtAuthenticationErrorCode.BAD_CREDENTIALS,"bad credentials")),
-                            null, null));
+                                    JwtAuthenticationErrorCode.BAD_CREDENTIALS,
+                                    "bad credentials"))
+                    ));
         }
     }
 
