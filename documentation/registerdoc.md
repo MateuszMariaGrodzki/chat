@@ -4,7 +4,7 @@
 
 | Id |URL|Description|Reference|
 |:-:|:-:|:-:|:-:|
-|1|`/api/register`|Endpoint for user registration|[click](#api/register-endpoint)|
+|1|`/api/register`|Endpoint for user registration|[click](#apiregister-endpoint)|
 
 
 ## api/register endpoint
