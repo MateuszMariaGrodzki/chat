@@ -62,4 +62,4 @@ __Conditions to strong password:__
 - at least one small and big letter
 - at least one digit 
 - at least one of special characters: !,@,#,$,%,^,&,*  
-- cannot have white characters  
+- cannot have whitespace characters  
