@@ -45,5 +45,5 @@ These error codes are more likely appears when sent json has wrong typo.
 |NAME_MISSING|422|parameter name is not present|
 |PASSWORD_MISSING|422|parameter password is not present|
 |BAD_CREDENTIALS|401|bad credentials|
-If NAME_MISSING oraz PASSWORD_MISSING code appears then response status will be 422.
+If NAME_MISSING or PASSWORD_MISSING code appears then response status will be 422.
 Otherwise response status is 401
