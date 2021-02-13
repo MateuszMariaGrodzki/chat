@@ -1,10 +1,12 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline, ThemeProvider as MUIThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
+import { ThemeProvider } from "styled-components";
 
 import AppRouter from "@components/Router";
 import { UserContextProvider } from "@providers/UserProvider";
+import theme from "@config/theme";
 
 const App = () => (
   <>
@@ -15,9 +17,13 @@ const App = () => (
     </Helmet>
     <CssBaseline />
     <UserContextProvider>
-      <SnackbarProvider variant="error">
-        <AppRouter />
-      </SnackbarProvider>
+      <MUIThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider variant="error" maxSnack={5}>
+            <AppRouter />
+          </SnackbarProvider>
+        </ThemeProvider>
+      </MUIThemeProvider>
     </UserContextProvider>
   </>
 );

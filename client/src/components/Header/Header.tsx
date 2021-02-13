@@ -1,10 +1,11 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 import { useUserContext } from "@providers/UserProvider";
 import { paths } from "@config/paths";
 
-import { StyledLink } from "./styled";
+import { MenuItem, Logo } from "./styled";
 
 const Header = () => {
   const { user, logout } = useUserContext();
@@ -14,27 +15,28 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6">ChatApp</Typography>
-        <Button component={StyledLink} to="/" color="secondary">
-          Home
-        </Button>
+        <Logo component={Link} to="/" color="primary">
+          ChatApp
+        </Logo>
         {isUnfetched && "Loading..."}
         {isGuest && (
           <>
-            <Button component={StyledLink} to={paths.register} color="primary">
+            <MenuItem component={Link} to={paths.register} color="primary">
               Register
-            </Button>
-            <Button component={StyledLink} to={paths.login}>
+            </MenuItem>
+            <MenuItem component={Link} to={paths.login} color="primary">
               Login
-            </Button>
+            </MenuItem>
           </>
         )}
         {isLoggedIn && (
           <>
-            <Button component={StyledLink} to={paths.users} color="primary">
+            <MenuItem component={Link} to={paths.users} color="primary">
               Users
-            </Button>
-            <Button color="secondary" onClick={logout}>Logout</Button>
+            </MenuItem>
+            <MenuItem onClick={logout} color="primary">
+              Logout
+            </MenuItem>
           </>
         )}
       </Toolbar>
