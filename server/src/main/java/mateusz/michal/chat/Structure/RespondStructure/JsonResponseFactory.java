@@ -1,3 +1,4 @@
+
 package mateusz.michal.chat.Structure.RespondStructure;
 
 import org.springframework.stereotype.Component;
