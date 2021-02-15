@@ -36,7 +36,8 @@
 |:-:|:-:|:-:|
 |NAME_NULL|400|parameter name is null|
 |PASSWORD_NULL|400|parameter password is null|
-If one of critical error codes appears then the response status will be 400.
+
+If one of critical error codes appears then the response status will be 400. \
 These error codes are more likely appears when sent json has wrong typo.
 
 #### Normal error codes list
@@ -45,5 +46,6 @@ These error codes are more likely appears when sent json has wrong typo.
 |NAME_MISSING|422|parameter name is not present|
 |PASSWORD_MISSING|422|parameter password is not present|
 |BAD_CREDENTIALS|401|bad credentials|
-If NAME_MISSING or PASSWORD_MISSING code appears then response status will be 422.
+
+If NAME_MISSING or PASSWORD_MISSING code appears then response status will be 422. \
 Otherwise response status is 401
