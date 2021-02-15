@@ -37,7 +37,8 @@
 |NAME_NULL|400|parameter name is null|
 |EMAIL_NULL|400|parameter email is null|
 |PASSWORD_NULL|400|parameter password is null|
-If one of critical error codes appears then the response status will be 400.
+
+If one of critical error codes appears then the response status will be 400.  \
 These error codes are more likely appears when sent json has wrong typo.
 
 #### Normal error codes list
