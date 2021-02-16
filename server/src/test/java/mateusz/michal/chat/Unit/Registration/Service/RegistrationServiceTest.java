@@ -1,4 +1,4 @@
-package mateusz.michal.chat.Service;
+package mateusz.michal.chat.Unit.Registration.Service;
 
 import mateusz.michal.chat.Registration.Model.RegisterFormErrorCode;
 import mateusz.michal.chat.User.Model.User;
