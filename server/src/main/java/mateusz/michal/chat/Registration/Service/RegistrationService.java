@@ -33,23 +33,9 @@ public class RegistrationService {
     @Autowired
     SlugService slugService;
 
-    public ResponseEntity<IJsonResponse> getResponseForUserRegistration(UserDTO userDTO){
-        List<MyError> errors = validateRequest(userDTO);
-        if (errors.size() == 0){
-            User user = createUser(userDTO);
-            userRepository.save(user);
-            return ResponseEntity.ok(
-                    JsonResponseFactory.createResponse(
-                            new SimpleDataResponse("user has been succesfully registered and saved in database")));
-        }
-        for(MyError error : errors){
-            if(error.getStatus() == 400){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                        body(JsonResponseFactory.createResponse(errors));
-            }
-        }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
-                body(JsonResponseFactory.createResponse(errors));
+    public void saveUser(UserDTO userDTO){
+        User user = createUser(userDTO);
+        userRepository.save(user);
     }
 
     private User createUser(UserDTO userDTO){
@@ -64,7 +50,7 @@ public class RegistrationService {
     }
 
     // method that validate request
-    private List<MyError> validateRequest(UserDTO userDTO){
+    public List<MyError> validateRequest(UserDTO userDTO){
         List<MyError> errors = new ArrayList<>();
         errors.addAll(validateUserName(userDTO.getName()));
         errors.addAll(validateUserEmail(userDTO.getEmail()));
