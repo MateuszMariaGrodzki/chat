@@ -84,9 +84,10 @@ public class RegistrationServiceTest {
     @Test
     @DisplayName("Name incorret test")
     public void nameIncorrectTest(){
+        //given
         UserDTO userDTO = UserDTO.builder().name("Maciek123^").email("user1@gmail.com").password("AlamaKota123#").build();
         List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.NAME_INCORRECT)
-        .title("name can only have letters and digits").build());
+                .title("name can only have letters and digits").build());
 
         //when
         List<MyError> actual = registrationService.validateRequest(userDTO);
@@ -95,13 +96,70 @@ public class RegistrationServiceTest {
         assertIterableEquals(expected,actual);
     }
 
-
-
-
-
-
-
     //tests with wrong email
+    @Test
+    @DisplayName("Email null test")
+    public void emailNullTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email(null).password("AlamaKota123#").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(400).code(RegisterFormErrorCode.EMAIL_NULL)
+                .title("parameter email is null").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Email empty test")
+    public void emailEmptyTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("").password("AlamaKota123#").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.EMAIL_MISSING)
+                .title("parameter email isn't present").build(),
+                MyError.builder().status(422).code(RegisterFormErrorCode.EMAIL_INCORRECT)
+                        .title("email has bad format").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Email occupied test")
+    public void emailOccupiedTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("user123@gmail.com").password("AlamaKota123#").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.EMAIL_OCCUPIED)
+                .title("In database exist user with that email").build());
+
+        //when
+        when(userRepository.findByEmail(anyString())).thenReturn(new User());
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Email incorrect test")
+    public void emailIncorrectTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("aaa").password("AlamaKota123#").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.EMAIL_INCORRECT)
+                .title("email has bad format").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
     //tests with wrong password
 
 
