@@ -118,9 +118,7 @@ public class RegistrationServiceTest {
         //given
         UserDTO userDTO = UserDTO.builder().name("Maciek123").email("").password("AlamaKota123#").build();
         List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.EMAIL_MISSING)
-                .title("parameter email isn't present").build(),
-                MyError.builder().status(422).code(RegisterFormErrorCode.EMAIL_INCORRECT)
-                        .title("email has bad format").build());
+                .title("parameter email isn't present").build());
 
         //when
         List<MyError> actual = registrationService.validateRequest(userDTO);
@@ -161,6 +159,20 @@ public class RegistrationServiceTest {
     }
 
     //tests with wrong password
+    @Test
+    @DisplayName("Password null test")
+    public void passwordNullTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password(null).build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(400).code(RegisterFormErrorCode.PASSWORD_NULL)
+                .title("parameter password is null").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
 
 
 }
