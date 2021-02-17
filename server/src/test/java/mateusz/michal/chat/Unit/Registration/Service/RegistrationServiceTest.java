@@ -174,5 +174,102 @@ public class RegistrationServiceTest {
         assertIterableEquals(expected,actual);
     }
 
+    @Test
+    @DisplayName("Password empty test")
+    public void passwordEmptyTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.PASSWORD_MISSING)
+                .title("parameter password isn't present").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Password weak test")
+    public void passworWeakTest(){
+        //given
+        UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("AlamaKota").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                .title("password is too weak").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDto);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Password short test")
+    public void passworShortTest(){
+        //given
+        UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("Al3$").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.SHORT_PASSWORD)
+                .title("password is too short").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDto);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Password long test")
+    public void passworLongTest(){
+        //given
+        UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").
+                password("AlamaKota#2132gfdge").build();
+        List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.LONG_PASSWORD)
+                .title("password is too long").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDto);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Password weak and short test")
+    public void passwordWeakAndShortTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("A").build();
+        List<MyError> expected = Arrays.asList(
+                MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build(),
+                MyError.builder().status(422).code(RegisterFormErrorCode.SHORT_PASSWORD)
+                        .title("password is too short").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("Password weak and long test")
+    public void passwordWeakAndLongTest(){
+        //given
+        UserDTO userDTO = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").
+                password("AlaMaKota12321321321312").build();
+        List<MyError> expected = Arrays.asList(
+                MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build(),
+                MyError.builder().status(422).code(RegisterFormErrorCode.LONG_PASSWORD)
+                        .title("password is too long").build());
+
+        //when
+        List<MyError> actual = registrationService.validateRequest(userDTO);
+
+        //then
+        assertIterableEquals(expected,actual);
+    }
 
 }
