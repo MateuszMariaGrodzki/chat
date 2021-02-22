@@ -164,9 +164,7 @@ public class RegistrationService {
     }
 
     private boolean isPasswordStrong(String password) {
-        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
-                "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*]).{0,}");
-        return pattern.matcher(password).matches();
+        return password.matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*]).{0,}");
     }
 
     private boolean isPasswordToShort(String password){
