@@ -279,6 +279,141 @@ public class RegistrationServiceTest {
             }
 
             @Test
+            @DisplayName("Password weak test with missing digit and upper case letter")
+            public void passworWeakTestNoDigitNoUpperCaseLetter() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("alamakota@@").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing digit and lower case letter")
+            public void passworWeakTestNoDigitNoLowerCaseLetter() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("ALAMAKOTA##").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing upper case letter and lower case letter")
+            public void passworWeakTestNoUpperCaseLetterNoLowerCaseLetter() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("3333####2@@").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing upper case letter and special sign")
+            public void passworWeakTestNoUpperCaseLetterNoSpecialSign() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("alamakota123").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing lower case letter and special sign")
+            public void passworWeakTestNoLowerCaseLetterNoSpecialSign() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("ALAMAKOTA123").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing lower case letter and special sign and upper case letter")
+            public void passworWeakTestNoLowerCaseLetterNoSpecialSignNoUpperCaseLetter() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("123456789123").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing lower case letter and special sign and digit")
+            public void passworWeakTestNoLowerCaseLetterNoSpecialSignNoDigit() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("ALAMAKOTATAK").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing upper case letter and special sign and digit")
+            public void passworWeakTestNoUpperCaseLetterNoSpecialSignNoDigit() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("alamakotatak").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
+            @DisplayName("Password weak test with missing lower case letter and upper case letter and digit")
+            public void passworWeakTestNoLowerCaseLetterNoUpperCaseLetterNoDigit() {
+                //given
+                UserDTO userDto = UserDTO.builder().name("Maciek123").email("Maciek123@gmail.com").password("!@#$%^&*").build();
+                List<MyError> expected = Arrays.asList(MyError.builder().status(422).code(RegisterFormErrorCode.WEAK_PASSWORD)
+                        .title("password is too weak").build());
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDto);
+
+                //then
+                assertIterableEquals(expected, actual);
+            }
+
+            @Test
             @DisplayName("Password short test")
             public void passworShortTest() {
                 //given
