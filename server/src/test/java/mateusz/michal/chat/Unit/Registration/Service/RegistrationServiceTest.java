@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -285,10 +286,29 @@ public class RegistrationServiceTest {
                 assertIterableEquals(expected, actual);
             }
         }
+
+        @Nested
+        class SuccesValidationTests{
+
+            @Test
+            @DisplayName("All 3 parameters are correct")
+            public void correctDataTest(){
+                //given
+                UserDTO userDTO = UserDTO.builder().name("Maciek123").email("maciek123@gmail.com")
+                        .password("AlamaKota123#").build();
+                List<MyError> expected = new ArrayList<>();
+
+                //when
+                List<MyError> actual = registrationService.validateRequest(userDTO);
+
+                //then
+                assertIterableEquals(expected,actual);
+            }
+        }
     }
 
     @Nested
-    class validateSaveUserMethodTests{
-        //TODO write this tests ( saveUser returns void) 
+    class ValidateSaveUserMethodTests{
+        //TODO write this tests ( saveUser returns void)
     }
 }
