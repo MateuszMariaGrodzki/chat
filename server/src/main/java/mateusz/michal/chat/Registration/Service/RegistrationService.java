@@ -71,7 +71,7 @@ public class RegistrationService {
             errors.add(new MyError(422, RegisterFormErrorCode.NAME_OCCUPIED,
                     "In database exist user with that name"));
         }
-        if (isNameIncorrect(name)) {
+        if (!isNameCorrect(name)) {
             errors.add(new MyError(422, RegisterFormErrorCode.NAME_INCORRECT,
                     "name can only have letters and digits"));
         }
@@ -133,7 +133,7 @@ public class RegistrationService {
         return property == null;
     }
 
-    private boolean isNameIncorrect(String name){
+    private boolean isNameCorrect(String name){
         return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
     }
 
@@ -181,7 +181,7 @@ public class RegistrationService {
             return RegisterFormErrorCode.EMAIL_MISSING;
         } else if(isEmpty(userDTO.getPassword())){
             return RegisterFormErrorCode.PASSWORD_MISSING;
-        } else if(isNameIncorrect(userDTO.getName())) {
+        } else if(!isNameCorrect(userDTO.getName())) {
             return RegisterFormErrorCode.NAME_INCORRECT;
         } else if (isUserInDatabaseByName(userDTO.getName())){
             return RegisterFormErrorCode.NAME_OCCUPIED;
