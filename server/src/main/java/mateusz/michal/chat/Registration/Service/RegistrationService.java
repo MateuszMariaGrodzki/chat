@@ -134,7 +134,7 @@ public class RegistrationService {
     }
 
     private boolean isNameCorrect(String name){
-        return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
+        return !(name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
     }
 
     private boolean hasNameSpecialCharacters(String name){
