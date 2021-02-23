@@ -10,8 +10,6 @@ import mateusz.michal.chat.User.Model.User;
 import mateusz.michal.chat.User.Repository.UserRepository;
 import mateusz.michal.chat.User.Service.SlugService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -115,11 +113,11 @@ public class RegistrationService {
             errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
                     "password is too weak"));
         }
-        if(isPasswordToShort(password)){
+        if(isPasswordTooShort(password)){
             errors.add(new MyError(422,RegisterFormErrorCode.SHORT_PASSWORD,
                     "password is too short"));
         }
-        if(isPassworToLong(password)){
+        if(isPassworTooLong(password)){
             errors.add(new MyError(422,RegisterFormErrorCode.LONG_PASSWORD,
                     "password is too long"));
         }
@@ -167,11 +165,11 @@ public class RegistrationService {
         return password.matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*]).{0,}");
     }
 
-    private boolean isPasswordToShort(String password){
+    private boolean isPasswordTooShort(String password){
         return password.length() < 8;
     }
 
-    private boolean isPassworToLong(String password){
+    private boolean isPassworTooLong(String password){
         return password.length() > 15;
     }
     

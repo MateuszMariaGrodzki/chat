@@ -1,206 +1,51 @@
-# Login form
+# User authenticate documentation
 
-## Login form is on `/api/authenticate` endpoint
+## List of all endpoints:
 
-### Required JSON as presented below:
+| Id |URL|Description|Reference|
+|:-:|:-:|:-:|:-:|
+|1|`/api/authenticate`|Endpoint for user authentication|[click](#apiauthenticate-endpoint)|
 
-```
-{
-    "name": "user name",
-    "password": "user password"
-}
-```
-## Types of response:
-- JSON data response
-- JSON error response
 
-## JSON data response:
-If request satisfy all conditions then response json structure will be like below:
-```
-{
-    "data": {
-        "token": "user token",
-        "name": "user name",
-        "email": "user email"
-    },
-    "metaData": null
-}
-```
-HTTP status code for this response: 200
-Moreover with data response server also sends cookie with acces token so please allow credentials on client side.
-## JSON error response:
-When some problems occured on server side the response will have a table of errors:
-```
-{
-    "errors": [
-    ],
-    "metaData": null
-}
-```
-The example of structure of each error:
-```
-{
-    "status": 422,
-    "code": "NAME_OCCUPIED",
-    "title": "In database exist user with that name"
-}
-```
-Short describe of fields:
-- status: http status represented as integer and corresponding to each error
-- code: an application-specific error code, expressed as a string value
-- title: a short, human-readable summary of the problem  
+## api/authenticate endpoint
+| Title | User logout  |
+|:-:|:-|
+| __URL__  | `/api/authenticate` |
+| __Method__    | POST      |
+| __URL PARAMS__ | none      |
+|__Data Params__| Required json:<pre>{<br>&#9;"name": "user_name",<br>&#9;"password": "user_password"<br>}<pre>|
+|__Notes__|none |
 
-### Name property error codes:
-Critical errors: 
-- NAME_NULL
+### Success response
+|Title|Success response|
+|:-:|:-|
+|Code|200|
+|Body| <pre>{<br>&#9;"data": {<br>&#9;&#9;"token":"jwt_token",<br>&#9;&#9;"name": "user_name",<br>&#9;&#9;"email":"user_email"<br>&#9;},<br>"metaData": null<br>}</pre>|
+|Credentials| Cookie with token |
+|Notes| Be sure to allow credentials from client side |
 
-Normal errors: 
-- NAME_MISSING
+### Error response
+|Title|Error response|
+|:-:|:-|
+|Code|400 or 401 or 422|
+|Body|<pre>{<br>&#9;"errors": [<br>&#9;&#9;{<br>&#9;&#9;&#9;"status": 400,<br>&#9;&#9;&#9;"code": "error code",<br>&#9;&#9;&#9;"title": "short description of problem"<br>&#9;&#9;}<br>&#9;],<br>&#9;"metaData": null<br>}</pre>|
+|Notes| Table can have multiple elements. List of possible error with short description is presented below |
 
-##### NAME_NULL error description
-Structure:
-```
-{
-    "status": 400,
-    "code": "NAME_NULL",
-    "title": "parameter name is null"
-}
-```
-Description: Server dosen't recive name parameter value
-Reasons:
-- problems in communication client-server
-- property name has wrong typo e.g. mame instead of name
+#### Critical  error codes list
+|code|status|title|
+|:-:|:-:|:-:|
+|NAME_NULL|400|parameter name is null|
+|PASSWORD_NULL|400|parameter password is null|
 
-If this error occurs there won't be more errors of name property and http status will be 400.
-Please notice that error dosen't interference with errors from password property.
-##### NAME_MISSING error description:
-Structure:
-```
-{
-    "status": 422,
-    "code": "NAME_MISSING",
-    "title": "parameter name is not present"
-}
-```
-Description: Name cannot be empty string
-### Password property error codes:
-Critical errors: 
-- PASSWORD_NULL
+If one of critical error codes appears then the response status will be 400. \
+These error codes are more likely appears when sent json has wrong typo.
 
-Normal errors: 
-- PASSWORD_MISSING
+#### Normal error codes list
+|code|status|title|
+|:-:|:-:|:-:|
+|NAME_MISSING|422|parameter name is not present|
+|PASSWORD_MISSING|422|parameter password is not present|
+|BAD_CREDENTIALS|401|bad credentials|
 
-##### PASSWORD_NULL error description
-Structure:
-```
-{
-    "status": 400,
-    "code": "PASSWORD_NULL",
-    "title": "parameter password is null"
-}
-```
-Description: Server dosen't recive password parameter value
-Reasons:
-- problems in communication client-server
-- property name has wrong typo e.g. mame instead of name
-
-If this error occurs there won't be more errors of password property and http status will be 400.
-Please notice that error dosen't interference with errors from name property.
-##### PASSWORD_MISSING error description:
-Structure:
-```
-{
-    "status": 422,
-    "code": "PASSWORD_MISSING",
-    "title": "parameter password is not present"
-}
-```
-Description: password cannot be empty string
-### Authentication error code:
-- BAD_CREDENTIALS
-
-##### BAD_CREDENTIALS error description:
-Structure:
-```
-{
-    "status": 401,
-    "code": "BAD_CREDENTIALS",
-    "title": "bad credentials"
-}
-```
-Description: server cannot authenticate user due to invalid name or password
-
-### HTTP status for error responses
-If one of the critical errors occurs http status will be 400 \
-If bad credentials error occurs http status will be 401 \
-Else http status will be 422
-
-### Example of error responses
-##### Without crirital errors
-JSON send:
-```
-{
-    "name": "",
-    "password": "ImF1u9n5k^yPassword"
-}
-```
-Response:
-```
-{
-    "errors": [
-        {
-            "status": 422,
-            "code": "NAME_MISSING",
-            "title": "parameter name is not present"
-        }
-    ],
-    "metaData": null
-}
-```
-##### With crirital errors
-JSON send:
-```
-{
-    "name": null,
-    "password": ""
-}
-```
-Response:
-```
-{
-    "errors": [
-        {
-            "status": 400,
-            "code": "NAME_NULL",
-            "title": "parameter name is null"
-        },
-        {
-            "status": 422,
-            "code": "PASSWORD_MISSING",
-            "title": "parameter password is not present"
-        }
-    ],
-    "metaData": null
-}
-```
-##### With bad credentials
-JSON send:
-```
-{
-    "name": "Monday",
-    "password": "123"
-}
-```
-Response:
-```
-{
-    "errors": [
-        {
-            "status": 401,
-            "code": "BAD_CREDENTIALS",
-            "title": "bad credentials"
-        }
-    ],
-    "metaData": null
-}
-```
+If NAME_MISSING or PASSWORD_MISSING code appears then response status will be 422. \
+Otherwise response status is 401
