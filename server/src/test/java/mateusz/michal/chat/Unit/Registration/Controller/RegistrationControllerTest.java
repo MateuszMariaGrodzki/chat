@@ -1,4 +1,4 @@
-package mateusz.michal.chat.Controller;
+package mateusz.michal.chat.Unit.Registration.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

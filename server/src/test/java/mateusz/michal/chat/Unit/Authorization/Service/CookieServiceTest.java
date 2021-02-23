@@ -1,4 +1,4 @@
-package mateusz.michal.chat.Service;
+package mateusz.michal.chat.Unit.Authorization.Service;
 
 import mateusz.michal.chat.Authorization.Service.CookieService;
 import org.junit.jupiter.api.Assertions;
