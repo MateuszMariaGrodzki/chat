@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MainPageUserProfilesDTO implements IData {
-    List<UserNameAndSlug> data;
+    List<UserNameAndSlug> users;
 }

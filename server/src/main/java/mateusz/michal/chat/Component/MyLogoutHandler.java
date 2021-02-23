@@ -47,7 +47,7 @@ public class MyLogoutHandler implements LogoutSuccessHandler {
             response.setContentType("application/json");
             response.getWriter().print(object);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        } else{
+        } else {
             Cookie[] deletedCookies = cookieService.deleteAllCookiesFromBrowser(request.getCookies());
             for(Cookie cookie: deletedCookies){
                 response.addCookie(cookie);
@@ -66,12 +66,11 @@ public class MyLogoutHandler implements LogoutSuccessHandler {
         Gson gson = builder.setPrettyPrinting().create();
         switch (responseEnum){
             case ERROR:{
-                return gson.toJson(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                        Arrays.asList(myError),null,null));
+                return gson.toJson(JsonResponseFactory.createResponse(Arrays.asList(myError)));
             }
             case DATA:{
-                return gson.toJson(JsonResponseFactory.createResponse(ResponseEnum.DATA,null,
-                        new SimpleDataResponse("user has been succesfully logout"),null));
+                return gson.toJson(JsonResponseFactory.createResponse(
+                        new SimpleDataResponse("user has been succesfully logout")));
             }
         }
         throw new UnsupportedOperationException();

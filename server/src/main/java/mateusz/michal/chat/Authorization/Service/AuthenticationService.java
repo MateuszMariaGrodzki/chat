@@ -5,7 +5,6 @@ import mateusz.michal.chat.Authorization.Model.JwtTokenRequest;
 import mateusz.michal.chat.Authorization.Model.JwtTokenResponse;
 import mateusz.michal.chat.Component.JwtTokenUtil;
 import mateusz.michal.chat.Structure.RespondStructure.MyError;
-import mateusz.michal.chat.Structure.RespondStructure.ResponseEnum;
 import mateusz.michal.chat.User.Model.User;
 import mateusz.michal.chat.User.Service.UserService;
 import mateusz.michal.chat.Structure.RespondStructure.IJsonResponse;
@@ -45,14 +44,12 @@ public class AuthenticationService {
         for (MyError error : errors){
             if (error.getStatus() == 400){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                        body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                                errors,null,null));
+                        body(JsonResponseFactory.createResponse(errors));
             }
         }
         if(errors.size() != 0){
             return ResponseEntity.status(422).
-                    body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
-                            errors,null,null));
+                    body(JsonResponseFactory.createResponse(errors));
         }
       
         try {
@@ -61,15 +58,15 @@ public class AuthenticationService {
             String token = jwtTokenUtil.generateToken(userDetails.getUsername());
             User user = userService.loadUserByUserName(jwtTokenRequest.getName());
             response.addCookie(cookieService.generateRefreshCookie(token));
-            return ResponseEntity.ok(JsonResponseFactory.createResponse(ResponseEnum.DATA,
-                    null,new JwtTokenResponse(token,
-                            user.getName(),user.getEmail()),null));
+            return ResponseEntity.ok(JsonResponseFactory.createResponse(new JwtTokenResponse(token,
+                            user.getName(),user.getEmail())));
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(JsonResponseFactory.createResponse(ResponseEnum.ERROR,
+                    .body(JsonResponseFactory.createResponse(
                             Arrays.asList(new MyError(401,
-                                    JwtAuthenticationErrorCode.BAD_CREDENTIALS,"bad credentials")),
-                            null, null));
+                                    JwtAuthenticationErrorCode.BAD_CREDENTIALS,
+                                    "bad credentials"))
+                    ));
         }
     }
 
@@ -90,10 +87,10 @@ public class AuthenticationService {
     // methods that validate each property
     private List<MyError> validateUserName(String name){
         List<MyError> errors = new ArrayList<>();
-        if(isNameNull(name)){
+        if(isNull(name)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.NAME_NULL,
                     "parameter name is null"));
-        } else if(isNameMissing(name)){
+        } else if(isEmpty(name)){
             errors.add(new MyError(422, JwtAuthenticationErrorCode.NAME_MISSING,
                     "parameter name is not present"));
         }
@@ -102,10 +99,10 @@ public class AuthenticationService {
 
     private List<MyError> validateUserPassword(String password){
         List<MyError> errors = new ArrayList<>();
-        if(isPasswordNull(password)){
+        if(isNull(password)){
             errors.add(new MyError(400, JwtAuthenticationErrorCode.PASSWORD_NULL,
                     "parameter password is null"));
-        } else if(isPasswordMissing(password)){
+        } else if(isEmpty(password)){
                 errors.add(new MyError(422, JwtAuthenticationErrorCode.PASSWORD_MISSING,
                         "parameter password is not present"));
         }
@@ -113,19 +110,13 @@ public class AuthenticationService {
     }
 
     // methods that validate single elements of properties
-    private boolean isNameMissing(String name){
-        return name.equals("");
+    private boolean isEmpty(String property){
+        return property.equals("");
     }
 
-    private boolean isPasswordMissing(String password){
-        return password.equals("");
+    private boolean isNull(String property){
+        return property == null;
     }
 
-    private boolean isNameNull(String name){
-        return name == null;
-    }
 
-    private boolean isPasswordNull(String password){
-        return password == null;
-    }
 }
