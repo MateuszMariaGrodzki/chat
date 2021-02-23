@@ -10,6 +10,7 @@ import Login from "@pages/Login";
 import Home from "@pages/Home";
 import RegisterSuccess from "@pages/RegisterSuccess";
 import Users from "@pages/Users";
+import Styleguide from "@pages/Styleguide";
 
 const AppRouter: React.FC = () => {
   const { user } = useUserContext();
@@ -18,13 +19,9 @@ const AppRouter: React.FC = () => {
       <Header />
       <Container>
         <Switch>
-          {user && (
-            <>
-              <Route path={paths.users}>
-                <Users />
-              </Route>
-            </>
-          )}
+          <Route exact path={paths.home}>
+            <Home />
+          </Route>
           <Route path={paths.registerSuccess}>
             <RegisterSuccess />
           </Route>
@@ -34,9 +31,16 @@ const AppRouter: React.FC = () => {
           <Route path={paths.login}>
             <Login />
           </Route>
-          <Route path={paths.home}>
-            <Home />
+          <Route path={paths.styleguide}>
+            <Styleguide />
           </Route>
+          {user && (
+            <>
+              <Route path={paths.users}>
+                <Users />
+              </Route>
+            </>
+          )}
         </Switch>
       </Container>
     </Router>
