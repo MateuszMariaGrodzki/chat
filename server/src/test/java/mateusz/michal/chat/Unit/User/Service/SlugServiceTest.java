@@ -1,4 +1,4 @@
-package mateusz.michal.chat.Service;
+package mateusz.michal.chat.Unit.User.Service;
 
 import mateusz.michal.chat.User.Service.SlugService;
 import org.junit.jupiter.api.Assertions;

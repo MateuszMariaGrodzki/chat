@@ -10,8 +10,6 @@ import mateusz.michal.chat.User.Model.User;
 import mateusz.michal.chat.User.Repository.UserRepository;
 import mateusz.michal.chat.User.Service.SlugService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,23 +31,9 @@ public class RegistrationService {
     @Autowired
     SlugService slugService;
 
-    public ResponseEntity<IJsonResponse> getResponseForUserRegistration(UserDTO userDTO){
-        List<MyError> errors = validateRequest(userDTO);
-        if (errors.size() == 0){
-            User user = createUser(userDTO);
-            userRepository.save(user);
-            return ResponseEntity.ok(
-                    JsonResponseFactory.createResponse(
-                            new SimpleDataResponse("user has been succesfully registered and saved in database")));
-        }
-        for(MyError error : errors){
-            if(error.getStatus() == 400){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                        body(JsonResponseFactory.createResponse(errors));
-            }
-        }
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).
-                body(JsonResponseFactory.createResponse(errors));
+    public void saveUser(UserDTO userDTO){
+        User user = createUser(userDTO);
+        userRepository.save(user);
     }
 
     private User createUser(UserDTO userDTO){
@@ -64,7 +48,7 @@ public class RegistrationService {
     }
 
     // method that validate request
-    private List<MyError> validateRequest(UserDTO userDTO){
+    public List<MyError> validateRequest(UserDTO userDTO){
         List<MyError> errors = new ArrayList<>();
         errors.addAll(validateUserName(userDTO.getName()));
         errors.addAll(validateUserEmail(userDTO.getEmail()));
@@ -74,71 +58,68 @@ public class RegistrationService {
 
     // methods that validate each property
     private List<MyError> validateUserName(String name){
-        List<MyError> errors = new ArrayList<>();
-        if(isNull(name)){
-            errors.add(new MyError(400, RegisterFormErrorCode.NAME_NULL,
+        if(isNull(name)) {
+            return Arrays.asList(new MyError(400, RegisterFormErrorCode.NAME_NULL,
                     "parameter name is null"));
-        } else {
-            if(isEmpty(name)){
-                errors.add(new MyError(422,RegisterFormErrorCode.NAME_MISSING,
-                        "parameter name isn't present"));
-            }
-            if(isUserInDatabaseByName(name)){
-                errors.add(new MyError(422,RegisterFormErrorCode.NAME_OCCUPIED,
-                        "In database exist user with that name"));
-            }
-            if(isNameIncorrect(name)){
-                errors.add(new MyError(422,RegisterFormErrorCode.NAME_INCORRECT,
-                        "name can only have letters and digits"));
-            }
+        }
+        if (isEmpty(name)) {
+            return Arrays.asList(new MyError(422, RegisterFormErrorCode.NAME_MISSING,
+                    "parameter name isn't present"));
+        }
+        List<MyError> errors = new ArrayList<>();
+        if (isUserInDatabaseByName(name)) {
+            errors.add(new MyError(422, RegisterFormErrorCode.NAME_OCCUPIED,
+                    "In database exist user with that name"));
+        }
+        if (!isNameCorrect(name)) {
+            errors.add(new MyError(422, RegisterFormErrorCode.NAME_INCORRECT,
+                    "name can only have letters and digits"));
         }
         return errors;
     }
 
     private List<MyError> validateUserEmail(String email){
-        List<MyError> errors = new ArrayList<>();
         if (isNull(email)){
-            errors.add(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
+            return Arrays.asList(new MyError(400,RegisterFormErrorCode.EMAIL_NULL,
                     "parameter email is null"));
-        } else {
-            if(isEmpty(email)){
-                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
-                        "parameter email isn't present"));
-            }
-            if(isUserInDatabaseByEmail(email)){
-                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
-                        "In database exist user with that email"));
-            }
-            if(!isEmailCorrect(email)){
-                errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
-                        "email has bad format"));
-            }
+        }
+        if(isEmpty(email)){
+            return Arrays.asList(new MyError(422,RegisterFormErrorCode.EMAIL_MISSING,
+                    "parameter email isn't present"));
+        }
+        List<MyError> errors = new ArrayList<>();
+        if(isUserInDatabaseByEmail(email)){
+            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
+                    "In database exist user with that email"));
+        }
+        if(isEmailIncorrect(email)){
+            errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
+                    "email has bad format"));
         }
         return errors;
     }
 
     private List<MyError> validateUserPassword(String password){
-        List<MyError> errors = new ArrayList<>();
         if(isNull(password)){
-            errors.add(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
+            return Arrays.asList(new MyError(400, RegisterFormErrorCode.PASSWORD_NULL,
                     "parameter password is null"));
-        } else {
-            if(isEmpty(password)){
-                errors.add(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
-                        "parameter password isn't present"));
-            }
-            if(!isPasswordStrong(password)){
-                errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
-                        "password is too weak"));
-            }
-            if(isPasswordToShort(password)){
-                errors.add(new MyError(422,RegisterFormErrorCode.SHORT_PASSWORD,
-                        "password is too short"));
-            }
-            if(isPassworToLong(password)){
-                errors.add(new MyError(422,RegisterFormErrorCode.LONG_PASSWORD,
-                        "password is too long"));
-            }
+        }
+        if(isEmpty(password)){
+            return Arrays.asList(new MyError(422,RegisterFormErrorCode.PASSWORD_MISSING,
+                    "parameter password isn't present"));
+        }
+        List<MyError> errors = new ArrayList<>();
+        if(!isPasswordStrong(password)){
+            errors.add(new MyError(422,RegisterFormErrorCode.WEAK_PASSWORD,
+                    "password is too weak"));
+        }
+        if(isPasswordTooShort(password)){
+            errors.add(new MyError(422,RegisterFormErrorCode.SHORT_PASSWORD,
+                    "password is too short"));
+        }
+        if(isPassworTooLong(password)){
+            errors.add(new MyError(422,RegisterFormErrorCode.LONG_PASSWORD,
+                    "password is too long"));
         }
         return errors;
     }
@@ -152,8 +133,8 @@ public class RegistrationService {
         return property == null;
     }
 
-    private boolean isNameIncorrect(String name){
-        return (name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
+    private boolean isNameCorrect(String name){
+        return !(name.startsWith(" ") || name.endsWith(" ") || hasNameSpecialCharacters(name));
     }
 
     private boolean hasNameSpecialCharacters(String name){
@@ -163,6 +144,18 @@ public class RegistrationService {
             }
         }
         return false;
+    }
+
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isEmailNull(String email){
+        return email == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
     }
 
     private boolean isUserInDatabaseByName(String name){
@@ -175,47 +168,47 @@ public class RegistrationService {
         return user.isPresent();
     }
 
-    private boolean isEmailCorrect(String email){
+    private boolean isEmailIncorrect(String email){
         Pattern pattern = Pattern.compile("[a-zA-Z]+[\\.a-zA-Z0-9]*@[a-zA-Z0-9]+\\.[a-z]{2,}[a-z]*");
-        return pattern.matcher(email).matches();
+        return !pattern.matcher(email).matches();
     }
 
     private boolean isPasswordStrong(String password) {
-        Pattern pattern = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])" +
-                "(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*]).{0,}");
-        return pattern.matcher(password).matches();
+        return password.matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*]).{0,}");
     }
 
-    private boolean isPasswordToShort(String password){
+    private boolean isPasswordTooShort(String password){
         return password.length() < 8;
     }
 
-    private boolean isPassworToLong(String password){
+    private boolean isPassworTooLong(String password){
         return password.length() > 15;
     }
-    
+    /*
     // TODO delete this after test refactoring
     public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
-        if(isEmpty(userDTO.getName())){
+        if(isNameEmptyString(userDTO.getName())){
             return RegisterFormErrorCode.NAME_MISSING;
-        } else if(isEmpty(userDTO.getEmail())){
+        } else if(isEmailEmptyString(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_MISSING;
-        } else if(isEmpty(userDTO.getPassword())){
+        } else if(isPassworEmptyString(userDTO.getPassword())){
             return RegisterFormErrorCode.PASSWORD_MISSING;
-        } else if(isNameIncorrect(userDTO.getName())) {
+        } else if(!isNameCorrect(userDTO.getName())) {
             return RegisterFormErrorCode.NAME_INCORRECT;
         } else if (isUserInDatabaseByName(userDTO.getName())){
             return RegisterFormErrorCode.NAME_OCCUPIED;
         } else if(isUserInDatabaseByEmail(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_OCCUPIED;
-        } else if(isEmailCorrect(userDTO.getEmail())){
+        } else if(isEmailIncorrect(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_INCORRECT;
-        } else if(isPasswordStrong(userDTO.getPassword())){
+        } else if(isPasswordIncorrect(userDTO.getPassword())){
             return RegisterFormErrorCode.WEAK_PASSWORD;
         } else {
             User userToSave = createUser(userDTO);
             userRepository.save(userToSave);
             return RegisterFormErrorCode.REGISTERED;
         }
-    }
+
+     */
+
 }
