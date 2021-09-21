@@ -1,9 +1,7 @@
 package mateusz.michal.chat.Component;
 
-import mateusz.michal.chat.Model.User;
-import mateusz.michal.chat.Repository.UserRepository;
-import mateusz.michal.chat.Service.CookieService;
-import mateusz.michal.chat.Service.MyUserDetailsService;
+import mateusz.michal.chat.Authorization.Service.CookieService;
+import mateusz.michal.chat.Authorization.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
