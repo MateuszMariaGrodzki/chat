@@ -54,7 +54,7 @@ public class RegistrationControllerTest {
     @DisplayName("Test response with name_missing error code")
     void testResponseWithNameMissing() throws Exception {
         UserDTO user = UserDTO.builder().name("").email("saka@dsa.com").password("").build();
-        when(registrationService.saveUserToDatabase(user)).thenReturn(RegisterFormErrorCode.NAME_MISSING);
+        //when(registrationService.saveUserToDatabase(user)).thenReturn(RegisterFormErrorCode.NAME_MISSING);
         MvcResult mvcResult = mockMvc.perform(post("/api/register")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(user)))

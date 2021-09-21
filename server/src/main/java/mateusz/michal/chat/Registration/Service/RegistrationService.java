@@ -92,7 +92,7 @@ public class RegistrationService {
             errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_OCCUPIED,
                     "In database exist user with that email"));
         }
-        if(!isEmailCorrect(email)){
+        if(isEmailIncorrect(email)){
             errors.add(new MyError(422,RegisterFormErrorCode.EMAIL_INCORRECT,
                     "email has bad format"));
         }
@@ -146,6 +146,18 @@ public class RegistrationService {
         return false;
     }
 
+    private boolean isNameNull(String name){
+        return name == null;
+    }
+
+    private boolean isEmailNull(String email){
+        return email == null;
+    }
+
+    private boolean isPasswordNull(String password){
+        return password == null;
+    }
+
     private boolean isUserInDatabaseByName(String name){
         Optional<User> user = Optional.ofNullable(userRepository.findByName(name));
         return user.isPresent();
@@ -156,9 +168,9 @@ public class RegistrationService {
         return user.isPresent();
     }
 
-    private boolean isEmailCorrect(String email){
+    private boolean isEmailIncorrect(String email){
         Pattern pattern = Pattern.compile("[a-zA-Z]+[\\.a-zA-Z0-9]*@[a-zA-Z0-9]+\\.[a-z]{2,}[a-z]*");
-        return pattern.matcher(email).matches();
+        return !pattern.matcher(email).matches();
     }
 
     private boolean isPasswordStrong(String password) {
@@ -172,14 +184,14 @@ public class RegistrationService {
     private boolean isPassworTooLong(String password){
         return password.length() > 15;
     }
-    
+    /*
     // TODO delete this after test refactoring
     public RegisterFormErrorCode saveUserToDatabase(@NotNull UserDTO userDTO) {
-        if(isEmpty(userDTO.getName())){
+        if(isNameEmptyString(userDTO.getName())){
             return RegisterFormErrorCode.NAME_MISSING;
-        } else if(isEmpty(userDTO.getEmail())){
+        } else if(isEmailEmptyString(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_MISSING;
-        } else if(isEmpty(userDTO.getPassword())){
+        } else if(isPassworEmptyString(userDTO.getPassword())){
             return RegisterFormErrorCode.PASSWORD_MISSING;
         } else if(!isNameCorrect(userDTO.getName())) {
             return RegisterFormErrorCode.NAME_INCORRECT;
@@ -187,14 +199,16 @@ public class RegistrationService {
             return RegisterFormErrorCode.NAME_OCCUPIED;
         } else if(isUserInDatabaseByEmail(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_OCCUPIED;
-        } else if(isEmailCorrect(userDTO.getEmail())){
+        } else if(isEmailIncorrect(userDTO.getEmail())){
             return RegisterFormErrorCode.EMAIL_INCORRECT;
-        } else if(isPasswordStrong(userDTO.getPassword())){
+        } else if(isPasswordIncorrect(userDTO.getPassword())){
             return RegisterFormErrorCode.WEAK_PASSWORD;
         } else {
             User userToSave = createUser(userDTO);
             userRepository.save(userToSave);
             return RegisterFormErrorCode.REGISTERED;
         }
-    }
+
+     */
+
 }
