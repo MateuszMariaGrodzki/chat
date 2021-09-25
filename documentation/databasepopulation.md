@@ -51,5 +51,5 @@
 #### Errorr codes list
 |code|status|title|
 |:-:|:-:|:-:|
-|FILE_NOT_FOUND|422|server can't find file in resources|
-|BAD_FILE_STRUCTURE|422|file has bad structure|
+|FILE_NOT_FOUND|400|server can't find file in resources|
+|BAD_FILE_STRUCTURE|400|file has bad structure|
