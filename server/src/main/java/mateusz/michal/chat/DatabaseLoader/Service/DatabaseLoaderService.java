@@ -5,7 +5,6 @@ import mateusz.michal.chat.Structure.RespondStructure.MyError;
 import mateusz.michal.chat.User.Model.User;
 import mateusz.michal.chat.User.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
