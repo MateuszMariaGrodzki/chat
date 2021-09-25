@@ -8,9 +8,9 @@
 
 
 ## api/register endpoint
-| Title | User logout  |
+| Title | User repister endpoint  |
 |:-:|:-|
-| __URL__  | `/api/logout` |
+| __URL__  | `/api/register` |
 | __Method__    | POST      |
 | __URL PARAMS__ | none      |
 |__Data Params__|Required json:<pre>{<br>&#9;"name": "user_name",<br>&#9;"email": "user_email",<br>&#9;"password": "user_password"<br>}<pre>|
