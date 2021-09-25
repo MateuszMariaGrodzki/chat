@@ -8,7 +8,7 @@
 
 
 ## api/register endpoint
-| Title | User repister endpoint  |
+| Title | User register endpoint  |
 |:-:|:-|
 | __URL__  | `/api/register` |
 | __Method__    | POST      |
